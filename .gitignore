@@ -1,0 +1,34 @@
+# Java/Spring Boot
+/target/
+*.class
+*.war
+*.jar
+
+# Maven
+/.mvn/
+*.log
+
+# IDE files
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Angular
+/node_modules/
+/dist/
+/*.js
+/*.js.map
+
+# Compiled TypeScript
+/*.ts
+/*.js
+/*.js.map
+
+# Logs
+*.log
+logs/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
