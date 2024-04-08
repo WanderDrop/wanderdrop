@@ -35,7 +35,6 @@ public class User {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "role_id", referencedColumnName = "role_id", nullable = false, updatable = false)
-    @Column(name= "role_id", nullable = false)
     @OnDelete(action = OnDeleteAction.RESTRICT)
     private Role roleId;
 
