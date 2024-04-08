@@ -38,13 +38,14 @@ public class User {
     @OnDelete(action = OnDeleteAction.RESTRICT)
     private Role roleId;
 
-    @Column(name= "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name= "created_at", nullable = false, updatable = false, insertable = false,
+            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createdAt;
 
     @Column(name= "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name= "user_status", nullable = false)
-    private Status userStatus;
+    @Column(name = "status", nullable = false, columnDefinition = "ENUM('active', 'deleted') DEFAULT 'active'")
+    private String status;
 
 }
