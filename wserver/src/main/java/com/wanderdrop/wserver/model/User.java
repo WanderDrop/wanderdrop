@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.security.Timestamp;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -15,7 +16,7 @@ public class User {
     @Id
     @GeneratedValue
     @Column(name= "user_id")
-    private String userId;
+    private UUID userId;
 
     @Column(name= "username", unique = true, nullable = false)
     private String username;
