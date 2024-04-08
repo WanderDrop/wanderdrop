@@ -27,10 +27,10 @@ public class Comment {
     @Column(name = "status", nullable = false, columnDefinition = "ENUM('active', 'deleted') DEFAULT 'active'")
     private String status;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "attraction_id", referencedColumnName = "attraction_id", insertable = false, updatable = false)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    private Attraction attraction;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "attraction_id", referencedColumnName = "attraction_id", insertable = false, updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Attraction attraction;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", referencedColumnName = "user_id", nullable = false, updatable = false)
