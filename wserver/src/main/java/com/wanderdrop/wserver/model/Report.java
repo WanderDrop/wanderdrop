@@ -1,0 +1,43 @@
+package com.wanderdrop.wserver.model;
+
+import jakarta.persistence.*;
+import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import java.security.Timestamp;
+
+@Entity
+@Data
+@Table(name= "report")
+public class Report {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name= "report_id")
+    private int reportId;
+
+    @Column(name= "report_heading", nullable = false)
+    private String reportHeading;
+
+    @Column(name= "report_message", nullable = false)
+    private String reportMessage;
+
+    @Column(name = "status", nullable = false, columnDefinition = "ENUM('active', 'deleted') DEFAULT 'active'")
+    private String status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "attraction_id",referencedColumnName = "attraction_id", nullable = false, updatable = false )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Attraction attractionId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "create_by",referencedColumnName = "user_id", nullable = false, updatable = false )
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    private User createBy;
+
+    @Column(name= "create_at", nullable = false, updatable = false, insertable = false,
+            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp createAt;
+
+}
