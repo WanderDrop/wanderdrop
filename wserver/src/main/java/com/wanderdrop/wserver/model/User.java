@@ -45,7 +45,7 @@ public class User {
     @Column(name= "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name= "user_status")
-    private UserStatus userStatus;
+    @Column(name= "user_status", nullable = false)
+    private Status userStatus;
 
 }
