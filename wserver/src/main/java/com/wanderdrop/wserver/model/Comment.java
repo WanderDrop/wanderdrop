@@ -6,7 +6,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.security.Timestamp;
-import java.util.Date;
 
 @Entity
 @Data
@@ -38,7 +37,7 @@ public class Comment {
 
     @Column(name = "created_at", nullable = false, insertable = false, updatable = false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Date createdAt;
+    private Timestamp createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deletion_reason_id", referencedColumnName = "deletion_reason_id")

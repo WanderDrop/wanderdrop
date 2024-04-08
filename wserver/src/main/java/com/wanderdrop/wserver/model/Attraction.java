@@ -3,11 +3,11 @@ package com.wanderdrop.wserver.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Date;
+import java.security.Timestamp;
 
 @Entity
 @Data
-@Table(name="attraction")
+@Table(name = "attraction")
 public class Attraction {
 
     @Id
@@ -40,10 +40,10 @@ public class Attraction {
 
     @Column(name = "created_at", nullable = false, insertable = false, updatable = false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Date createdAt;
+    private Timestamp createdAt;
 
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Timestamp updatedAt;
 
     @Column(name = "status", nullable = false, columnDefinition = "ENUM('active', 'deleted') DEFAULT 'active'")
     private String status;
