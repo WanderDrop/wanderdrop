@@ -1,0 +1,7 @@
+.extra-bottom-margin {
+  margin-bottom: 6rem;
+}
+
+.invalid-checkbox .form-check-input {
+  border-color: red;
+}
