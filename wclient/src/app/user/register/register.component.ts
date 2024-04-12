@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import {
   FormControl,
@@ -9,7 +10,7 @@ import {
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
@@ -26,5 +27,11 @@ export class RegisterComponent {
     });
   }
 
-  onSubmit() {}
+  onSubmit() {
+    if (this.registerForm.valid) {
+      console.log(this.registerForm.value);
+    } else {
+      this.registerForm.markAllAsTouched();
+    }
+  }
 }

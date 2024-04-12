@@ -31,6 +31,15 @@
                         id="firstName"
                         placeholder="First name"
                       />
+                      <div
+                        *ngIf="
+                          registerForm.get('firstName')?.invalid &&
+                          registerForm.get('firstName')?.touched
+                        "
+                        class="text-danger"
+                      >
+                        Please provide a first name.
+                      </div>
                     </div>
                   </div>
 
@@ -50,6 +59,15 @@
                         id="lastName"
                         placeholder="Last name"
                       />
+                      <div
+                        *ngIf="
+                          registerForm.get('lastName')?.invalid &&
+                          registerForm.get('lastName')?.touched
+                        "
+                        class="text-danger"
+                      >
+                        Please provide a last name.
+                      </div>
                     </div>
                   </div>
 
@@ -69,6 +87,15 @@
                         id="email"
                         placeholder="Email"
                       />
+                      <div
+                        *ngIf="
+                          registerForm.get('email')?.invalid &&
+                          registerForm.get('email')?.touched
+                        "
+                        class="text-danger"
+                      >
+                        Please provide your email.
+                      </div>
                     </div>
                   </div>
 
@@ -88,10 +115,26 @@
                         id="userPassword"
                         placeholder="Password"
                       />
+                      <div
+                        *ngIf="
+                          registerForm.get('userPassword')?.invalid &&
+                          registerForm.get('userPassword')?.touched
+                        "
+                        class="text-danger"
+                      >
+                        Please choose your password.
+                      </div>
                     </div>
                   </div>
 
-                  <div class="form-check d-flex justify-content-center mb-5">
+                  <div
+                    class="form-check d-flex justify-content-center mb-5"
+                    [ngClass]="{
+                      'invalid-checkbox':
+                        registerForm.get('agreeToTerms')?.invalid &&
+                        registerForm.get('agreeToTerms')?.touched
+                    }"
+                  >
                     <input
                       class="form-check-input me-2"
                       formControlName="agreeToTerms"
