@@ -5,7 +5,10 @@ import { Comment } from './comment.model';
   providedIn: 'root',
 })
 export class CommentService {
-  comments: Comment[] = [];
+  comments: Comment[] = [
+    new Comment(1, 'Nice place', 'I fell in love with this place.'),
+    new Comment(1, 'Very nice', 'Loved the incredible view.'),
+  ];
 
   constructor() {}
 
