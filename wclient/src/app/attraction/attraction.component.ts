@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { Attraction } from './attraction.model';
 import { CommentItemComponent } from '../comment/comment-list/comment-item/comment-item.component';
 import { CommentListComponent } from '../comment/comment-list/comment-list.component';
 import { CommentsComponent } from '../comment/comment.component';
 import { AddCommentComponent } from '../comment/add-comment/add-comment.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-attraction',
@@ -19,6 +20,9 @@ import { AddCommentComponent } from '../comment/add-comment/add-comment.componen
 })
 export class AttractionComponent {
   attraction!: Attraction;
+  @ViewChild('addCommentContent') addCommentContent!: TemplateRef<any>;
+
+  constructor(public modalService: NgbModal) {}
 
   //create a dummy attraction
   ngOnInit() {
@@ -31,5 +35,9 @@ export class AttractionComponent {
     console.log(this.attraction);
   }
 
-  onAddComment() {}
+  onAddComment() {
+    this.modalService.open(this.addCommentContent, {
+      ariaLabelledBy: 'modal-basic-title',
+    });
+  }
 }
