@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Attraction } from '../../../attraction/attraction.model';
 import { Comment } from '../../comment.model';
 
@@ -9,14 +9,7 @@ import { Comment } from '../../comment.model';
   templateUrl: './comment-item.component.html',
   styleUrl: './comment-item.component.css',
 })
-export class CommentItemComponent implements OnInit {
-  comment: Comment | undefined;
+export class CommentItemComponent {
+  @Input() comment!: Comment;
 
-  ngOnInit(): void {
-    this.comment = new Comment(
-      1,
-      'Nice place',
-      'I fell in love with this place.'
-    );
-  }
 }
