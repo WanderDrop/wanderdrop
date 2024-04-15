@@ -2,10 +2,10 @@
   class="comment-item mb-3 p-3 border-bottom d-flex align-items-center justify-content-between"
 >
   <div class="me-3" style="text-align: justify">
-    <h5 class="text-primary">Heading</h5>
-    <p>Text</p>
+    <h5 class="text-primary">{{ comment?.commentHeading }}</h5>
+    <p>{{ comment?.commentText }}</p>
     <p>
-      <small>Posted by author on some date</small>
+      <small>Posted by {{ comment?.author }} on {{ comment?.date }}</small>
     </p>
   </div>
   <div>
