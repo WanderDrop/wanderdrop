@@ -3,6 +3,7 @@
     <div class="form-group mb-3">
       <label for="commentHeading" class="mb-2">Comment heading</label>
       <input
+        [(ngModel)]="commentHeading"
         type="text"
         name="commentHeading"
         class="form-control"
@@ -14,6 +15,7 @@
     <div class="form-group mb-5">
       <label for="commentText" class="mb-2">Comment content</label>
       <textarea
+        [(ngModel)]="commentText"
         class="form-control"
         name="commentText"
         id="commentText"
