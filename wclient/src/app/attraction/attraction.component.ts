@@ -1,10 +1,11 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Attraction } from './attraction.model';
 import { CommentItemComponent } from '../comment/comment-list/comment-item/comment-item.component';
 import { CommentListComponent } from '../comment/comment-list/comment-list.component';
 import { CommentsComponent } from '../comment/comment.component';
 import { AddCommentComponent } from '../comment/add-comment/add-comment.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AttractionService } from './attraction.service';
 
 @Component({
   selector: 'app-attraction',
@@ -18,21 +19,17 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
     AddCommentComponent,
   ],
 })
-export class AttractionComponent {
+export class AttractionComponent implements OnInit {
   attraction!: Attraction;
   @ViewChild('addCommentContent') addCommentContent!: TemplateRef<any>;
 
-  constructor(public modalService: NgbModal) {}
+  constructor(
+    public modalService: NgbModal,
+    private attractionService: AttractionService
+  ) {}
 
-  //create a dummy attraction
-  ngOnInit() {
-    this.attraction = new Attraction(
-      1,
-      'Mystic Mountain Adventure',
-      'Embark on an exhilarating journey through Mystic Mountain, where lush forests, cascading waterfalls, and breathtaking vistas await. Traverse winding trails, brave suspension bridges, and discover hidden caves teeming with ancient mysteries. With thrilling zip lines and heart-pounding rappelling, this adventure promises unforgettable experiences for thrill-seekers and nature lovers alike.',
-      'John Doe'
-    );
-    console.log(this.attraction);
+  ngOnInit(): void {
+    this.attraction = this.attractionService.getAttraction();
   }
 
   onAddComment() {
