@@ -2,13 +2,20 @@ import { Component } from '@angular/core';
 import { Attraction } from './attraction.model';
 import { CommentItemComponent } from '../comment/comment-list/comment-item/comment-item.component';
 import { CommentListComponent } from '../comment/comment-list/comment-list.component';
+import { CommentsComponent } from '../comment/comment.component';
+import { AddCommentComponent } from '../comment/add-comment/add-comment.component';
 
 @Component({
   selector: 'app-attraction',
   standalone: true,
   templateUrl: './attraction.component.html',
   styleUrl: './attraction.component.css',
-  imports: [CommentItemComponent, CommentListComponent],
+  imports: [
+    CommentItemComponent,
+    CommentListComponent,
+    CommentsComponent,
+    AddCommentComponent,
+  ],
 })
 export class AttractionComponent {
   attraction!: Attraction;
@@ -23,4 +30,6 @@ export class AttractionComponent {
     );
     console.log(this.attraction);
   }
+
+  onAddComment() {}
 }
