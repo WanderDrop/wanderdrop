@@ -21,7 +21,7 @@ export class Attraction {
     this._id = id ? id : 0;
     this._name = name ? name : '';
     this._description = description ? description : '';
-    this._createdBy = 'Eleri';
+    this._createdBy = createdBy ? createdBy : 'Eleri';
     this._createdAt = new Date();
     this._status = 'active';
   }
