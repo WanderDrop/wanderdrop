@@ -48,7 +48,10 @@
     <div class="col-xs-12">
       <h4>Comments</h4>
       <div class="comments-section mh-100 overflow-auto">
-        <app-comment-list></app-comment-list>
+        <app-comments *ngIf="comments.length; else noComments"></app-comments>
+        <ng-template #noComments>
+          <p>No comments about this attraction</p>
+        </ng-template>
       </div>
     </div>
   </div>
@@ -56,9 +59,18 @@
   <hr />
 
   <div class="float-end">
-    <button type="button" class="btn btn-primary me-3 py-2 px-4 btn-lg">
+    <button
+      type="button"
+      class="btn btn-primary me-3 py-2 px-4 btn-lg"
+      (click)="onAddComment()"
+    >
       Add Comment
     </button>
+
+    <ng-template #addCommentContent>
+      <app-add-comment></app-add-comment>
+    </ng-template>
+
     <button type="button" class="btn btn-secondary me-3 py-2 px-4 btn-lg">
       Close
     </button>
