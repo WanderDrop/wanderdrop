@@ -3,13 +3,13 @@ export class Attraction {
   private _name: string;
   private _description: string;
   // private _location: string;
-  // private _city: string;
-  // private _country: string;
+  // private _city?: string;
+  // private _country?: string;
   private _createdBy: string; //replace with User if we have user model created
   // private _updatedBy?: User;
   private _createdAt: Date;
   // private _updatedAt?: Date;
-  // private _status: DeleteStatus;
+  private _status: 'active' | 'deleted';
   // private _deletionReason?: DeletionReason;
 
   constructor(
@@ -23,6 +23,7 @@ export class Attraction {
     this._description = description ? description : '';
     this._createdBy = 'Eleri';
     this._createdAt = new Date();
+    this._status = 'active';
   }
 
   get id(): number {
