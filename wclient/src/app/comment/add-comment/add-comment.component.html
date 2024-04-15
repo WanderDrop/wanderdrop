@@ -1,1 +1,28 @@
-<p>add-comment works!</p>
+<div class="modal-body">
+  <form (ngSubmit)="onSubmit()" #f="ngForm">
+    <div class="form-group mb-3">
+      <label for="commentHeading" class="mb-2">Heading</label>
+      <input
+        type="text"
+        name="commentHeading"
+        class="form-control"
+        id="commentHeading"
+      />
+    </div>
+    <div class="form-group mb-5">
+      <label for="commentText" class="mb-2">Content</label>
+      <textarea
+        class="form-control"
+        name="commentText"
+        id="commentText"
+      ></textarea>
+    </div>
+
+    <div class="modal-footer">
+      <div class="float-end">
+        <button type="submit" class="btn btn-success me-4">Add comment</button>
+        <button type="button" class="btn btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </form>
+</div>
