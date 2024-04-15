@@ -1,0 +1,16 @@
+<div
+  class="comment-item mb-3 p-3 border-bottom d-flex align-items-center justify-content-between"
+>
+  <div class="me-3" style="text-align: justify">
+    <h5 class="text-primary">{{ comment?.commentHeading }}</h5>
+    <p>{{ comment?.commentText }}</p>
+    <p>
+      <small>Posted by {{ comment?.author }} on {{ comment?.date }}</small>
+    </p>
+  </div>
+  <div>
+    <button type="button" class="btn btn-warning me-3 mb-5 py-2 px-4 btn-lg">
+      Delete
+    </button>
+  </div>
+</div>

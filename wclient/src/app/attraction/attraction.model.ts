@@ -1,3 +1,5 @@
+import { AttractionStatus } from './attraction-status.enum';
+
 export class Attraction {
   private _id: number;
   private _name: string;
@@ -6,11 +8,11 @@ export class Attraction {
   // private _city?: string;
   // private _country?: string;
   private _createdBy: string; //replace with User if we have user model created
-  // private _updatedBy?: User;
+  // private _updatedBy?: User; //probably only user id is needed(number)
   private _createdAt: Date;
   // private _updatedAt?: Date;
-  private _status: 'active' | 'deleted';
-  // private _deletionReason?: DeletionReason;
+  private _status: AttractionStatus;
+  // private _deletionReason?: DeletionReason; //probably only deletionReason id is needed(number)
 
   constructor(
     id?: number,
@@ -23,7 +25,7 @@ export class Attraction {
     this._description = description ? description : '';
     this._createdBy = createdBy ? createdBy : 'Eleri';
     this._createdAt = new Date();
-    this._status = 'active';
+    this._status = AttractionStatus.Active;
   }
 
   get id(): number {
@@ -56,5 +58,13 @@ export class Attraction {
 
   set createdBy(value: string) {
     this._createdBy = value;
+  }
+
+  get status(): AttractionStatus {
+    return this._status;
+  }
+
+  set status(value: AttractionStatus) {
+    this._status = value;
   }
 }
