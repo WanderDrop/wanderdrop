@@ -28,4 +28,11 @@ export class CommentService {
     this.comments.push(comment);
     this.commentsUpdated.next([...this.comments]);
   }
+
+  deleteComment(commentId: number) {
+    this.comments = this.comments.filter(
+      (comment) => comment.commentId !== commentId
+    );
+    this.commentsUpdated.next([...this.comments]);
+  }
 }

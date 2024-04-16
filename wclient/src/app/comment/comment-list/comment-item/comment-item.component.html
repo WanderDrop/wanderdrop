@@ -9,7 +9,11 @@
     </p>
   </div>
   <div>
-    <button type="button" class="btn btn-warning me-3 mb-5 py-2 px-4 btn-lg">
+    <button
+      type="button"
+      class="btn btn-warning me-3 mb-5 py-2 px-4 btn-lg"
+      (click)="onDeleteComment(comment.commentId)"
+    >
       Delete
     </button>
   </div>

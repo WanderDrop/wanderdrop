@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Attraction } from '../../../attraction/attraction.model';
 import { Comment } from '../../comment.model';
+import { CommentService } from '../../comment.service';
 
 @Component({
   selector: 'app-comment-item',
@@ -12,4 +13,9 @@ import { Comment } from '../../comment.model';
 export class CommentItemComponent {
   @Input() comment!: Comment;
 
+  constructor(private commentService: CommentService) {}
+
+  onDeleteComment(commentId: number) {
+    this.commentService.deleteComment(commentId);
+  }
 }
