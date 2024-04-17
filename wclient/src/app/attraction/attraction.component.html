@@ -21,9 +21,19 @@
         <button
           type="button"
           class="btn btn-primary me-3 py-2 px-4 btn-lg mb-2"
+          (click)="open(modifyContent)"
         >
           Modify
         </button>
+
+        <ng-template #modifyContent let-modal>
+          <app-modify-attraction
+            [attractionName]="attractionName"
+            [description]="description"
+            (dataChanged)="onDataChanged($event)"
+          ></app-modify-attraction>
+        </ng-template>
+
         <button
           type="button"
           class="btn btn-warning me-3 py-2 px-4 btn-lg mb-2"

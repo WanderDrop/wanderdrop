@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title" id="modal-basic-title">name of attraction</h4>
+  <h4 class="modal-title" id="modal-basic-title">{{ attractionName }}</h4>
   <button type="button" class="btn-close"></button>
 </div>
 <div class="modal-body">
@@ -11,8 +11,10 @@
         name="name"
         class="form-control mt-2"
         placeholder="Enter heading here..."
+        rows="1"
+        [(ngModel)]="attractionName"
       >
-name of attraction</textarea
+      {{ attractionName }}</textarea
       >
     </div>
     <div class="mb-3 mt-5">
@@ -22,8 +24,10 @@ name of attraction</textarea
         name="description"
         class="form-control mt-2"
         placeholder="Enter description here..."
+        rows="3"
+        [(ngModel)]="description"
       >
-description</textarea
+      {{ description }}</textarea
       >
     </div>
   </form>
