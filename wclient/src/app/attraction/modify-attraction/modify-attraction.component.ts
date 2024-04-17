@@ -13,7 +13,6 @@ export class ModifyAttractionComponent {
   @Input() attractionName: string = '';
   @Input() description: string = '';
   @Output() dataChanged = new EventEmitter<{
-    originalName: string;
     attractionName: string;
     description: string;
   }>();
@@ -22,5 +21,12 @@ export class ModifyAttractionComponent {
 
   closeModal() {
     this.modalService.dismissAll();
+  }
+
+  onSaveChanges() {
+    this.dataChanged.emit({
+      attractionName: this.attractionName,
+      description: this.description,
+    });
   }
 }

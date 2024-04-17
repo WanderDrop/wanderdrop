@@ -55,9 +55,9 @@ export class AttractionComponent implements OnInit {
   }
 
   open(content: any) {
+    this.attractionName = this.attraction.name;
+    this.description = this.attraction.description;
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
-    // this.attractionService.getAttraction().name = this.attractionName;
-    // this.attractionService.getAttraction().description = this.description;
   }
 
   onDataChanged(event: { attractionName: string; description: string }) {
