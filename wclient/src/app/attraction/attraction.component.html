@@ -21,7 +21,7 @@
         <button
           type="button"
           class="btn btn-primary me-3 py-2 px-4 btn-lg mb-2"
-          (click)="open(modifyContent)"
+          (click)="openModify(modifyContent)"
         >
           Modify
         </button>
@@ -37,9 +37,14 @@
         <button
           type="button"
           class="btn btn-warning me-3 py-2 px-4 btn-lg mb-2"
+          (click)="openDelete(deleteContent)"
         >
           Delete
         </button>
+
+        <ng-template #deleteContent let-modal>
+          <app-delete-confirmation></app-delete-confirmation>
+        </ng-template>
 
         <button type="button" class="btn btn-danger py-2 px-4 btn-lg mb-2">
           Report

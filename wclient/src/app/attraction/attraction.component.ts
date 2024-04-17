@@ -10,6 +10,7 @@ import { CommentService } from '../comment/comment.service';
 import { Comment } from '../comment/comment.model';
 import { CommonModule } from '@angular/common';
 import { ModifyAttractionComponent } from './modify-attraction/modify-attraction.component';
+import { DeleteConfirmationComponent } from '../shared/delete-confirmation/delete-confirmation.component';
 
 @Component({
   selector: 'app-attraction',
@@ -23,6 +24,7 @@ import { ModifyAttractionComponent } from './modify-attraction/modify-attraction
     AddCommentComponent,
     CommonModule,
     ModifyAttractionComponent,
+    DeleteConfirmationComponent,
   ],
 })
 export class AttractionComponent implements OnInit {
@@ -54,10 +56,25 @@ export class AttractionComponent implements OnInit {
     });
   }
 
-  open(content: any) {
+  openModify(content: any) {
     this.attractionName = this.attraction.name;
     this.description = this.attraction.description;
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+  }
+
+  openDelete(content: any) {
+    const modalRef = this.modalService.open(DeleteConfirmationComponent);
+
+    modalRef.result
+      .then((result) => {
+        if (result === 'delete') {
+          // Call service to delete the attraction
+          console.log('DELETED');
+        }
+      })
+      .catch((reason) => {
+        console.log('Modal dismissed due to: ', reason);
+      });
   }
 
   onDataChanged(event: { attractionName: string; description: string }) {
