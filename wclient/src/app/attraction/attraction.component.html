@@ -37,9 +37,14 @@
         <button
           type="button"
           class="btn btn-warning me-3 py-2 px-4 btn-lg mb-2"
+          (click)="open(deleteContent)"
         >
           Delete
         </button>
+
+        <ng-template #deleteContent>
+          <app-delete-confirmation></app-delete-confirmation>
+        </ng-template>
 
         <button type="button" class="btn btn-danger py-2 px-4 btn-lg mb-2">
           Report

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-delete-confirmation',
@@ -10,7 +11,21 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './delete-confirmation.component.css',
 })
 export class DeleteConfirmationComponent {
-  reasons: string[] = [];
+  reasons: string[] = [
+    'Violation of Community Guidelines',
+    'Inappropriate Content',
+    'Irrelevant or Off-topic',
+    'Duplicate Content',
+    'Trolling or Disruptive Behaviour',
+    'Commercial or Promotional Content',
+    'Political or Religious Sensitivity',
+  ];
+
+  constructor(private modalService: NgbModal) {}
+
   onDelete() {}
-  onCancel() {}
+
+  onCancel() {
+    this.modalService.dismissAll();
+  }
 }

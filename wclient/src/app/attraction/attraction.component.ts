@@ -10,6 +10,7 @@ import { CommentService } from '../comment/comment.service';
 import { Comment } from '../comment/comment.model';
 import { CommonModule } from '@angular/common';
 import { ModifyAttractionComponent } from './modify-attraction/modify-attraction.component';
+import { DeleteConfirmationComponent } from '../shared/delete-confirmation/delete-confirmation.component';
 
 @Component({
   selector: 'app-attraction',
@@ -23,6 +24,7 @@ import { ModifyAttractionComponent } from './modify-attraction/modify-attraction
     AddCommentComponent,
     CommonModule,
     ModifyAttractionComponent,
+    DeleteConfirmationComponent,
   ],
 })
 export class AttractionComponent implements OnInit {

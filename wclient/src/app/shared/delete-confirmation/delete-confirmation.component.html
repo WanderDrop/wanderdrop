@@ -1,4 +1,7 @@
 <div>
+  <div class="modal-header">
+    <h3>Select the reason:</h3>
+  </div>
   <div class="modal-body">
     <form (ngSubmit)="onDelete()" #f="ngForm">
       <div *ngFor="let reason of reasons">
@@ -31,9 +34,9 @@
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="onCancel()">
+    <button type="submit" class="btn btn-warning">Delete</button>
+    <button type="button" class="btn btn-secondary" (click)="onCancel()">
       Cancel
     </button>
-    <button type="submit" class="btn btn-warning">Delete</button>
   </div>
 </div>
