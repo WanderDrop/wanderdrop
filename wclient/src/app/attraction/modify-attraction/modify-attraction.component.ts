@@ -24,10 +24,12 @@ export class ModifyAttractionComponent {
   }
 
   onSaveChanges() {
-    this.dataChanged.emit({
-      attractionName: this.attractionName,
-      description: this.description,
-    });
+    if (window.confirm('Are you sure you want to modify the attraction?')) {
+      this.dataChanged.emit({
+        attractionName: this.attractionName,
+        description: this.description,
+      });
+    }
     this.modalService.dismissAll();
   }
 }
