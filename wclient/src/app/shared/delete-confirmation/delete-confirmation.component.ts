@@ -11,6 +11,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './delete-confirmation.component.css',
 })
 export class DeleteConfirmationComponent {
+  selectedReason: string = '';
+  otherReason: string = '';
+
   reasons: string[] = [
     'Violation of Community Guidelines',
     'Inappropriate Content',
@@ -23,7 +26,9 @@ export class DeleteConfirmationComponent {
 
   constructor(private modalService: NgbModal) {}
 
-  onDelete() {}
+  onDelete() {
+    console.log('Attraction deleted (not really).');
+  }
 
   onCancel() {
     this.modalService.dismissAll();
