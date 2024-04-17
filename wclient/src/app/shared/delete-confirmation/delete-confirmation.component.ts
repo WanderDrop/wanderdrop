@@ -28,6 +28,10 @@ export class DeleteConfirmationComponent {
 
   onDelete() {
     console.log('Attraction deleted (not really).');
+    console.log(
+      this.selectedReason !== 'other' ? this.selectedReason : this.otherReason
+    );
+    this.modalService.dismissAll();
   }
 
   onCancel() {

@@ -3,8 +3,8 @@
     <h3>Select the reason:</h3>
   </div>
 
-  <div class="modal-body">
-    <form (ngSubmit)="onDelete()" #f="ngForm">
+  <form (ngSubmit)="onDelete()" #f="ngForm">
+    <div class="modal-body">
       <div *ngFor="let reason of reasons">
         <div class="radio-wrapper">
           <input
@@ -16,34 +16,38 @@
             required
           /><label for="reason"> {{ reason }}</label>
         </div>
-        <div class="radio-wrapper">
-          <input type="radio" value="other" name="reason" id="other" /><label
-            for="other"
-            >Something else</label
-          >
-        </div>
       </div>
 
-      <div class="mb-3 mt-5">
+      <div class="radio-wrapper">
+        <input
+          type="radio"
+          value="other"
+          name="reason"
+          id="other"
+          [(ngModel)]="selectedReason"
+        /><label for="other">Something else</label>
+      </div>
+
+      <div class="mb-3 mt-5" *ngIf="selectedReason === 'other'">
         <label for="comment">Please enter another reason:</label>
         <textarea
           id="otherReason"
           name="otherReason"
           class="form-control mt-2"
           placeholder="Specify..."
-          rows="3"
+          rows="5"
           [(ngModel)]="otherReason"
         ></textarea>
       </div>
-    </form>
-  </div>
+    </div>
 
-  <div class="modal-footer">
-    <button type="submit" class="btn btn-warning" [disabled]="!f.valid">
-      Delete
-    </button>
-    <button type="button" class="btn btn-secondary" (click)="onCancel()">
-      Cancel
-    </button>
-  </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-warning" [disabled]="!f.valid">
+        Delete
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
 </div>
