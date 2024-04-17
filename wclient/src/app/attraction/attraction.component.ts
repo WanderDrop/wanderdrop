@@ -56,10 +56,25 @@ export class AttractionComponent implements OnInit {
     });
   }
 
-  open(content: any) {
+  openModify(content: any) {
     this.attractionName = this.attraction.name;
     this.description = this.attraction.description;
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+  }
+
+  openDelete(content: any) {
+    const modalRef = this.modalService.open(DeleteConfirmationComponent);
+
+    modalRef.result
+      .then((result) => {
+        if (result === 'delete') {
+          // Call service to delete the attraction
+          console.log('DELETED');
+        }
+      })
+      .catch((reason) => {
+        console.log('Modal dismissed due to: ', reason);
+      });
   }
 
   onDataChanged(event: { attractionName: string; description: string }) {

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-delete-confirmation',
@@ -24,17 +24,21 @@ export class DeleteConfirmationComponent {
     'Political or Religious Sensitivity',
   ];
 
-  constructor(private modalService: NgbModal) {}
+  constructor(private activeModal: NgbActiveModal) {}
 
   onDelete() {
-    console.log('Attraction deleted (not really).');
-    console.log(
-      this.selectedReason !== 'other' ? this.selectedReason : this.otherReason
-    );
-    this.modalService.dismissAll();
+    if (window.confirm('Are you sure? This action cannot be undone.')) {
+      console.log('Deleted (not really).');
+      console.log(
+        this.selectedReason !== 'other' ? this.selectedReason : this.otherReason
+      );
+      this.activeModal.close('delete'); // Close this modal and resolve the Promise with 'delete'
+    } else {
+      this.activeModal.dismiss('cancel'); // Dismiss this modal and reject the Promise with 'cancel'
+    }
   }
 
   onCancel() {
-    this.modalService.dismissAll();
+    this.activeModal.dismiss('cancel');
   }
 }
