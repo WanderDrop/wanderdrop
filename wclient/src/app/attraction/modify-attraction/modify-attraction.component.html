@@ -1,0 +1,42 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">{{ attractionName }}</h4>
+  <button type="button" class="btn-close" (click)="closeModal()"></button>
+</div>
+<div class="modal-body">
+  <form>
+    <div class="mb-3">
+      <label for="heading">Name</label>
+      <textarea
+        id="name"
+        name="name"
+        class="form-control mt-2"
+        placeholder="Enter heading here..."
+        rows="1"
+        [(ngModel)]="attractionName"
+      >
+      {{ attractionName }}</textarea
+      >
+    </div>
+    <div class="mb-3 mt-5">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        name="description"
+        class="form-control mt-2"
+        placeholder="Enter description here..."
+        rows="10"
+        [(ngModel)]="description"
+      >
+      {{ description }}</textarea
+      >
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="onSaveChanges()">
+    Save
+  </button>
+  <button type="button" class="btn btn-secondary" (click)="closeModal()">
+    Cancel
+  </button>
+</div>

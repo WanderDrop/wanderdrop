@@ -9,6 +9,7 @@ import { AttractionService } from './attraction.service';
 import { CommentService } from '../comment/comment.service';
 import { Comment } from '../comment/comment.model';
 import { CommonModule } from '@angular/common';
+import { ModifyAttractionComponent } from './modify-attraction/modify-attraction.component';
 
 @Component({
   selector: 'app-attraction',
@@ -21,11 +22,14 @@ import { CommonModule } from '@angular/common';
     CommentsComponent,
     AddCommentComponent,
     CommonModule,
+    ModifyAttractionComponent,
   ],
 })
 export class AttractionComponent implements OnInit {
   attraction!: Attraction;
   comments!: Comment[];
+  attractionName: string = '';
+  description: string = '';
   @ViewChild('addCommentContent') addCommentContent!: TemplateRef<any>;
 
   constructor(
@@ -48,5 +52,16 @@ export class AttractionComponent implements OnInit {
     this.modalService.open(this.addCommentContent, {
       ariaLabelledBy: 'modal-basic-title',
     });
+  }
+
+  open(content: any) {
+    this.attractionName = this.attraction.name;
+    this.description = this.attraction.description;
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+  }
+
+  onDataChanged(event: { attractionName: string; description: string }) {
+    this.attraction.name = event.attractionName;
+    this.attraction.description = event.description;
   }
 }

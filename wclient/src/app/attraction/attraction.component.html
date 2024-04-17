@@ -1,9 +1,9 @@
-<div class="content-body m-4">
+<div class="content-body m-4 extra-padding-on-top">
   <div class="row">
     <div class="col-xs-12">
       <button
         type="button"
-        class="btn-close position-absolute top-0 end-0 m-3"
+        class="btn-close position-absolute end-0 m-1"
         aria-label="Close"
       ></button>
       <div class="float-start">
@@ -11,7 +11,7 @@
 
         <div class="row">
           <div class="col-xs-12">
-            <div>
+            <div style="text-align: justify">
               <p>{{ attraction.description }}</p>
             </div>
           </div>
@@ -21,9 +21,19 @@
         <button
           type="button"
           class="btn btn-primary me-3 py-2 px-4 btn-lg mb-2"
+          (click)="open(modifyContent)"
         >
           Modify
         </button>
+
+        <ng-template #modifyContent let-modal>
+          <app-modify-attraction
+            [attractionName]="attractionName"
+            [description]="description"
+            (dataChanged)="onDataChanged($event)"
+          ></app-modify-attraction>
+        </ng-template>
+
         <button
           type="button"
           class="btn btn-warning me-3 py-2 px-4 btn-lg mb-2"
