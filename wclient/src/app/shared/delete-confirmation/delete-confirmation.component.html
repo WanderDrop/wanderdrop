@@ -1,1 +1,39 @@
-<p>delete-confirmation works!</p>
+<div>
+  <div class="modal-body">
+    <form (ngSubmit)="onDelete()" #f="ngForm">
+      <div *ngFor="let reason of reasons">
+        <div class="radio-wrapper">
+          <input
+            type="radio"
+            [value]="reason"
+            name="reason"
+            id="reason"
+          /><label for="reason"> {{ reason }}</label>
+        </div>
+        <div class="radio-wrapper">
+          <input type="radio" value="other" name="reason" id="other" /><label
+            for="other"
+            >Something else</label
+          >
+        </div>
+      </div>
+
+      <div class="mb-3 mt-5">
+        <label for="comment">Please enter another reason:</label>
+        <textarea
+          id="otherReason"
+          name="otherReason"
+          class="form-control mt-2"
+          placeholder="Specify..."
+        ></textarea>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="onCancel()">
+      Cancel
+    </button>
+    <button type="submit" class="btn btn-warning">Delete</button>
+  </div>
+</div>
