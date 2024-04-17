@@ -28,5 +28,6 @@ export class ModifyAttractionComponent {
       attractionName: this.attractionName,
       description: this.description,
     });
+    this.modalService.dismissAll();
   }
 }

@@ -61,7 +61,7 @@ export class AttractionComponent implements OnInit {
   }
 
   onDataChanged(event: { attractionName: string; description: string }) {
-    this.attractionName = event.attractionName;
-    this.description = event.description;
+    this.attraction.name = event.attractionName;
+    this.attraction.description = event.description;
   }
 }
