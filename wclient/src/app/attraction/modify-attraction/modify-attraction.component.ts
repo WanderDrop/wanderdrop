@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-modify-attraction',
@@ -16,4 +17,10 @@ export class ModifyAttractionComponent {
     attractionName: string;
     description: string;
   }>();
+
+  constructor(private modalService: NgbModal) {}
+
+  closeModal() {
+    this.modalService.dismissAll();
+  }
 }
