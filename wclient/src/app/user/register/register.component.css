@@ -1,7 +1,21 @@
-.extra-bottom-margin {
-  margin-bottom: 6rem;
-}
-
 .invalid-checkbox .form-check-input {
   border-color: red;
+}
+
+.card {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.row {
+  overflow: auto;
+}
+
+@media (min-width: 768px) {
+  .container {
+    /* max-width: 960px; */
+    height: 100vh;
+  }
 }
