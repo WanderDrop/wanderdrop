@@ -5,6 +5,7 @@
         type="button"
         class="btn-close position-absolute end-0 m-1"
         aria-label="Close"
+        (click)="onNavigateHome()"
       ></button>
       <div class="float-start">
         <h3 class="mb-4 text-primary">{{ attraction.name }}</h3>
@@ -86,7 +87,11 @@
       <app-add-comment></app-add-comment>
     </ng-template>
 
-    <button type="button" class="btn btn-secondary me-3 py-2 px-4 btn-lg mb-1">
+    <button
+      type="button"
+      class="btn btn-secondary me-3 py-2 px-4 btn-lg mb-1"
+      (click)="onNavigateHome()"
+    >
       Close
     </button>
   </div>
