@@ -1,19 +1,23 @@
-<nav class="navbar bg-dark border-bottom border-body fixed-top" data-bs-theme="dark">
-    <a class="navbar-brand" href="#">
-        WanderDrop
+<nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
+  <a class="navbar-brand" href="#"> WanderDrop </a>
+  <div class="container-md">
+    <form class="d-flex" role="search">
+      <input
+        class="form-control col-4 me-3"
+        type="search"
+        placeholder="Insert country/city name"
+        aria-label="Search"
+      />
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+  </div>
+  <div class="d-flex justify-content-md-end">
+    <a href="#">
+      <span class="material-symbols-outlined"> login </span>
     </a>
-    <div class="container-md">
-        <form class="d-flex" role="search">
-            <input class="form-control col-4 me-3" type="search" placeholder="Insert country/city name" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-    </div>
-    <div class="d-flex justify-content-md-end">
-        <a href="#" >
-        <span class="material-symbols-outlined">
-        login
-        </span>
-        </a>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    </div>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+  </div>
 </nav>
