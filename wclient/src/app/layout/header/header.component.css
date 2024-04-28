@@ -1,0 +1,18 @@
+.custom-search-bar {
+  width: 400px;
+}
+
+@media (max-width: 768px) {
+  .custom-search-bar {
+    width: 100%;
+    min-width: 255px;
+  }
+
+  .search-button {
+    margin-left: 10px;
+  }
+
+  .custom-top-margin {
+    margin-top: 10px;
+  }
+}

@@ -1,10 +1,11 @@
-<div class="content-body m-4 extra-padding-on-top">
+<div class="content-body m-4 extra-padding">
   <div class="row">
     <div class="col-xs-12">
       <button
         type="button"
         class="btn-close position-absolute end-0 m-1"
         aria-label="Close"
+        (click)="onNavigateHome()"
       ></button>
       <div class="float-start">
         <h3 class="mb-4 text-primary">{{ attraction.name }}</h3>
@@ -76,7 +77,7 @@
   <div class="float-end">
     <button
       type="button"
-      class="btn btn-primary me-3 py-2 px-4 btn-lg"
+      class="btn btn-primary me-3 py-2 px-4 btn-lg mb-1"
       (click)="onAddComment()"
     >
       Add Comment
@@ -86,7 +87,11 @@
       <app-add-comment></app-add-comment>
     </ng-template>
 
-    <button type="button" class="btn btn-secondary me-3 py-2 px-4 btn-lg">
+    <button
+      type="button"
+      class="btn btn-secondary me-3 py-2 px-4 btn-lg mb-1"
+      (click)="onNavigateHome()"
+    >
       Close
     </button>
   </div>

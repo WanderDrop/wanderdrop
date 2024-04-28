@@ -11,6 +11,7 @@ import { Comment } from '../comment/comment.model';
 import { CommonModule } from '@angular/common';
 import { ModifyAttractionComponent } from './modify-attraction/modify-attraction.component';
 import { DeleteConfirmationComponent } from '../shared/delete-confirmation/delete-confirmation.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-attraction',
@@ -37,7 +38,8 @@ export class AttractionComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private attractionService: AttractionService,
-    private commentService: CommentService
+    private commentService: CommentService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -48,6 +50,10 @@ export class AttractionComponent implements OnInit {
       .subscribe((comments: Comment[]) => {
         this.comments = comments;
       });
+  }
+
+  onNavigateHome() {
+    this.router.navigate(['/home']);
   }
 
   onAddComment() {

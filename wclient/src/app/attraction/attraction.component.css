@@ -1,5 +1,13 @@
-.extra-padding-on-top {
+.extra-padding {
   position: relative;
-  padding-top: 100px;
-  padding-bottom: 100px;
+  padding-bottom: 20px;
+}
+
+.content-body {
+  height: 100vh;
+}
+
+.float-end {
+  margin-top: 15px;
+  margin-bottom: 25px;
 }

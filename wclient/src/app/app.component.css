@@ -1,0 +1,13 @@
+.my-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+app-google-maps {
+  flex-grow: 1;
+}
+
+.add-height {
+  height: 100%;
+}
