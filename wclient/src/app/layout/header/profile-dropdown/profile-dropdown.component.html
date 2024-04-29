@@ -1,0 +1,96 @@
+<ul class="nav navbar-nav navbar-right">
+  <!-- Show Profile dropdown on large screens -->
+
+  <li class="dropdown d-none d-sm-block dropdown">
+    <button
+      class="btn btn-dark dropdown-toggle text-light"
+      type="button"
+      id="dropdownMenuButton"
+      data-bs-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      Profile
+    </button>
+
+    <div
+      class="dropdown-menu-absolute"
+      [ngStyle]="{
+        right: screenWidth >= 579 ? '0' : 'auto'
+      }"
+    >
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a
+          style="cursor: pointer"
+          class="dropdown-item"
+          (click)="onDisplayProfile()"
+          >Your profile</a
+        >
+        <a
+          style="cursor: pointer"
+          class="dropdown-item"
+          (click)="onDisplayActivity()"
+          >Your activity</a
+        >
+        <a
+          style="cursor: pointer"
+          class="dropdown-item"
+          (click)="onDisplayReports()"
+          >Reports</a
+        >
+        <a style="cursor: pointer" class="dropdown-item" (click)="onLogout()"
+          >Log out</a
+        >
+      </div>
+    </div>
+  </li>
+
+  <!-- Show hamburger icon on small screens -->
+  <li class="dropdown d-sm-none dropdown">
+    <button
+      class="btn btn-dark navbar-toggler dropdown-toggle text-light"
+      [ngClass]="{
+        'custom-top-margin': screenWidth < 437
+      }"
+      type="button"
+      id="dropdownMenuButtonSmall"
+      data-bs-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div #smallDropdownMenu class="dropdown-menu-absolute-small">
+      <div
+        class="dropdown-menu collapse"
+        aria-labelledby="dropdownMenuButtonSmall"
+      >
+        <a
+          style="cursor: pointer"
+          class="dropdown-item"
+          (click)="onDisplayProfile()"
+          >Your profile</a
+        >
+
+        <a
+          style="cursor: pointer"
+          class="dropdown-item"
+          (click)="onDisplayActivity()"
+          >Your activity</a
+        >
+
+        <a
+          style="cursor: pointer"
+          class="dropdown-item"
+          (click)="onDisplayReports()"
+          >Reports</a
+        >
+
+        <a style="cursor: pointer" class="dropdown-item" (click)="onLogout()"
+          >Log out</a
+        >
+      </div>
+    </div>
+  </li>
+</ul>

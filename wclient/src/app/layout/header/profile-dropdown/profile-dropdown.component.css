@@ -1,0 +1,23 @@
+.dropdown-menu-absolute {
+  position: absolute;
+  overflow: visible;
+  z-index: 1;
+}
+
+.dropdown-menu-absolute-small {
+  position: absolute;
+  overflow: visible;
+  z-index: 1;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.no-overlap {
+  right: 0;
+}
+
+button.custom-top-margin {
+  margin-top: 10px;
+}
