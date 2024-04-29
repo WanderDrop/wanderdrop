@@ -1,5 +1,6 @@
 <ul class="nav navbar-nav navbar-right">
   <!-- Show Profile dropdown on large screens -->
+
   <li class="dropdown d-none d-sm-block dropdown">
     <button
       class="btn btn-dark dropdown-toggle text-light"
@@ -14,7 +15,11 @@
 
     <div class="dropdown-menu-absolute">
       <div
-        class="dropdown-menu dropdown-menu-right"
+        #largeDropdownMenu
+        class="dropdown-menu"
+        [ngClass]="{
+          'dropdown-menu-end': screenWidth <= 563 || screenWidth >= 576
+        }"
         aria-labelledby="dropdownMenuButton"
       >
         <a
@@ -46,6 +51,9 @@
   <li class="dropdown d-sm-none dropdown">
     <button
       class="btn btn-dark navbar-toggler dropdown-toggle text-light"
+      [ngClass]="{
+        'custom-top-margin': screenWidth < 437
+      }"
       type="button"
       id="dropdownMenuButtonSmall"
       data-bs-toggle="dropdown"
@@ -55,17 +63,36 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div
-      class="dropdown-menu collapse"
-      aria-labelledby="dropdownMenuButtonSmall"
-    >
-      <a style="cursor: pointer" class="dropdown-item">Your profile</a>
+    <div #smallDropdownMenu class="dropdown-menu-absolute-small">
+      <div
+        class="dropdown-menu collapse"
+        aria-labelledby="dropdownMenuButtonSmall"
+      >
+        <a
+          style="cursor: pointer"
+          class="dropdown-item"
+          (click)="onDisplayProfile()"
+          >Your profile</a
+        >
 
-      <a style="cursor: pointer" class="dropdown-item">Your activity</a>
+        <a
+          style="cursor: pointer"
+          class="dropdown-item"
+          (click)="onDisplayActivity()"
+          >Your activity</a
+        >
 
-      <a style="cursor: pointer" class="dropdown-item">Reports</a>
+        <a
+          style="cursor: pointer"
+          class="dropdown-item"
+          (click)="onDisplayReports()"
+          >Reports</a
+        >
 
-      <a style="cursor: pointer" class="dropdown-item">Log out</a>
+        <a style="cursor: pointer" class="dropdown-item" (click)="onLogout()"
+          >Log out</a
+        >
+      </div>
     </div>
   </li>
 </ul>
