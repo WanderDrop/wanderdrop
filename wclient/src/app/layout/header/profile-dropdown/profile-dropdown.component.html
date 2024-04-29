@@ -13,15 +13,13 @@
       Profile
     </button>
 
-    <div class="dropdown-menu-absolute">
-      <div
-        #largeDropdownMenu
-        class="dropdown-menu"
-        [ngClass]="{
-          'dropdown-menu-end': screenWidth <= 563 || screenWidth >= 576
-        }"
-        aria-labelledby="dropdownMenuButton"
-      >
+    <div
+      class="dropdown-menu-absolute"
+      [ngStyle]="{
+        right: screenWidth >= 579 ? '0' : 'auto'
+      }"
+    >
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <a
           style="cursor: pointer"
           class="dropdown-item"
