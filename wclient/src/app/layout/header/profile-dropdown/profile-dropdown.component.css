@@ -1,0 +1,10 @@
+.dropdown-menu-absolute {
+  position: absolute;
+  overflow: visible;
+  right: 0;
+  z-index: 1;
+}
+
+.dropdown {
+  position: relative;
+}

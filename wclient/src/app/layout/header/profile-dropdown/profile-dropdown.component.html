@@ -12,14 +12,33 @@
       Profile
     </button>
 
-    <div
-      class="dropdown-menu dropdown-menu-right"
-      aria-labelledby="dropdownMenuButton"
-    >
-      <a style="cursor: pointer" class="dropdown-item">Your profile</a>
-      <a style="cursor: pointer" class="dropdown-item">Your activity</a>
-      <a style="cursor: pointer" class="dropdown-item">Reports</a>
-      <a style="cursor: pointer" class="dropdown-item">Log out</a>
+    <div class="dropdown-menu-absolute">
+      <div
+        class="dropdown-menu dropdown-menu-right"
+        aria-labelledby="dropdownMenuButton"
+      >
+        <a
+          style="cursor: pointer"
+          class="dropdown-item"
+          (click)="onDisplayProfile()"
+          >Your profile</a
+        >
+        <a
+          style="cursor: pointer"
+          class="dropdown-item"
+          (click)="onDisplayActivity()"
+          >Your activity</a
+        >
+        <a
+          style="cursor: pointer"
+          class="dropdown-item"
+          (click)="onDisplayReports()"
+          >Reports</a
+        >
+        <a style="cursor: pointer" class="dropdown-item" (click)="onLogout()"
+          >Log out</a
+        >
+      </div>
     </div>
   </li>
 </ul>

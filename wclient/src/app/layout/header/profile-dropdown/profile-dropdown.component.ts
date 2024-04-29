@@ -5,8 +5,14 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './profile-dropdown.component.html',
-  styleUrl: './profile-dropdown.component.css'
+  styleUrl: './profile-dropdown.component.css',
 })
 export class ProfileDropdownComponent {
+  onDisplayProfile() {}
 
+  onDisplayActivity() {}
+
+  onDisplayReports() {}
+
+  onLogout() {}
 }
