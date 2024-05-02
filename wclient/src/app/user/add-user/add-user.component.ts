@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -17,8 +17,16 @@ import { Router } from '@angular/router';
 })
 export class AddUserComponent {
   registerForm!: FormGroup;
+  isMobile!: boolean;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    this.isMobile = window.innerWidth <= 1100;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: { target: { innerWidth: number } }) {
+    this.isMobile = event.target.innerWidth <= 1100;
+  }
 
   ngOnInit() {
     this.registerForm = new FormGroup({
@@ -27,6 +35,7 @@ export class AddUserComponent {
       email: new FormControl(null, [Validators.required, Validators.email]),
       userPassword: new FormControl(null, Validators.required),
       agreeToTerms: new FormControl(false, Validators.requiredTrue),
+      role: new FormControl(null, Validators.required),
     });
   }
 
