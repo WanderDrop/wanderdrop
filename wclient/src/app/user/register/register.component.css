@@ -12,9 +12,3 @@
 .row {
   overflow: auto;
 }
-
-@media (min-width: 768px) {
-  .container {
-    height: 100vh;
-  }
-}
