@@ -9,6 +9,7 @@ import {
   Renderer2,
   ViewChildren,
 } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-dropdown',
@@ -22,7 +23,11 @@ export class ProfileDropdownComponent implements AfterViewInit {
 
   screenWidth: number = window.innerWidth;
 
-  constructor(private renderer: Renderer2, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private renderer: Renderer2,
+    private cdr: ChangeDetectorRef,
+    private router: Router
+  ) {}
 
   @HostListener('window:resize')
   onResize() {
@@ -63,4 +68,8 @@ export class ProfileDropdownComponent implements AfterViewInit {
   onDisplayReports() {}
 
   onLogout() {}
+
+  onAddNewUser() {
+    this.router.navigate(['/add-user']);
+  }
 }
