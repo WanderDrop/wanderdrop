@@ -3,11 +3,15 @@
   padding-bottom: 20px;
 }
 
-.content-body {
-  height: 100vh;
+#adventure-container {
+  background-color: white;
+  padding-bottom: 60px;
+  padding-top: 10px;
+  border-radius: 20px;
+  margin-top: 20px;
+  margin-bottom: 25px;
 }
 
 .float-end {
   margin-top: 15px;
-  margin-bottom: 25px;
 }
