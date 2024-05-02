@@ -1,0 +1,14 @@
+.invalid-checkbox .form-check-input {
+  border-color: red;
+}
+
+.card {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.row {
+  overflow: auto;
+}
