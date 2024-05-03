@@ -96,12 +96,54 @@ export class GoogleMapsComponent implements OnInit {
     }
   }
 
+  // click(event: google.maps.MapMouseEvent) {
+  //   console.log(event);
+  //   const position = {
+  //     lat: event.latLng?.lat(),
+  //     lng: event.latLng?.lng(),
+  //   };
+  //   this.initMarkers(position);
+  // }
+
   click(event: google.maps.MapMouseEvent) {
     console.log(event);
-    const position = {
-      lat: event.latLng?.lat(),
-      lng: event.latLng?.lng(),
-    };
-    this.initMarkers(position);
+    if (event.latLng) {
+      const position = {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng(),
+      };
+
+      const contentString = `
+      <div class="card" style="width: 16rem;">
+        <div class="card-body">
+          <h5 class="card-title mb-4 text-center">Add new attraction</h5>
+          <button id="add-attraction" class="btn btn-primary float-start ml-2">Add new</button>
+          <button id="cancel-attraction" class="btn btn-secondary float-end mr-2">Cancel</button>
+        </div>
+      </div>
+    `;
+
+      const infoWindow = new google.maps.InfoWindow({
+        content: contentString,
+        position: position,
+      });
+
+      infoWindow.open(this.map);
+
+      google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
+        document
+          .getElementById('add-attraction')
+          ?.addEventListener('click', () => {
+            this.initMarkers(position);
+            // Redirect to the new component
+          });
+
+        document
+          .getElementById('cancel-attraction')
+          ?.addEventListener('click', () => {
+            infoWindow.close();
+          });
+      });
+    }
   }
 }
