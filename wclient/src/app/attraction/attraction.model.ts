@@ -4,6 +4,8 @@ export class Attraction {
   private _id: number;
   private _name: string;
   private _description: string;
+  private _latitude: number;
+  private _longitude: number;
   // private _location: string;
   // private _city?: string;
   // private _country?: string;
@@ -13,16 +15,20 @@ export class Attraction {
   // private _updatedAt?: Date;
   private _status: AttractionStatus;
   // private _deletionReason?: DeletionReason; //probably only deletionReason id is needed(number)
+  private static lastId = 1;
 
   constructor(
-    id?: number,
     name?: string,
     description?: string,
+    latitude?: number,
+    longitude?: number,
     createdBy?: string
   ) {
-    this._id = id ? id : 0;
+    this._id = Attraction.lastId++;
     this._name = name ? name : '';
     this._description = description ? description : '';
+    this._latitude = latitude ? latitude : 0;
+    this._longitude = longitude ? longitude : 0;
     this._createdBy = createdBy ? createdBy : 'Eleri';
     this._createdAt = new Date();
     this._status = AttractionStatus.Active;
@@ -50,6 +56,22 @@ export class Attraction {
 
   set description(value: string) {
     this._description = value;
+  }
+
+  get latitude(): number {
+    return this._latitude;
+  }
+
+  set latitude(value: number) {
+    this._latitude = value;
+  }
+
+  get longitude(): number {
+    return this._longitude;
+  }
+
+  set longitude(value: number) {
+    this._longitude = value;
   }
 
   get createdBy(): string {

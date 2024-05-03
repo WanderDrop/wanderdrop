@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import {
   GoogleMap,
   GoogleMapsModule,
@@ -7,6 +7,9 @@ import {
 } from '@angular/google-maps';
 import { Loader } from '@googlemaps/js-api-loader';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
+import { MapService } from './map.service';
+import { AttractionService } from '../attraction/attraction.service';
 
 @Component({
   selector: 'app-google-maps',
@@ -33,10 +36,12 @@ export class GoogleMapsComponent implements OnInit {
 
   map!: google.maps.Map;
 
-  loader: any = new Loader({
-    apiKey: environment.API_KEY,
-    version: 'weekly',
-  });
+  constructor(
+    private router: Router,
+    private mapService: MapService,
+    private ngZone: NgZone,
+    private attractionService: AttractionService
+  ) {}
 
   ngOnInit() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -49,8 +54,8 @@ export class GoogleMapsComponent implements OnInit {
   }
 
   initMap(): void {
-    this.loader
-      .load()
+    this.mapService
+      .loadGoogleMaps()
       .then(() => {
         this.map = new google.maps.Map(
           document.getElementById('map') as HTMLElement,
@@ -63,13 +68,22 @@ export class GoogleMapsComponent implements OnInit {
             },
           }
         );
+        console.log('Initialized map:', this.map);
         this.map.addListener('click', (event: any) => {
           this.click(event);
         });
+        this.mapService.setMap(this.map);
+        this.addAttractionMarkers();
       })
       .catch((error: any) => {
         console.error('Error loading Google Maps JavaScript API: ', error);
       });
+  }
+
+  addAttractionMarkers() {
+    this.attractionService.attractions.forEach((attraction) => {
+      this.mapService.addMarker(attraction.latitude, attraction.longitude);
+    });
   }
 
   async initMarkers(position: any): Promise<void> {
@@ -78,8 +92,8 @@ export class GoogleMapsComponent implements OnInit {
         'marker'
       )) as google.maps.MarkerLibrary;
 
-      this.loader
-        .load()
+      this.mapService
+        .loadGoogleMaps()
         .then(() => {
           const marker = new AdvancedMarkerElement({
             map: this.map,
@@ -112,6 +126,7 @@ export class GoogleMapsComponent implements OnInit {
         lat: event.latLng.lat(),
         lng: event.latLng.lng(),
       };
+      this.mapService.setPosition(event.latLng.lat(), event.latLng.lng());
 
       const contentString = `
       <div class="card" style="width: 16rem;">
@@ -135,7 +150,9 @@ export class GoogleMapsComponent implements OnInit {
           .getElementById('add-attraction')
           ?.addEventListener('click', () => {
             this.initMarkers(position);
-            // Redirect to the new component
+            this.ngZone.run(() => {
+              this.router.navigate(['add-new-attraction']);
+            });
           });
 
         document
