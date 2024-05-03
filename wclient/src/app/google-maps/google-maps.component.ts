@@ -6,6 +6,7 @@ import {
   MapInfoWindow,
 } from '@angular/google-maps';
 import { Loader } from '@googlemaps/js-api-loader';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-google-maps',
@@ -32,7 +33,7 @@ export class GoogleMapsComponent implements OnInit {
   map!: google.maps.Map;
 
   loader: any = new Loader({
-    apiKey: '',
+    apiKey: environment.API_KEY,
     version: 'weekly',
   });
 
