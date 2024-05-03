@@ -17,6 +17,7 @@ import { environment } from '../../environments/environment';
 })
 export class GoogleMapsComponent implements OnInit {
   markers: any = [];
+  marker: any;
   infoContent = '';
   zoom = 12;
   center!: google.maps.LatLngLiteral;
@@ -56,14 +57,51 @@ export class GoogleMapsComponent implements OnInit {
           {
             center: this.center,
             zoom: 12,
+            mapId: environment.MAP_ID,
             zoomControlOptions: {
               position: google.maps.ControlPosition.RIGHT_CENTER,
             },
           }
         );
+        this.map.addListener('click', (event: any) => {
+          this.click(event);
+        });
       })
       .catch((error: any) => {
         console.error('Error loading Google Maps JavaScript API: ', error);
       });
+  }
+
+  async initMarkers(position: any): Promise<void> {
+    if (!this.marker) {
+      const { AdvancedMarkerElement } = (await google.maps.importLibrary(
+        'marker'
+      )) as google.maps.MarkerLibrary;
+
+      this.loader
+        .load()
+        .then(() => {
+          const marker = new AdvancedMarkerElement({
+            map: this.map,
+            position: position,
+            gmpDraggable: true,
+            zIndex: 2000,
+          });
+        })
+        .catch((error: any) => {
+          console.error('Error loading Google Maps JavaScript API: ', error);
+        });
+    } else {
+      this.marker.position = position;
+    }
+  }
+
+  click(event: google.maps.MapMouseEvent) {
+    console.log(event);
+    const position = {
+      lat: event.latLng?.lat(),
+      lng: event.latLng?.lng(),
+    };
+    this.initMarkers(position);
   }
 }
