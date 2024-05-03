@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   GoogleMap,
   GoogleMapsModule,
   MapInfoWindow,
-  MapMarker,
 } from '@angular/google-maps';
+import { Loader } from '@googlemaps/js-api-loader';
 
 @Component({
   selector: 'app-google-maps',
@@ -19,6 +19,7 @@ export class GoogleMapsComponent implements OnInit {
   infoContent = '';
   zoom = 12;
   center!: google.maps.LatLngLiteral;
+
   options: google.maps.MapOptions = {
     mapTypeId: 'hybrid',
     zoomControl: false,
@@ -28,9 +29,12 @@ export class GoogleMapsComponent implements OnInit {
     minZoom: 8,
   };
 
-  @ViewChild(GoogleMap, { static: false })
-  map!: GoogleMap;
-  @ViewChild(MapInfoWindow, { static: false }) info!: MapInfoWindow;
+  map!: google.maps.Map;
+
+  loader: any = new Loader({
+    apiKey: '',
+    version: 'weekly',
+  });
 
   ngOnInit() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -38,34 +42,27 @@ export class GoogleMapsComponent implements OnInit {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       };
+      this.initMap();
     });
   }
 
-  logCenter() {
-    console.log(JSON.stringify(this.map.getCenter()));
-  }
-
-  click(event: google.maps.MapMouseEvent) {
-    console.log(event);
-  }
-
-  openInfo(marker: any, content: string) {
-    this.infoContent = content;
-    this.info.open(marker);
-  }
-
-  addMarker() {
-    this.markers.push({
-      position: {
-        lat: this.center.lat + ((Math.random() - 0.5) * 2) / 10,
-        lng: this.center.lng + ((Math.random() - 0.5) * 2) / 10,
-      },
-      label: {
-        color: 'red',
-        text: 'Marker label ' + (this.markers.length + 1),
-      },
-      title: 'Marker title ' + (this.markers.length + 1),
-      options: { animation: google.maps.Animation.BOUNCE },
-    });
+  initMap(): void {
+    this.loader
+      .load()
+      .then(() => {
+        this.map = new google.maps.Map(
+          document.getElementById('map') as HTMLElement,
+          {
+            center: this.center,
+            zoom: 12,
+            zoomControlOptions: {
+              position: google.maps.ControlPosition.RIGHT_CENTER,
+            },
+          }
+        );
+      })
+      .catch((error: any) => {
+        console.error('Error loading Google Maps JavaScript API: ', error);
+      });
   }
 }
