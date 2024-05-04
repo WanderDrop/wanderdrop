@@ -13,6 +13,7 @@ export const routes: Routes = [
   { path: 'home', component: GoogleMapsComponent },
   { path: 'add-user', component: AddUserComponent },
   { path: 'add-new-attraction', component: AddNewAttractionComponent },
+  { path: 'attraction/:id', component: AttractionComponent },
 ];
 
 @NgModule({

@@ -82,7 +82,11 @@ export class GoogleMapsComponent implements OnInit {
 
   addAttractionMarkers() {
     this.attractionService.attractions.forEach((attraction) => {
-      this.mapService.addMarker(attraction.latitude, attraction.longitude);
+      this.mapService.addMarker(
+        attraction.latitude,
+        attraction.longitude,
+        attraction.id
+      );
     });
   }
 
@@ -109,15 +113,6 @@ export class GoogleMapsComponent implements OnInit {
       this.marker.position = position;
     }
   }
-
-  // click(event: google.maps.MapMouseEvent) {
-  //   console.log(event);
-  //   const position = {
-  //     lat: event.latLng?.lat(),
-  //     lng: event.latLng?.lng(),
-  //   };
-  //   this.initMarkers(position);
-  // }
 
   click(event: google.maps.MapMouseEvent) {
     console.log(event);

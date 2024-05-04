@@ -33,4 +33,8 @@ export class AttractionService {
   getLongitude(): number {
     return this.attraction.longitude;
   }
+
+  getAttractionById(id: number): Attraction | undefined {
+    return this.attractions.find((attraction) => attraction.id === id);
+  }
 }

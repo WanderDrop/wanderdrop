@@ -53,10 +53,11 @@ export class AddNewAttractionComponent {
       this.longitude,
       'Eleri'
     );
+    const newAttractionId = attraction.id;
 
     this.attractionService.attractions.push(attraction);
 
-    this.mapService.addMarker(this.latitude, this.longitude);
+    this.mapService.addMarker(this.latitude, this.longitude, newAttractionId);
     this.mapService
       .getMap()
       .setCenter({ lat: this.latitude, lng: this.longitude });

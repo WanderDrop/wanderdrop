@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Loader } from '@googlemaps/js-api-loader';
 import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,8 @@ export class MapService {
     null
   );
   private map!: google.maps.Map;
+
+  constructor(private router: Router) {}
 
   private loader: any = new Loader({
     apiKey: environment.API_KEY,
@@ -39,7 +42,7 @@ export class MapService {
     this.map = map;
   }
 
-  async addMarker(lat: number, lng: number) {
+  async addMarker(lat: number, lng: number, attractionId: number) {
     console.log('Adding marker at lat:', lat, 'lng:', lng);
     const position = { lat, lng };
 
@@ -57,6 +60,11 @@ export class MapService {
           zIndex: 2000,
         });
         console.log('Marker:', marker);
+
+        marker.addListener('click', () => {
+          // Navigate to the attraction component when the marker is clicked
+          this.router.navigate(['/attraction', attractionId]);
+        });
       })
       .catch((error: any) => {
         console.error('Error loading Google Maps JavaScript API: ', error);
