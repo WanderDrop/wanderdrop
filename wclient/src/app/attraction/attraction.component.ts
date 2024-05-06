@@ -11,7 +11,7 @@ import { Comment } from '../comment/comment.model';
 import { CommonModule } from '@angular/common';
 import { ModifyAttractionComponent } from './modify-attraction/modify-attraction.component';
 import { DeleteConfirmationComponent } from '../shared/delete-confirmation/delete-confirmation.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-attraction',
@@ -29,27 +29,35 @@ import { Router } from '@angular/router';
   ],
 })
 export class AttractionComponent implements OnInit {
-  attraction!: Attraction;
+  attraction!: Attraction | undefined;
   comments!: Comment[];
   attractionName: string = '';
   description: string = '';
+  selectedAttractionId!: number;
   @ViewChild('addCommentContent') addCommentContent!: TemplateRef<any>;
 
   constructor(
     private modalService: NgbModal,
     private attractionService: AttractionService,
     private commentService: CommentService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.attraction = this.attractionService.getAttraction();
-    this.comments = this.commentService.getComments(this.attraction.id);
-    this.commentService
-      .getCommentsUpdated()
-      .subscribe((comments: Comment[]) => {
-        this.comments = comments;
-      });
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.attraction = this.attractionService.getAttractionById(+id);
+      if (this.attraction) {
+        this.selectedAttractionId = this.attraction.id;
+        this.comments = this.commentService.getComments(this.attraction.id);
+        this.commentService
+          .getCommentsUpdated()
+          .subscribe((comments: Comment[]) => {
+            this.comments = comments;
+          });
+      }
+    }
   }
 
   onNavigateHome() {
@@ -57,15 +65,18 @@ export class AttractionComponent implements OnInit {
   }
 
   onAddComment() {
-    this.modalService.open(this.addCommentContent, {
-      ariaLabelledBy: 'modal-basic-title',
-    });
+    const modalRef = this.modalService.open(AddCommentComponent);
+    if (this.attraction) {
+      modalRef.componentInstance.attractionId = this.attraction.id;
+    }
   }
 
   openModify(content: any) {
-    this.attractionName = this.attraction.name;
-    this.description = this.attraction.description;
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+    if (this.attraction) {
+      this.attractionName = this.attraction.name;
+      this.description = this.attraction.description;
+      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+    }
   }
 
   openDelete(content: any) {
@@ -84,7 +95,13 @@ export class AttractionComponent implements OnInit {
   }
 
   onDataChanged(event: { attractionName: string; description: string }) {
-    this.attraction.name = event.attractionName;
-    this.attraction.description = event.description;
+    if (this.attraction) {
+      this.attraction.name = event.attractionName;
+      this.attraction.description = event.description;
+    }
+  }
+
+  onAttractionSelected(attraction: Attraction) {
+    this.selectedAttractionId = attraction.id;
   }
 }

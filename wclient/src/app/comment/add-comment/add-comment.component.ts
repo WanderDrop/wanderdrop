@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AttractionService } from '../../attraction/attraction.service';
@@ -16,6 +16,7 @@ import { CommentService } from '../comment.service';
 export class AddCommentComponent {
   commentHeading = '';
   commentText = '';
+  @Input() attractionId!: number;
 
   constructor(
     private modalService: NgbModal,
@@ -24,9 +25,8 @@ export class AddCommentComponent {
   ) {}
 
   onSubmit() {
-    const attractionId = this.attractionService.getAttractionId();
     const comment = new Comment(
-      attractionId,
+      this.attractionId,
       this.commentHeading,
       this.commentText
     );

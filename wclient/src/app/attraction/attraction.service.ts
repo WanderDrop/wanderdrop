@@ -1,26 +1,67 @@
 import { Injectable } from '@angular/core';
 import { Attraction } from './attraction.model';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AttractionService {
-  private attraction: Attraction;
+  private currentAttraction!: Attraction;
+  private currentAttractionId = new BehaviorSubject<number | null>(null);
+  attractions: Attraction[] = [];
 
-  constructor() {
-    this.attraction = new Attraction(
-      1,
-      'Mystic Mountain Adventure',
-      'Embark on an exhilarating journey through Mystic Mountain, where lush forests, cascading waterfalls, and breathtaking vistas await. Traverse winding trails, brave suspension bridges, and discover hidden caves teeming with ancient mysteries. With thrilling zip lines and heart-pounding rappelling, this adventure promises unforgettable experiences for thrill-seekers and nature lovers alike.',
-      'John Doe'
-    );
+  constructor() {}
+
+  setCurrentAttraction(attraction: Attraction) {
+    this.currentAttraction = attraction;
   }
 
-  getAttraction(): Attraction {
-    return this.attraction;
+  getCurrentAttraction(): Attraction {
+    return this.currentAttraction;
   }
 
   getAttractionId(): number {
-    return this.attraction.id;
+    if (this.currentAttraction) {
+      return this.currentAttraction.id;
+    } else {
+      console.error('Attraction is undefined');
+      return -1;
+    }
+  }
+
+  getLatitude(): number {
+    return this.currentAttraction.latitude;
+  }
+
+  getLongitude(): number {
+    return this.currentAttraction.longitude;
+  }
+
+  getAttractionById(id: number): Attraction | undefined {
+    return this.attractions.find((attraction) => attraction.id === id);
+  }
+
+  setCurrentAttractionId(attractionId: number) {
+    this.currentAttractionId.next(attractionId);
+    const attraction = this.getAttractionById(attractionId);
+    if (attraction) {
+      this.setCurrentAttraction(attraction);
+    } else {
+      console.error('Attraction with id ' + attractionId + ' not found');
+    }
+  }
+
+  getCurrentAttractionId(): number {
+    const attractionId = this.currentAttractionId.getValue();
+    if (attractionId !== null) {
+      return attractionId;
+    } else {
+      console.error('Attraction ID is undefined');
+      return -1;
+    }
+  }
+
+  getAttractionIdObservable(): BehaviorSubject<number | null> {
+    return this.currentAttractionId;
   }
 }

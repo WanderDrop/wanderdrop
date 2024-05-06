@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Comment } from './comment.model';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommentService {
-  comments: Comment[] = [
-    new Comment(1, 'Nice place', 'I fell in love with this place.'),
-    new Comment(1, 'Very nice', 'Loved the incredible view.'),
-  ];
-  private commentsUpdated = new Subject<Comment[]>();
+  comments: { [attractionId: number]: Comment[] } = {};
+  private commentsUpdated = new BehaviorSubject<Comment[]>([]);
 
   constructor() {}
 
@@ -19,20 +16,28 @@ export class CommentService {
   }
 
   getComments(attractionId: number) {
-    return this.comments.filter(
-      (comment) => comment.attractionId === attractionId
-    );
+    return this.comments[attractionId] || [];
+  }
+
+  fetchComments(attractionId: number) {
+    const comments = this.comments[attractionId] || [];
+    this.commentsUpdated.next(comments);
   }
 
   addComment(comment: Comment) {
-    this.comments.push(comment);
-    this.commentsUpdated.next([...this.comments]);
+    if (!this.comments[comment.attractionId]) {
+      this.comments[comment.attractionId] = [];
+    }
+    this.comments[comment.attractionId].push(comment);
+    this.commentsUpdated.next(this.comments[comment.attractionId]);
   }
 
-  deleteComment(commentId: number) {
-    this.comments = this.comments.filter(
-      (comment) => comment.commentId !== commentId
-    );
-    this.commentsUpdated.next([...this.comments]);
+  deleteComment(commentId: number, attractionId: number) {
+    if (this.comments[attractionId]) {
+      this.comments[attractionId] = this.comments[attractionId].filter(
+        (comment) => comment.commentId !== commentId
+      );
+      this.commentsUpdated.next(this.comments[attractionId]);
+    }
   }
 }
