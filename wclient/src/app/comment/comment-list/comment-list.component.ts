@@ -3,6 +3,7 @@ import { CommentItemComponent } from './comment-item/comment-item.component';
 import { CommentService } from '../comment.service';
 import { Comment } from '../comment.model';
 import { CommonModule } from '@angular/common';
+import { AttractionService } from '../../attraction/attraction.service';
 
 @Component({
   selector: 'app-comment-list',
@@ -14,14 +15,20 @@ import { CommonModule } from '@angular/common';
 export class CommentListComponent implements OnInit {
   comments: Comment[] = [];
 
-  constructor(private commentService: CommentService) {}
+  constructor(
+    private commentService: CommentService,
+    private attractionService: AttractionService
+  ) {}
 
   ngOnInit(): void {
-    this.comments = this.commentService.getComments(1);
     this.commentService
       .getCommentsUpdated()
       .subscribe((comments: Comment[]) => {
-        this.comments = comments;
+        const attractionId = this.attractionService.getAttractionId();
+        console.log('Fetching comments for attractionId:', attractionId);
+        this.comments = comments.filter(
+          (comment) => comment.attractionId === attractionId
+        );
       });
   }
 }

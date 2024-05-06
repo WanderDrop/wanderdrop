@@ -30,7 +30,10 @@ export class CommentItemComponent {
     modalRef.result
       .then((result) => {
         if (result === 'delete') {
-          this.commentService.deleteComment(commentId);
+          this.commentService.deleteComment(
+            commentId,
+            this.comment.attractionId
+          );
         }
       })
       .catch((reason) => {

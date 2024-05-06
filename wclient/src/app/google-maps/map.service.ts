@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { Loader } from '@googlemaps/js-api-loader';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { AttractionService } from '../attraction/attraction.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,10 @@ export class MapService {
   );
   private map!: google.maps.Map;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private attractionService: AttractionService
+  ) {}
 
   private loader: any = new Loader({
     apiKey: environment.API_KEY,
@@ -62,7 +66,7 @@ export class MapService {
         console.log('Marker:', marker);
 
         marker.addListener('click', () => {
-          // Navigate to the attraction component when the marker is clicked
+          this.attractionService.setCurrentAttractionId(attractionId);
           this.router.navigate(['/attraction', attractionId]);
         });
       })

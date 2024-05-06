@@ -33,6 +33,7 @@ export class AttractionComponent implements OnInit {
   comments!: Comment[];
   attractionName: string = '';
   description: string = '';
+  selectedAttractionId!: number;
   @ViewChild('addCommentContent') addCommentContent!: TemplateRef<any>;
 
   constructor(
@@ -48,6 +49,7 @@ export class AttractionComponent implements OnInit {
     if (id) {
       this.attraction = this.attractionService.getAttractionById(+id);
       if (this.attraction) {
+        this.selectedAttractionId = this.attraction.id;
         this.comments = this.commentService.getComments(this.attraction.id);
         this.commentService
           .getCommentsUpdated()
@@ -63,9 +65,10 @@ export class AttractionComponent implements OnInit {
   }
 
   onAddComment() {
-    this.modalService.open(this.addCommentContent, {
-      ariaLabelledBy: 'modal-basic-title',
-    });
+    const modalRef = this.modalService.open(AddCommentComponent);
+    if (this.attraction) {
+      modalRef.componentInstance.attractionId = this.attraction.id;
+    }
   }
 
   openModify(content: any) {
@@ -96,5 +99,9 @@ export class AttractionComponent implements OnInit {
       this.attraction.name = event.attractionName;
       this.attraction.description = event.description;
     }
+  }
+
+  onAttractionSelected(attraction: Attraction) {
+    this.selectedAttractionId = attraction.id;
   }
 }

@@ -1,13 +1,13 @@
 <div id="adventure-container">
+  <button
+    type="button"
+    class="btn-close position-absolute end-0 m-1"
+    aria-label="Close"
+    (click)="onNavigateHome()"
+  ></button>
   <div class="content-body m-4 extra-padding">
     <div class="row">
       <div class="col-xs-12">
-        <button
-          type="button"
-          class="btn-close position-absolute end-0 m-1"
-          aria-label="Close"
-          (click)="onNavigateHome()"
-        ></button>
         <div class="float-start">
           <h3 class="mb-4 text-primary">{{ attraction?.name }}</h3>
 
@@ -85,7 +85,9 @@
       </button>
 
       <ng-template #addCommentContent>
-        <app-add-comment></app-add-comment>
+        <app-add-comment
+          [attractionId]="selectedAttractionId"
+        ></app-add-comment>
       </ng-template>
 
       <button

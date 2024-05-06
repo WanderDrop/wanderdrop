@@ -5,36 +5,52 @@ import { Attraction } from './attraction.model';
   providedIn: 'root',
 })
 export class AttractionService {
-  private attraction: Attraction;
+  private currentAttraction!: Attraction;
+  private currentAttractionId!: number;
   attractions: Attraction[] = [];
 
-  constructor() {
-    this.attraction = new Attraction(
-      'Mystic Mountain Adventure',
-      'Embark on an exhilarating journey through Mystic Mountain, where lush forests, cascading waterfalls, and breathtaking vistas await. Traverse winding trails, brave suspension bridges, and discover hidden caves teeming with ancient mysteries. With thrilling zip lines and heart-pounding rappelling, this adventure promises unforgettable experiences for thrill-seekers and nature lovers alike.',
-      24.4965768,
-      58.385807,
-      'John Doe'
-    );
+  constructor() {}
+
+  setCurrentAttraction(attraction: Attraction) {
+    this.currentAttraction = attraction;
   }
 
-  getAttraction(): Attraction {
-    return this.attraction;
+  getCurrentAttraction(): Attraction {
+    return this.currentAttraction;
   }
 
   getAttractionId(): number {
-    return this.attraction.id;
+    if (this.currentAttraction) {
+      return this.currentAttraction.id;
+    } else {
+      console.error('Attraction is undefined');
+      return -1;
+    }
   }
 
   getLatitude(): number {
-    return this.attraction.latitude;
+    return this.currentAttraction.latitude;
   }
 
   getLongitude(): number {
-    return this.attraction.longitude;
+    return this.currentAttraction.longitude;
   }
 
   getAttractionById(id: number): Attraction | undefined {
     return this.attractions.find((attraction) => attraction.id === id);
+  }
+
+  setCurrentAttractionId(attractionId: number) {
+    this.currentAttractionId = attractionId;
+    const attraction = this.getAttractionById(attractionId);
+    if (attraction) {
+      this.setCurrentAttraction(attraction);
+    } else {
+      console.error('Attraction with id ' + attractionId + ' not found');
+    }
+  }
+
+  getCurrentAttractionId(): number {
+    return this.currentAttractionId;
   }
 }
