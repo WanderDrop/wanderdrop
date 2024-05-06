@@ -1,7 +1,6 @@
 import { Component, NgZone } from '@angular/core';
 import { AttractionService } from '../attraction.service';
 import { Router } from '@angular/router';
-import { GoogleMapsComponent } from '../../google-maps/google-maps.component';
 import { Attraction } from '../attraction.model';
 import { FormsModule } from '@angular/forms';
 import { MapService } from '../../google-maps/map.service';
@@ -42,10 +41,6 @@ export class AddNewAttractionComponent {
   }
 
   onAddAttraction() {
-    console.log(
-      `Adding marker at lat: ${this.latitude}, lng: ${this.longitude}`
-    );
-
     const attraction = new Attraction(
       this.attractionName,
       this.description,
@@ -61,13 +56,6 @@ export class AddNewAttractionComponent {
     this.mapService
       .getMap()
       .setCenter({ lat: this.latitude, lng: this.longitude });
-
-    console.log(
-      this.latitude,
-      this.longitude,
-      attraction.name,
-      attraction.description
-    );
 
     this.ngZone.run(() => {
       this.router.navigate(['home']);

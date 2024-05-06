@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Comment } from './comment.model';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +25,6 @@ export class CommentService {
   }
 
   addComment(comment: Comment) {
-    console.log('adding comment: ' + comment.attractionId);
     if (!this.comments[comment.attractionId]) {
       this.comments[comment.attractionId] = [];
     }

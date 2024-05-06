@@ -42,12 +42,10 @@ export class MapService {
   }
 
   setMap(map: google.maps.Map) {
-    console.log('Setting map:', map);
     this.map = map;
   }
 
   async addMarker(lat: number, lng: number, attractionId: number) {
-    console.log('Adding marker at lat:', lat, 'lng:', lng);
     const position = { lat, lng };
 
     const { AdvancedMarkerElement } = (await google.maps.importLibrary(
@@ -60,10 +58,9 @@ export class MapService {
         const marker = new AdvancedMarkerElement({
           map: this.map,
           position: position,
-          gmpDraggable: true,
+          gmpDraggable: false,
           zIndex: 2000,
         });
-        console.log('Marker:', marker);
 
         marker.addListener('click', () => {
           this.attractionService.setCurrentAttractionId(attractionId);

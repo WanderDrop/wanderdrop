@@ -36,7 +36,6 @@ export class CommentListComponent implements OnInit {
       )
       .subscribe(({ attractionId, comments }) => {
         if (attractionId !== null) {
-          console.log('Fetching comments for attractionId:', attractionId);
           this.comments = comments.filter(
             (comment) => comment.attractionId === attractionId
           );

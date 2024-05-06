@@ -1,11 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgZone, OnInit } from '@angular/core';
-import {
-  GoogleMap,
-  GoogleMapsModule,
-  MapInfoWindow,
-} from '@angular/google-maps';
-import { Loader } from '@googlemaps/js-api-loader';
+import { GoogleMapsModule } from '@angular/google-maps';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { MapService } from './map.service';
@@ -68,7 +63,6 @@ export class GoogleMapsComponent implements OnInit {
             },
           }
         );
-        console.log('Initialized map:', this.map);
         this.map.addListener('click', (event: any) => {
           this.click(event);
         });
@@ -102,7 +96,7 @@ export class GoogleMapsComponent implements OnInit {
           const marker = new AdvancedMarkerElement({
             map: this.map,
             position: position,
-            gmpDraggable: true,
+            gmpDraggable: false,
             zIndex: 2000,
           });
         })
@@ -115,7 +109,6 @@ export class GoogleMapsComponent implements OnInit {
   }
 
   click(event: google.maps.MapMouseEvent) {
-    console.log(event);
     if (event.latLng) {
       const position = {
         lat: event.latLng.lat(),

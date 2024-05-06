@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Attraction } from '../../../attraction/attraction.model';
 import { Comment } from '../../comment.model';
 import { CommentService } from '../../comment.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
