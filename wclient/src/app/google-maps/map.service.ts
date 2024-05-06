@@ -4,6 +4,7 @@ import { Loader } from '@googlemaps/js-api-loader';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { AttractionService } from '../attraction/attraction.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,8 @@ export class MapService {
 
   constructor(
     private router: Router,
-    private attractionService: AttractionService
+    private attractionService: AttractionService,
+    private http: HttpClient
   ) {}
 
   private loader: any = new Loader({
@@ -43,6 +45,12 @@ export class MapService {
 
   setMap(map: google.maps.Map) {
     this.map = map;
+  }
+
+  geocodeLocation(location: string) {
+    return this.http.get(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${environment.API_KEY}`
+    );
   }
 
   async addMarker(lat: number, lng: number, attractionId: number) {
