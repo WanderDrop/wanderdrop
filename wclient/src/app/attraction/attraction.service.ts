@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Attraction } from './attraction.model';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AttractionService {
   private currentAttraction!: Attraction;
-  private currentAttractionId!: number;
+  private currentAttractionId = new BehaviorSubject<number | null>(null);
   attractions: Attraction[] = [];
 
   constructor() {}
@@ -41,7 +42,7 @@ export class AttractionService {
   }
 
   setCurrentAttractionId(attractionId: number) {
-    this.currentAttractionId = attractionId;
+    this.currentAttractionId.next(attractionId);
     const attraction = this.getAttractionById(attractionId);
     if (attraction) {
       this.setCurrentAttraction(attraction);
@@ -51,6 +52,16 @@ export class AttractionService {
   }
 
   getCurrentAttractionId(): number {
+    const attractionId = this.currentAttractionId.getValue();
+    if (attractionId !== null) {
+      return attractionId;
+    } else {
+      console.error('Attraction ID is undefined');
+      return -1;
+    }
+  }
+
+  getAttractionIdObservable(): BehaviorSubject<number | null> {
     return this.currentAttractionId;
   }
 }

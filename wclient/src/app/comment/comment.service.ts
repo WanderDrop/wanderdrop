@@ -19,6 +19,11 @@ export class CommentService {
     return this.comments[attractionId] || [];
   }
 
+  fetchComments(attractionId: number) {
+    const comments = this.comments[attractionId] || [];
+    this.commentsUpdated.next(comments);
+  }
+
   addComment(comment: Comment) {
     console.log('adding comment: ' + comment.attractionId);
     if (!this.comments[comment.attractionId]) {

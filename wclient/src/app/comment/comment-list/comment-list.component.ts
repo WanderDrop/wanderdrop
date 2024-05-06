@@ -4,6 +4,7 @@ import { CommentService } from '../comment.service';
 import { Comment } from '../comment.model';
 import { CommonModule } from '@angular/common';
 import { AttractionService } from '../../attraction/attraction.service';
+import { switchMap, map } from 'rxjs';
 
 @Component({
   selector: 'app-comment-list',
@@ -21,14 +22,25 @@ export class CommentListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.commentService
-      .getCommentsUpdated()
-      .subscribe((comments: Comment[]) => {
-        const attractionId = this.attractionService.getAttractionId();
-        console.log('Fetching comments for attractionId:', attractionId);
-        this.comments = comments.filter(
-          (comment) => comment.attractionId === attractionId
-        );
+    this.attractionService
+      .getAttractionIdObservable()
+      .pipe(
+        switchMap((attractionId: number | null) => {
+          if (attractionId !== null) {
+            this.commentService.fetchComments(attractionId);
+          }
+          return this.commentService
+            .getCommentsUpdated()
+            .pipe(map((comments: Comment[]) => ({ attractionId, comments })));
+        })
+      )
+      .subscribe(({ attractionId, comments }) => {
+        if (attractionId !== null) {
+          console.log('Fetching comments for attractionId:', attractionId);
+          this.comments = comments.filter(
+            (comment) => comment.attractionId === attractionId
+          );
+        }
       });
   }
 }
