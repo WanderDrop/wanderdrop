@@ -11,10 +11,6 @@ import { Router } from '@angular/router';
 export class FooterComponent {
   constructor(private router: Router) {}
 
-  openAttraction() {
-    this.router.navigate(['/attraction']);
-  }
-
   openRegistrationForm() {
     this.router.navigate(['/register']);
   }
