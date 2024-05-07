@@ -61,5 +61,6 @@ export class AddNewAttractionComponent {
     this.ngZone.run(() => {
       this.router.navigate(['home']);
     });
+    this.mapService.triggerResetSearchForm();
   }
 }

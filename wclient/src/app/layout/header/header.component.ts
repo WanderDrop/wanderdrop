@@ -1,4 +1,11 @@
-import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  NgZone,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { ProfileDropdownComponent } from './profile-dropdown/profile-dropdown.component';
 import { CommonModule } from '@angular/common';
@@ -12,7 +19,7 @@ import { MapService } from '../../google-maps/map.service';
   styleUrl: './header.component.css',
   imports: [ProfileDropdownComponent, CommonModule, ReactiveFormsModule],
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, AfterViewInit {
   searchForm: FormGroup;
   @ViewChild('search', { static: false })
   public searchElementRef!: ElementRef;
@@ -26,6 +33,18 @@ export class HeaderComponent {
   ) {
     this.searchForm = this.fb.group({
       location: [''],
+    });
+  }
+
+  ngOnInit() {
+    this.mapService.getResetSearchForm().subscribe((reset) => {
+      if (reset) {
+        this.searchForm.reset();
+        const autocompleteInput = document.getElementById(
+          'search-input'
+        ) as HTMLInputElement;
+        autocompleteInput.value = '';
+      }
     });
   }
 
@@ -69,6 +88,11 @@ export class HeaderComponent {
         const lng = response.results[0].geometry.location.lng;
         this.mapService.setPosition(lat, lng);
       }
+      const autocompleteInput = document.getElementById(
+        'search-input'
+      ) as HTMLInputElement;
+      autocompleteInput.value = '';
+      this.searchForm.get('location')?.setValue('');
     });
   }
 }

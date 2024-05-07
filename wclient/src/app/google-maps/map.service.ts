@@ -18,7 +18,7 @@ export class MapService {
     lng: number;
   } | null>(null);
   private map!: google.maps.Map;
-  private googleMapsLoadedPromise: Promise<void> = Promise.resolve();
+  private _resetSearchForm = new BehaviorSubject<boolean>(false);
   private googleMapsLoaded = false;
 
   constructor(
@@ -33,6 +33,14 @@ export class MapService {
 
   getNewAttractionLocation() {
     return this._newAttractionLocation.asObservable();
+  }
+
+  getResetSearchForm() {
+    return this._resetSearchForm.asObservable();
+  }
+
+  triggerResetSearchForm() {
+    this._resetSearchForm.next(true);
   }
 
   private loader: any = new Loader({
