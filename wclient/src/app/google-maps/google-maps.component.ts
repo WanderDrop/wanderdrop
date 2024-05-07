@@ -21,6 +21,7 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
   zoom = 12;
   center!: google.maps.LatLngLiteral;
   private positionSubscription!: Subscription;
+  private mapInitialized = false;
 
   options: google.maps.MapOptions = {
     mapTypeId: 'hybrid',
@@ -41,24 +42,42 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    let newAttractionCreated = false;
+
     navigator.geolocation.getCurrentPosition((position) => {
       this.center = {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       };
       this.initMap();
+      this.mapInitialized = true;
     });
 
     this.positionSubscription = this.mapService
       .getPosition()
       .subscribe((position) => {
-        if (position && this.map) {
+        if (
+          position &&
+          this.map &&
+          this.mapInitialized &&
+          !newAttractionCreated
+        ) {
           console.log('Position updated: ', position);
           this.center = position;
           this.map.setCenter(this.center);
           this.map.panTo(this.center);
         }
       });
+
+    this.mapService.getNewAttractionLocation().subscribe((location) => {
+      if (location && this.map && this.mapInitialized) {
+        newAttractionCreated = true;
+        this.center = location;
+        this.map.setCenter(this.center);
+        this.map.panTo(this.center);
+        this.positionSubscription.unsubscribe();
+      }
+    });
   }
 
   initMap(): void {
@@ -103,19 +122,12 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
         'marker'
       )) as google.maps.MarkerLibrary;
 
-      this.mapService
-        .loadGoogleMaps()
-        .then(() => {
-          const marker = new AdvancedMarkerElement({
-            map: this.map,
-            position: position,
-            gmpDraggable: false,
-            zIndex: 2000,
-          });
-        })
-        .catch((error: any) => {
-          console.error('Error loading Google Maps JavaScript API: ', error);
-        });
+      const marker = new AdvancedMarkerElement({
+        map: this.map,
+        position: position,
+        gmpDraggable: false,
+        zIndex: 2000,
+      });
     } else {
       this.marker.position = position;
     }

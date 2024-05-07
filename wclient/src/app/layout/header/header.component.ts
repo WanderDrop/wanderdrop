@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProfileDropdownComponent } from './profile-dropdown/profile-dropdown.component';
 import { CommonModule } from '@angular/common';
@@ -14,14 +14,46 @@ import { MapService } from '../../google-maps/map.service';
 })
 export class HeaderComponent {
   searchForm: FormGroup;
+  @ViewChild('search', { static: false })
+  public searchElementRef!: ElementRef;
+  private autocompleteInitialized = false;
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private mapService: MapService
+    private mapService: MapService,
+    private ngZone: NgZone
   ) {
     this.searchForm = this.fb.group({
       location: [''],
+    });
+  }
+
+  ngAfterViewInit() {
+    if (!this.autocompleteInitialized) {
+      this.setupAutocomplete();
+    }
+  }
+
+  setupAutocomplete() {
+    this.mapService.loadGoogleMaps().then(() => {
+      const autocomplete = new google.maps.places.Autocomplete(
+        this.searchElementRef.nativeElement
+      );
+
+      autocomplete.addListener('place_changed', () => {
+        this.ngZone.run(() => {
+          const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+
+          if (place.geometry && place.geometry.location) {
+            const lat = place.geometry.location.lat();
+            const lng = place.geometry.location.lng();
+            this.mapService.setPosition(lat, lng);
+          }
+        });
+      });
+
+      this.autocompleteInitialized = true;
     });
   }
 
@@ -31,15 +63,12 @@ export class HeaderComponent {
 
   onSubmit() {
     const location = this.searchForm.get('location')?.value;
-    this.mapService
-      .geocodeLocation(location)
-      .subscribe(async (response: any) => {
-        // Add async here
-        if (response.status === 'OK') {
-          const lat = response.results[0].geometry.location.lat;
-          const lng = response.results[0].geometry.location.lng;
-          await this.mapService.setPosition(lat, lng);
-        }
-      });
+    this.mapService.geocodeLocation(location).subscribe((response: any) => {
+      if (response.status === 'OK') {
+        const lat = response.results[0].geometry.location.lat;
+        const lng = response.results[0].geometry.location.lng;
+        this.mapService.setPosition(lat, lng);
+      }
+    });
   }
 }

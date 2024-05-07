@@ -13,7 +13,13 @@ export class MapService {
   private _position = new BehaviorSubject<{ lat: number; lng: number } | null>(
     null
   );
+  private _newAttractionLocation = new BehaviorSubject<{
+    lat: number;
+    lng: number;
+  } | null>(null);
   private map!: google.maps.Map;
+  private googleMapsLoadedPromise: Promise<void> = Promise.resolve();
+  private googleMapsLoaded = false;
 
   constructor(
     private router: Router,
@@ -21,14 +27,29 @@ export class MapService {
     private http: HttpClient
   ) {}
 
+  setNewAttractionLocation(lat: number, lng: number) {
+    this._newAttractionLocation.next({ lat, lng });
+  }
+
+  getNewAttractionLocation() {
+    return this._newAttractionLocation.asObservable();
+  }
+
   private loader: any = new Loader({
     apiKey: environment.API_KEY,
     version: 'weekly',
-    libraries: ['marker'],
+    libraries: ['marker', 'places'],
   });
 
-  loadGoogleMaps() {
-    return this.loader.load();
+  loadGoogleMaps(): Promise<void> {
+    if (!this.googleMapsLoaded) {
+      this.googleMapsLoaded = true;
+      return this.loader.load({
+        libraries: ['marker', 'places'],
+      });
+    } else {
+      return Promise.resolve();
+    }
   }
 
   setPosition(lat: number, lng: number) {
