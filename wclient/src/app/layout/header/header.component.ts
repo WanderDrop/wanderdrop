@@ -31,13 +31,15 @@ export class HeaderComponent {
 
   onSubmit() {
     const location = this.searchForm.get('location')?.value;
-    this.mapService.geocodeLocation(location).subscribe((response: any) => {
-      if (response.status === 'OK') {
-        const lat = response.results[0].geometry.location.lat;
-        const lng = response.results[0].geometry.location.lng;
-        this.mapService.setPosition(lat, lng);
-        this.router.navigate(['/location', lat, lng]);
-      }
-    });
+    this.mapService
+      .geocodeLocation(location)
+      .subscribe(async (response: any) => {
+        // Add async here
+        if (response.status === 'OK') {
+          const lat = response.results[0].geometry.location.lat;
+          const lng = response.results[0].geometry.location.lng;
+          await this.mapService.setPosition(lat, lng);
+        }
+      });
   }
 }

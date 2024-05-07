@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { MapService } from './map.service';
 import { AttractionService } from '../attraction/attraction.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-google-maps',
@@ -13,12 +14,13 @@ import { AttractionService } from '../attraction/attraction.service';
   templateUrl: './google-maps.component.html',
   styleUrl: './google-maps.component.css',
 })
-export class GoogleMapsComponent implements OnInit {
+export class GoogleMapsComponent implements OnInit, OnDestroy {
   markers: any = [];
   marker: any;
   infoContent = '';
   zoom = 12;
   center!: google.maps.LatLngLiteral;
+  private positionSubscription!: Subscription;
 
   options: google.maps.MapOptions = {
     mapTypeId: 'hybrid',
@@ -46,6 +48,17 @@ export class GoogleMapsComponent implements OnInit {
       };
       this.initMap();
     });
+
+    this.positionSubscription = this.mapService
+      .getPosition()
+      .subscribe((position) => {
+        if (position) {
+          console.log('Position updated: ', position);
+          this.center = position;
+          this.map.setCenter(this.center);
+          this.map.panTo(this.center);
+        }
+      });
   }
 
   initMap(): void {
@@ -149,6 +162,12 @@ export class GoogleMapsComponent implements OnInit {
             infoWindow.close();
           });
       });
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.positionSubscription) {
+      this.positionSubscription.unsubscribe();
     }
   }
 }

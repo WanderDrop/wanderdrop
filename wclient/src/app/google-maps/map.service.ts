@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Loader } from '@googlemaps/js-api-loader';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { AttractionService } from '../attraction/attraction.service';
 import { HttpClient } from '@angular/common/http';
@@ -48,9 +48,16 @@ export class MapService {
   }
 
   geocodeLocation(location: string) {
-    return this.http.get(
-      `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${environment.API_KEY}`
-    );
+    console.log('Geocoding location: ', location);
+    return this.http
+      .get(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${environment.API_KEY}`
+      )
+      .pipe(
+        tap((response) => {
+          console.log('Geocoding response: ', response);
+        })
+      );
   }
 
   async addMarker(lat: number, lng: number, attractionId: number) {
