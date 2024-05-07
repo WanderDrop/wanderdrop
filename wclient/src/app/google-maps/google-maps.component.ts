@@ -52,7 +52,7 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
     this.positionSubscription = this.mapService
       .getPosition()
       .subscribe((position) => {
-        if (position) {
+        if (position && this.map) {
           console.log('Position updated: ', position);
           this.center = position;
           this.map.setCenter(this.center);
