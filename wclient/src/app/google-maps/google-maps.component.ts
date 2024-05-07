@@ -69,7 +69,6 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
           this.mapInitialized &&
           !newAttractionCreated
         ) {
-          console.log('Position updated: ', position);
           this.center = position;
           this.map.setCenter(this.center);
           this.map.panTo(this.center);

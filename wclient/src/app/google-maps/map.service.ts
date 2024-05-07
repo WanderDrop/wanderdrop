@@ -83,7 +83,6 @@ export class MapService {
   }
 
   geocodeLocation(location: string) {
-    console.log('Geocoding location: ', location);
     return this.http
       .get(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${environment.API_KEY}`
