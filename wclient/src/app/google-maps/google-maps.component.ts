@@ -33,6 +33,7 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
   };
 
   map!: google.maps.Map;
+  infoWindow!: google.maps.InfoWindow;
 
   constructor(
     private router: Router,
@@ -90,6 +91,7 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
     this.mapService
       .loadGoogleMaps()
       .then(() => {
+        this.infoWindow = new google.maps.InfoWindow();
         this.map = new google.maps.Map(
           document.getElementById('map') as HTMLElement,
           {
@@ -157,14 +159,12 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
       </div>
     `;
 
-      const infoWindow = new google.maps.InfoWindow({
-        content: contentString,
-        position: position,
-      });
+      this.infoWindow.setContent(contentString);
+      this.infoWindow.setPosition(position);
 
-      infoWindow.open(this.map);
+      this.infoWindow.open(this.map);
 
-      google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
+      google.maps.event.addListenerOnce(this.infoWindow, 'domready', () => {
         document
           .getElementById('add-attraction')
           ?.addEventListener('click', () => {
@@ -177,7 +177,7 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
         document
           .getElementById('cancel-attraction')
           ?.addEventListener('click', () => {
-            infoWindow.close();
+            this.infoWindow.close();
           });
       });
     }
