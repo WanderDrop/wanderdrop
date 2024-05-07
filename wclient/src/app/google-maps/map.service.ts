@@ -20,6 +20,7 @@ export class MapService {
   private map!: google.maps.Map;
   private _resetSearchForm = new BehaviorSubject<boolean>(false);
   private googleMapsLoaded = false;
+  private lastCenter: google.maps.LatLngLiteral | null = null;
 
   constructor(
     private router: Router,
@@ -37,6 +38,10 @@ export class MapService {
 
   getResetSearchForm() {
     return this._resetSearchForm.asObservable();
+  }
+
+  getLastCenter(): google.maps.LatLngLiteral | null {
+    return this.lastCenter;
   }
 
   triggerResetSearchForm() {
@@ -62,6 +67,7 @@ export class MapService {
 
   setPosition(lat: number, lng: number) {
     this._position.next({ lat, lng });
+    this.lastCenter = { lat, lng };
   }
 
   getPosition() {

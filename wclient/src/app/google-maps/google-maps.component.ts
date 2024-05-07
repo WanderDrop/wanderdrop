@@ -19,7 +19,7 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
   marker: any;
   infoContent = '';
   zoom = 12;
-  center!: google.maps.LatLngLiteral;
+  center!: google.maps.LatLngLiteral | null;
   private positionSubscription!: Subscription;
   private mapInitialized = false;
 
@@ -43,15 +43,21 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     let newAttractionCreated = false;
+    this.center = this.mapService.getLastCenter();
 
-    navigator.geolocation.getCurrentPosition((position) => {
-      this.center = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      };
+    if (!this.center) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.center = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+        this.initMap();
+        this.mapInitialized = true;
+      });
+    } else {
       this.initMap();
       this.mapInitialized = true;
-    });
+    }
 
     this.positionSubscription = this.mapService
       .getPosition()
