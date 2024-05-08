@@ -7,6 +7,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UserService } from '../user.service';
+import { UserRole } from '../user-role.enum';
+import { User } from '../user.model';
 
 @Component({
   selector: 'app-add-user',
@@ -19,7 +22,7 @@ export class AddUserComponent {
   registerForm!: FormGroup;
   isMobile!: boolean;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private userService: UserService) {
     this.isMobile = window.innerWidth <= 1100;
   }
 
@@ -41,7 +44,15 @@ export class AddUserComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      console.log(this.registerForm.value);
+      const newUser = new User(
+        this.registerForm.value.email,
+        this.registerForm.value.userPassword,
+        this.registerForm.value.firstName,
+        this.registerForm.value.lastName,
+        this.registerForm.value.role || UserRole.User
+      );
+      this.userService.addUsers(newUser);
+      console.log(this.userService.getUsers());
     } else {
       this.registerForm.markAllAsTouched();
     }
