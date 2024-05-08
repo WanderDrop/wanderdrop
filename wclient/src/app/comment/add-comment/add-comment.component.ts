@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AttractionService } from '../../attraction/attraction.service';
 import { Comment } from '../comment.model';
 import { CommentService } from '../comment.service';
+import { UserService } from '../../user/user.service';
 
 @Component({
   selector: 'app-add-comment',
@@ -21,17 +22,20 @@ export class AddCommentComponent {
   constructor(
     private modalService: NgbModal,
     private attractionService: AttractionService,
-    private commentService: CommentService
+    private commentService: CommentService,
+    private userService: UserService
   ) {}
 
   onSubmit() {
     const comment = new Comment(
       this.attractionId,
       this.commentHeading,
-      this.commentText
+      this.commentText,
+      this.userService.getDummyUser().userId
     );
     this.commentService.addComment(comment);
     this.modalService.dismissAll();
+    console.log('AUTHOR ' + comment.author);
   }
 
   onCancel() {

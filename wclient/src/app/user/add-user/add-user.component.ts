@@ -53,6 +53,7 @@ export class AddUserComponent {
       );
       this.userService.addUser(newUser);
       console.log(this.userService.getUsers());
+      //In the future display popup "success" or "user with that email already exists"
       this.router.navigate(['/home']);
     } else {
       this.registerForm.markAllAsTouched();

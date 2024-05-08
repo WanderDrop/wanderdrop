@@ -44,6 +44,7 @@ export class RegisterComponent {
       );
       this.userService.addUser(newUser);
       console.log(this.userService.getUsers());
+      //At the moment navigate home. In the future display popup "success" or "user with that email already exists" and navigate to login page
       this.router.navigate(['/home']);
     } else {
       this.registerForm.markAllAsTouched();

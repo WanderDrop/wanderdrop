@@ -5,16 +5,17 @@ export class Comment {
   private _commentHeading: string;
   private _commentText: string;
   private _status: CommentStatus;
-  private _attractionId: number; //id of attraction
+  private _attractionId: number;
   private _date: Date;
-  private _author: string; // going to need a User object in the future to get the name of user who inserted the comment
+  private _author: number; // going to need a User object in the future to get the name of user who inserted the comment
   private _deletionReasonId!: number; //id of reletionReason
   public static lastId = 0; // dummy helper to increase comment id by one, set to delete in the future
 
   constructor(
     attractionId: number,
     commentHeading: string,
-    commentText: string
+    commentText: string,
+    author: number
   ) {
     Comment.lastId++;
     this._commentId = Comment.lastId;
@@ -23,7 +24,7 @@ export class Comment {
     this._status = CommentStatus.Active;
     this._attractionId = attractionId;
     this._date = new Date();
-    this._author = 'Eleri';
+    this._author = author;
   }
 
   get commentId(): number {
@@ -64,6 +65,10 @@ export class Comment {
 
   get author() {
     return this._author;
+  }
+
+  set author(value: number) {
+    this._author = value;
   }
 
   get deletionReasonId(): number {

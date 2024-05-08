@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Attraction } from '../attraction.model';
 import { FormsModule } from '@angular/forms';
 import { MapService } from '../../google-maps/map.service';
+import { UserService } from '../../user/user.service';
 
 @Component({
   selector: 'app-add-new-attraction',
@@ -22,7 +23,8 @@ export class AddNewAttractionComponent {
     private router: Router,
     private attractionService: AttractionService,
     private mapService: MapService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -46,7 +48,7 @@ export class AddNewAttractionComponent {
       this.description,
       this.latitude,
       this.longitude,
-      'Eleri'
+      this.userService.getDummyUser().userId
     );
     const newAttractionId = attraction.id;
 
