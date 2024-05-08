@@ -8,18 +8,13 @@
 app-google-maps {
   flex-grow: 1;
 }
+
 .main-content {
-  padding-bottom: 70px;
+  padding-bottom: 51.188px;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 400px) {
   .main-content {
-    padding-bottom: 70px;
-  }
-}
-
-@media (max-width: 557px) {
-  .main-content {
-    padding-bottom: 108px;
+    padding-bottom: 163.188px;
   }
 }

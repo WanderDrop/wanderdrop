@@ -6,12 +6,20 @@
       >
     </div>
     <div>
-      <form class="navbar-form" role="search">
+      <form
+        [formGroup]="searchForm"
+        (ngSubmit)="onSubmit()"
+        class="navbar-form"
+        role="search"
+      >
         <div class="d-flex align-items-center">
           <input
-            class="form-control mr-sm-2 custom-search-bar"
+            #search
+            formControlName="location"
+            class="form-control mr-sm-2 custom-search-bar map-input"
+            id="search-input"
             type="search"
-            placeholder="Insert country/city name"
+            placeholder="Search country/city name"
             aria-label="Search"
           />
           <div class="col-sm-4 col-md-2">

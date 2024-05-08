@@ -7,6 +7,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UserService } from '../user.service';
+import { UserRole } from '../user-role.enum';
+import { User } from '../user.model';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +21,7 @@ import { Router } from '@angular/router';
 export class RegisterComponent {
   registerForm!: FormGroup;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private userService: UserService) {}
 
   ngOnInit() {
     this.registerForm = new FormGroup({
@@ -32,7 +35,17 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      console.log(this.registerForm.value);
+      const newUser = new User(
+        this.registerForm.value.email,
+        this.registerForm.value.userPassword,
+        this.registerForm.value.firstName,
+        this.registerForm.value.lastName,
+        UserRole.User
+      );
+      this.userService.addUser(newUser);
+      console.log(this.userService.getUsers());
+      //At the moment navigate home. In the future display popup "success" or "user with that email already exists" and navigate to login page
+      this.router.navigate(['/home']);
     } else {
       this.registerForm.markAllAsTouched();
     }

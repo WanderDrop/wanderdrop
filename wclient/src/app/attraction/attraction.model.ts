@@ -6,30 +6,27 @@ export class Attraction {
   private _description: string;
   private _latitude: number;
   private _longitude: number;
-  // private _location: string;
-  // private _city?: string;
-  // private _country?: string;
-  private _createdBy: string; //replace with User if we have user model created
-  // private _updatedBy?: User; //probably only user id is needed(number)
+  private _createdBy!: number;
+  private _updatedBy?: number;
   private _createdAt: Date;
-  // private _updatedAt?: Date;
+  private _updatedAt?: Date;
   private _status: AttractionStatus;
-  // private _deletionReason?: DeletionReason; //probably only deletionReason id is needed(number)
+  private _deletionReason?: number;
   private static lastId = 1;
 
   constructor(
-    name?: string,
-    description?: string,
-    latitude?: number,
-    longitude?: number,
-    createdBy?: string
+    name: string,
+    description: string,
+    latitude: number,
+    longitude: number,
+    createdBy: number
   ) {
     this._id = Attraction.lastId++;
-    this._name = name ? name : '';
-    this._description = description ? description : '';
-    this._latitude = latitude ? latitude : 0;
-    this._longitude = longitude ? longitude : 0;
-    this._createdBy = createdBy ? createdBy : 'Eleri';
+    this._name = name;
+    this._description = description;
+    this._latitude = latitude;
+    this._longitude = longitude;
+    this._createdBy = createdBy;
     this._createdAt = new Date();
     this._status = AttractionStatus.Active;
   }
@@ -74,12 +71,28 @@ export class Attraction {
     this._longitude = value;
   }
 
-  get createdBy(): string {
+  get createdBy(): number {
     return this._createdBy;
   }
 
-  set createdBy(value: string) {
+  set createdBy(value: number) {
     this._createdBy = value;
+  }
+
+  get updatedBy(): number | undefined {
+    return this._updatedBy;
+  }
+
+  set updatedBy(value: number | undefined) {
+    this._updatedBy = value;
+  }
+
+  get updatedAt(): Date | undefined {
+    return this._updatedAt;
+  }
+
+  set updatedAt(value: Date | undefined) {
+    this._updatedAt = value;
   }
 
   get status(): AttractionStatus {
@@ -88,5 +101,13 @@ export class Attraction {
 
   set status(value: AttractionStatus) {
     this._status = value;
+  }
+
+  get deletionReason(): number | undefined {
+    return this._deletionReason;
+  }
+
+  set deletionReason(value: number | undefined) {
+    this._deletionReason = value;
   }
 }

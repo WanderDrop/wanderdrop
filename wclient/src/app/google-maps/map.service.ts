@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Loader } from '@googlemaps/js-api-loader';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { AttractionService } from '../attraction/attraction.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -12,25 +13,61 @@ export class MapService {
   private _position = new BehaviorSubject<{ lat: number; lng: number } | null>(
     null
   );
+  private _newAttractionLocation = new BehaviorSubject<{
+    lat: number;
+    lng: number;
+  } | null>(null);
   private map!: google.maps.Map;
+  private _resetSearchForm = new BehaviorSubject<boolean>(false);
+  private googleMapsLoaded = false;
+  private lastCenter: google.maps.LatLngLiteral | null = null;
 
   constructor(
     private router: Router,
-    private attractionService: AttractionService
+    private attractionService: AttractionService,
+    private http: HttpClient
   ) {}
+
+  setNewAttractionLocation(lat: number, lng: number) {
+    this._newAttractionLocation.next({ lat, lng });
+  }
+
+  getNewAttractionLocation() {
+    return this._newAttractionLocation.asObservable();
+  }
+
+  getResetSearchForm() {
+    return this._resetSearchForm.asObservable();
+  }
+
+  getLastCenter(): google.maps.LatLngLiteral | null {
+    return this.lastCenter;
+  }
+
+  triggerResetSearchForm() {
+    this._resetSearchForm.next(true);
+  }
 
   private loader: any = new Loader({
     apiKey: environment.API_KEY,
     version: 'weekly',
-    libraries: ['marker'],
+    libraries: ['marker', 'places'],
   });
 
-  loadGoogleMaps() {
-    return this.loader.load();
+  loadGoogleMaps(): Promise<void> {
+    if (!this.googleMapsLoaded) {
+      this.googleMapsLoaded = true;
+      return this.loader.load({
+        libraries: ['marker', 'places'],
+      });
+    } else {
+      return Promise.resolve();
+    }
   }
 
   setPosition(lat: number, lng: number) {
     this._position.next({ lat, lng });
+    this.lastCenter = { lat, lng };
   }
 
   getPosition() {
@@ -43,6 +80,18 @@ export class MapService {
 
   setMap(map: google.maps.Map) {
     this.map = map;
+  }
+
+  geocodeLocation(location: string) {
+    return this.http
+      .get(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${environment.API_KEY}`
+      )
+      .pipe(
+        tap((response) => {
+          console.log('Geocoding response: ', response);
+        })
+      );
   }
 
   async addMarker(lat: number, lng: number, attractionId: number) {

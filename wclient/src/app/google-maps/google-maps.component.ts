@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { MapService } from './map.service';
 import { AttractionService } from '../attraction/attraction.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-google-maps',
@@ -13,12 +14,14 @@ import { AttractionService } from '../attraction/attraction.service';
   templateUrl: './google-maps.component.html',
   styleUrl: './google-maps.component.css',
 })
-export class GoogleMapsComponent implements OnInit {
+export class GoogleMapsComponent implements OnInit, OnDestroy {
   markers: any = [];
   marker: any;
   infoContent = '';
   zoom = 12;
-  center!: google.maps.LatLngLiteral;
+  center!: google.maps.LatLngLiteral | null;
+  private positionSubscription!: Subscription;
+  private mapInitialized = false;
 
   options: google.maps.MapOptions = {
     mapTypeId: 'hybrid',
@@ -30,6 +33,7 @@ export class GoogleMapsComponent implements OnInit {
   };
 
   map!: google.maps.Map;
+  infoWindow!: google.maps.InfoWindow;
 
   constructor(
     private router: Router,
@@ -39,12 +43,46 @@ export class GoogleMapsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    navigator.geolocation.getCurrentPosition((position) => {
-      this.center = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      };
+    let newAttractionCreated = false;
+    this.center = this.mapService.getLastCenter();
+
+    if (!this.center) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.center = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+        this.initMap();
+        this.mapInitialized = true;
+      });
+    } else {
       this.initMap();
+      this.mapInitialized = true;
+    }
+
+    this.positionSubscription = this.mapService
+      .getPosition()
+      .subscribe((position) => {
+        if (
+          position &&
+          this.map &&
+          this.mapInitialized &&
+          !newAttractionCreated
+        ) {
+          this.center = position;
+          this.map.setCenter(this.center);
+          this.map.panTo(this.center);
+        }
+      });
+
+    this.mapService.getNewAttractionLocation().subscribe((location) => {
+      if (location && this.map && this.mapInitialized) {
+        newAttractionCreated = true;
+        this.center = location;
+        this.map.setCenter(this.center);
+        this.map.panTo(this.center);
+        this.positionSubscription.unsubscribe();
+      }
     });
   }
 
@@ -52,6 +90,7 @@ export class GoogleMapsComponent implements OnInit {
     this.mapService
       .loadGoogleMaps()
       .then(() => {
+        this.infoWindow = new google.maps.InfoWindow();
         this.map = new google.maps.Map(
           document.getElementById('map') as HTMLElement,
           {
@@ -90,19 +129,12 @@ export class GoogleMapsComponent implements OnInit {
         'marker'
       )) as google.maps.MarkerLibrary;
 
-      this.mapService
-        .loadGoogleMaps()
-        .then(() => {
-          const marker = new AdvancedMarkerElement({
-            map: this.map,
-            position: position,
-            gmpDraggable: false,
-            zIndex: 2000,
-          });
-        })
-        .catch((error: any) => {
-          console.error('Error loading Google Maps JavaScript API: ', error);
-        });
+      const marker = new AdvancedMarkerElement({
+        map: this.map,
+        position: position,
+        gmpDraggable: false,
+        zIndex: 2000,
+      });
     } else {
       this.marker.position = position;
     }
@@ -126,14 +158,12 @@ export class GoogleMapsComponent implements OnInit {
       </div>
     `;
 
-      const infoWindow = new google.maps.InfoWindow({
-        content: contentString,
-        position: position,
-      });
+      this.infoWindow.setContent(contentString);
+      this.infoWindow.setPosition(position);
 
-      infoWindow.open(this.map);
+      this.infoWindow.open(this.map);
 
-      google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
+      google.maps.event.addListenerOnce(this.infoWindow, 'domready', () => {
         document
           .getElementById('add-attraction')
           ?.addEventListener('click', () => {
@@ -146,9 +176,15 @@ export class GoogleMapsComponent implements OnInit {
         document
           .getElementById('cancel-attraction')
           ?.addEventListener('click', () => {
-            infoWindow.close();
+            this.infoWindow.close();
           });
       });
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.positionSubscription) {
+      this.positionSubscription.unsubscribe();
     }
   }
 }
