@@ -7,3 +7,11 @@
   bottom: 0;
   width: 100%;
 }
+
+footer.navbar {
+  padding: 20px 0;
+}
+
+.small-branch {
+  font-size: 0.8rem;
+}
