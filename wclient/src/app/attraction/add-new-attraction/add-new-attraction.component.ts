@@ -57,8 +57,10 @@ export class AddNewAttractionComponent {
       .getMap()
       .setCenter({ lat: this.latitude, lng: this.longitude });
 
+    this.mapService.setNewAttractionLocation(this.latitude, this.longitude);
     this.ngZone.run(() => {
       this.router.navigate(['home']);
     });
+    this.mapService.triggerResetSearchForm();
   }
 }
