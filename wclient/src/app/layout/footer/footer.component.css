@@ -15,3 +15,32 @@ footer.navbar {
 .small-branch {
   font-size: 0.8rem;
 }
+
+.light-icon {
+  color: #f8f9fa;
+}
+
+@media (max-width: 400px) {
+  .d-flex.align-items-center {
+    flex-direction: column;
+    padding-bottom: 10px;
+  }
+}
+
+@media (max-width: 645px) {
+  .hide-on-small {
+    display: none;
+  }
+}
+
+@media (max-width: 645px) {
+  .hide-on-small {
+    display: none !important;
+  }
+}
+
+@media (min-width: 646px) {
+  .show-on-large {
+    display: inline !important;
+  }
+}
