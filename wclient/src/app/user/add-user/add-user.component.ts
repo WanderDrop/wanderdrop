@@ -53,6 +53,7 @@ export class AddUserComponent {
       );
       this.userService.addUsers(newUser);
       console.log(this.userService.getUsers());
+      this.router.navigate(['/home']);
     } else {
       this.registerForm.markAllAsTouched();
     }
