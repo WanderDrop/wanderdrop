@@ -51,7 +51,7 @@ export class AddUserComponent {
         this.registerForm.value.lastName,
         this.registerForm.value.role || UserRole.User
       );
-      this.userService.addUsers(newUser);
+      this.userService.addUser(newUser);
       console.log(this.userService.getUsers());
       this.router.navigate(['/home']);
     } else {

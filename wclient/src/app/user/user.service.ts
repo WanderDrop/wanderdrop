@@ -9,7 +9,7 @@ export class UserService {
 
   constructor() {}
 
-  addUsers(user: User) {
+  addUser(user: User) {
     this.users.push(user);
   }
 
