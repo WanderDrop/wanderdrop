@@ -6,15 +6,12 @@ export class Attraction {
   private _description: string;
   private _latitude: number;
   private _longitude: number;
-  // private _location: string;
-  // private _city?: string;
-  // private _country?: string;
-  private _createdBy!: number; //replace with User if we have user model created
-  // private _updatedBy?: User; //probably only user id is needed(number)
+  private _createdBy!: number;
+  private _updatedBy?: number;
   private _createdAt: Date;
-  // private _updatedAt?: Date;
+  private _updatedAt?: Date;
   private _status: AttractionStatus;
-  // private _deletionReason?: DeletionReason; //probably only deletionReason id is needed(number)
+  private _deletionReason?: number;
   private static lastId = 1;
 
   constructor(
@@ -82,11 +79,35 @@ export class Attraction {
     this._createdBy = value;
   }
 
+  get updatedBy(): number | undefined {
+    return this._updatedBy;
+  }
+
+  set updatedBy(value: number | undefined) {
+    this._updatedBy = value;
+  }
+
+  get updatedAt(): Date | undefined {
+    return this._updatedAt;
+  }
+
+  set updatedAt(value: Date | undefined) {
+    this._updatedAt = value;
+  }
+
   get status(): AttractionStatus {
     return this._status;
   }
 
   set status(value: AttractionStatus) {
     this._status = value;
+  }
+
+  get deletionReason(): number | undefined {
+    return this._deletionReason;
+  }
+
+  set deletionReason(value: number | undefined) {
+    this._deletionReason = value;
   }
 }

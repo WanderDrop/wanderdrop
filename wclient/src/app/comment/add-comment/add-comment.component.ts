@@ -35,7 +35,6 @@ export class AddCommentComponent {
     );
     this.commentService.addComment(comment);
     this.modalService.dismissAll();
-    console.log('AUTHOR ' + comment.author);
   }
 
   onCancel() {

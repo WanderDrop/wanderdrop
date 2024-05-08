@@ -7,9 +7,9 @@ export class Comment {
   private _status: CommentStatus;
   private _attractionId: number;
   private _date: Date;
-  private _author: number; // going to need a User object in the future to get the name of user who inserted the comment
-  private _deletionReasonId!: number; //id of reletionReason
-  public static lastId = 0; // dummy helper to increase comment id by one, set to delete in the future
+  private _author: number;
+  private _deletionReasonId!: number;
+  public static lastId = 0;
 
   constructor(
     attractionId: number,
