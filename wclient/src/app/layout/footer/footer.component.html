@@ -1,14 +1,45 @@
-<footer class="footer bg-dark bg-info">
-  <div class="d-flex justify-content-md-between text-bg-dark p-3">
-    <span>&copy; 2024 WanderDrop</span>
-    <div>
-      <button
-        class="btn btn-primary margin-left"
-        (click)="openRegistrationForm()"
+<footer class="footer bg-dark bg-info navbar-dark bg-dark">
+  <div
+    class="container-fluid d-flex justify-content-between align-items-center"
+  >
+    <div class="d-flex justify-content-md-between p-3">
+      <span class="navbar-brand small-branch"
+        >&copy; 2024 WanderDrop. All rights reserved.</span
       >
-        Register
-      </button>
+      <!-- <div>
+        <button
+          class="btn btn-primary margin-left"
+          (click)="openRegistrationForm()"
+        >
+          Register
+        </button>
+      </div> -->
     </div>
-    <span>Powered by WanderDrop</span>
+    <div class="d-flex align-items-center icon-container">
+      <div class="d-flex align-items-center me-3">
+        <a href="tel:12-345-678" class="text-light text-decoration-none">
+          <i class="bi bi-telephone light-icon me-2"></i>
+          <span class="ms-2 small-branch hide-on-small show-on-large"
+            >12-345-678</span
+          >
+        </a>
+      </div>
+      <div class="d-flex align-items-center me-3">
+        <a
+          href="mailto:wanderprop&#64;gmail.com"
+          class="text-light text-decoration-none"
+        >
+          <i class="bi bi-envelope light-icon me-2"></i>
+          <span class="small-branch hide-on-small show-on-large"
+            >wanderdrop&#64;gmail.com</span
+          >
+        </a>
+      </div>
+      <div>
+        <a href="https://www.facebook.com" target="_blank">
+          <i class="bi bi-facebook me-4"></i>
+        </a>
+      </div>
+    </div>
   </div>
 </footer>
