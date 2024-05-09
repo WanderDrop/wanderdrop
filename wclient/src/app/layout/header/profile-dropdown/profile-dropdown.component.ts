@@ -61,7 +61,9 @@ export class ProfileDropdownComponent implements AfterViewInit {
     });
   }
 
-  onDisplayProfile() {}
+  onDisplayProfile() {
+    this.router.navigate(['/profile']);
+  }
 
   onDisplayActivity() {}
 
