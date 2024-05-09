@@ -97,11 +97,13 @@ export class YourProfileComponent {
 
   openModal() {
     this.isModalOpen = true;
+    this.passwordError = '';
+    this.newPasswordError = '';
+    this.changePasswordForm.reset();
   }
 
   closeModal() {
     this.isModalOpen = false;
-    this.changePasswordForm.reset();
   }
 
   close() {
