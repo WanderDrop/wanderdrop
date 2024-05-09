@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container m-5">
   <form [formGroup]="profileForm">
     <div class="mb-3">
       <label for="firstName" class="form-label">First Name</label>
@@ -28,19 +28,23 @@
         readonly
       />
     </div>
-    <button type="button" class="btn btn-primary" (click)="changePassword()">
+    <button
+      type="button"
+      class="btn btn-primary me-3"
+      (click)="changePassword()"
+    >
       Change Password
     </button>
-    <button type="button" class="btn btn-secondary" (click)="close()">
+    <button type="button" class="btn btn-secondary me-3" (click)="close()">
       Close
     </button>
     <button
       type="submit"
       class="btn btn-success"
-      *ngIf="profileForm.dirty"
+      *ngIf="valuesChanged()"
       (click)="save()"
     >
-      Save
+      Save new name
     </button>
   </form>
 </div>

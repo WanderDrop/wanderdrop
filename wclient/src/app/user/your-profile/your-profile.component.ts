@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,6 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-your-profile',
@@ -17,15 +18,24 @@ import {
 })
 export class YourProfileComponent {
   profileForm!: FormGroup;
+  originalValues: any;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private userService: UserService) {
+    const dummyUser = this.userService.getDummyUser();
 
-  ngOnInit(): void {
     this.profileForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: [{ value: '', disabled: true }, Validators.required],
+      firstName: [dummyUser.firstName, Validators.required],
+      lastName: [dummyUser.lastName, Validators.required],
+      email: [{ value: dummyUser.email, disabled: true }, Validators.required],
     });
+    this.originalValues = this.profileForm.value;
+  }
+
+  valuesChanged(): boolean {
+    return (
+      JSON.stringify(this.profileForm.value) !==
+      JSON.stringify(this.originalValues)
+    );
   }
 
   changePassword() {}
