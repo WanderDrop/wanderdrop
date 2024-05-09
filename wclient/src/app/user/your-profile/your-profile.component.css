@@ -17,3 +17,27 @@
   max-width: 500px;
   width: 100%;
 }
+
+.success-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #dff0d8;
+  color: #3c763d;
+  padding: 10px;
+  border-radius: 4px;
+  animation: fadeOut 3s forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

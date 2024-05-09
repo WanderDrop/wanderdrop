@@ -28,6 +28,9 @@ export class YourProfileComponent {
   changePasswordForm!: FormGroup;
   @ViewChild('modal') modal!: TemplateRef<any>;
   isModalOpen = false;
+  passwordError = '';
+  newPasswordError = '';
+  showSuccessMessage = false;
 
   constructor(
     private fb: FormBuilder,
@@ -65,10 +68,27 @@ export class YourProfileComponent {
 
   submitChangePassword() {
     if (this.changePasswordForm.valid) {
-      const dummyUser = this.userService.getDummyUser();
-      dummyUser.password = this.changePasswordForm.value.newPassword;
-      console.log(this.userService.getDummyUser().password);
-      this.isModalOpen = false;
+      const inputPassword = this.changePasswordForm.value.currentPassword;
+      const newPassword = this.changePasswordForm.value.newPassword;
+      if (this.userService.verifyPassword(inputPassword)) {
+        const dummyUser = this.userService.getDummyUser();
+        if (dummyUser.password !== newPassword) {
+          dummyUser.password = newPassword;
+          this.showSuccessMessage = true;
+          setTimeout(() => {
+            this.showSuccessMessage = false;
+            this.isModalOpen = false;
+          }, 2500);
+          this.changePasswordForm.reset();
+        } else {
+          this.newPasswordError =
+            'The new password should not be the same as the old password.';
+          this.changePasswordForm.controls['newPassword'].reset();
+        }
+      } else {
+        this.passwordError = 'The current password does not match.';
+        this.changePasswordForm.reset();
+      }
     }
   }
 
@@ -78,6 +98,7 @@ export class YourProfileComponent {
 
   closeModal() {
     this.isModalOpen = false;
+    this.changePasswordForm.reset();
   }
 
   close() {

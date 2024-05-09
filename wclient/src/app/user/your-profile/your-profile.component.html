@@ -50,6 +50,12 @@
               id="currentPassword"
               formControlName="currentPassword"
             />
+            <div class="text-danger" *ngIf="passwordError">
+              {{ passwordError }}
+            </div>
+            <div class="success-message" *ngIf="showSuccessMessage">
+              Password has been changed successfully!
+            </div>
           </div>
           <div class="mb-3">
             <label for="newPassword" class="form-label">New Password</label>
@@ -59,6 +65,9 @@
               id="newPassword"
               formControlName="newPassword"
             />
+            <div class="text-danger" *ngIf="newPasswordError">
+              {{ newPasswordError }}
+            </div>
           </div>
           <button
             type="button"
