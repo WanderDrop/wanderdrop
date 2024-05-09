@@ -1,13 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
-  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { UserService } from '../user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-your-profile',
@@ -19,8 +25,16 @@ import { UserService } from '../user.service';
 export class YourProfileComponent {
   profileForm!: FormGroup;
   originalValues: any;
+  changePasswordForm!: FormGroup;
+  @ViewChild('modal') modal!: TemplateRef<any>;
+  isModalOpen = false;
 
-  constructor(private fb: FormBuilder, private userService: UserService) {
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private viewContainerRef: ViewContainerRef,
+    private router: Router
+  ) {
     const dummyUser = this.userService.getDummyUser();
 
     this.profileForm = this.fb.group({
@@ -31,6 +45,13 @@ export class YourProfileComponent {
     this.originalValues = this.profileForm.value;
   }
 
+  ngOnInit(): void {
+    this.changePasswordForm = this.fb.group({
+      currentPassword: ['', Validators.required],
+      newPassword: ['', Validators.required],
+    });
+  }
+
   valuesChanged(): boolean {
     return (
       JSON.stringify(this.profileForm.value) !==
@@ -38,9 +59,30 @@ export class YourProfileComponent {
     );
   }
 
-  changePassword() {}
+  changePassword() {
+    this.openModal();
+  }
 
-  close() {}
+  submitChangePassword() {
+    if (this.changePasswordForm.valid) {
+      const dummyUser = this.userService.getDummyUser();
+      dummyUser.password = this.changePasswordForm.value.newPassword;
+      console.log(this.userService.getDummyUser().password);
+      this.isModalOpen = false;
+    }
+  }
+
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+  }
+
+  close() {
+    this.router.navigate(['home']);
+  }
 
   save() {
     if (this.profileForm.valid) {
