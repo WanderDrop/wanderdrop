@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs';
+import { DeleteReasonService } from '../delete-reason.service';
 
 @Component({
   selector: 'app-delete-confirmation',
@@ -13,28 +15,26 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class DeleteConfirmationComponent {
   selectedReason: string = '';
   otherReason: string = '';
+  reasons!: Observable<string[]>;
 
-  reasons: string[] = [
-    'Violation of Community Guidelines',
-    'Inappropriate Content',
-    'Irrelevant or Off-topic',
-    'Duplicate Content',
-    'Trolling or Disruptive Behaviour',
-    'Commercial or Promotional Content',
-    'Political or Religious Sensitivity',
-  ];
-
-  constructor(private activeModal: NgbActiveModal) {}
+  constructor(
+    private activeModal: NgbActiveModal,
+    private deleteReasonService: DeleteReasonService
+  ) {
+    this.reasons = this.deleteReasonService.reasons;
+  }
 
   onDelete() {
     if (window.confirm('Are you sure? This action cannot be undone.')) {
-      console.log('Deleted (not really).');
-      console.log(
-        this.selectedReason !== 'other' ? this.selectedReason : this.otherReason
-      );
-      this.activeModal.close('delete'); // Close this modal and resolve the Promise with 'delete'
+      const reason =
+        this.selectedReason !== 'other'
+          ? this.selectedReason
+          : this.otherReason;
+      console.log(reason);
+      this.deleteReasonService.saveReasonToDatabase(reason);
+      this.activeModal.close('delete');
     } else {
-      this.activeModal.dismiss('cancel'); // Dismiss this modal and reject the Promise with 'cancel'
+      this.activeModal.dismiss('cancel');
     }
   }
 
