@@ -42,5 +42,11 @@ export class YourProfileComponent {
 
   close() {}
 
-  save() {}
+  save() {
+    if (this.profileForm.valid) {
+      const dummyUser = this.userService.getDummyUser();
+      dummyUser.firstName = this.profileForm.value.firstName;
+      dummyUser.lastName = this.profileForm.value.lastName;
+    }
+  }
 }
