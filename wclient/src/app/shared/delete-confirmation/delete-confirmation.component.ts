@@ -25,17 +25,11 @@ export class DeleteConfirmationComponent {
   }
 
   onDelete() {
-    if (window.confirm('Are you sure? This action cannot be undone.')) {
-      const reason =
-        this.selectedReason !== 'other'
-          ? this.selectedReason
-          : this.otherReason;
-      console.log(reason);
-      this.deleteReasonService.saveReasonToDatabase(reason);
-      this.activeModal.close('delete');
-    } else {
-      this.activeModal.dismiss('cancel');
-    }
+    const reason =
+      this.selectedReason !== 'other' ? this.selectedReason : this.otherReason;
+    console.log(reason);
+    this.deleteReasonService.saveReasonToDatabase(reason);
+    this.activeModal.close('delete');
   }
 
   onCancel() {
