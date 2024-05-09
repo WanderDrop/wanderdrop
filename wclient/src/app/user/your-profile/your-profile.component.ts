@@ -31,6 +31,7 @@ export class YourProfileComponent {
   passwordError = '';
   newPasswordError = '';
   showSuccessMessage = false;
+  showNameChangeSuccessMessage = false;
 
   constructor(
     private fb: FormBuilder,
@@ -67,6 +68,8 @@ export class YourProfileComponent {
   }
 
   submitChangePassword() {
+    this.newPasswordError = '';
+    this.passwordError = '';
     if (this.changePasswordForm.valid) {
       const inputPassword = this.changePasswordForm.value.currentPassword;
       const newPassword = this.changePasswordForm.value.newPassword;
@@ -78,8 +81,8 @@ export class YourProfileComponent {
           setTimeout(() => {
             this.showSuccessMessage = false;
             this.isModalOpen = false;
+            this.changePasswordForm.reset();
           }, 2500);
-          this.changePasswordForm.reset();
         } else {
           this.newPasswordError =
             'The new password should not be the same as the old password.';
@@ -108,8 +111,15 @@ export class YourProfileComponent {
   save() {
     if (this.profileForm.valid) {
       const dummyUser = this.userService.getDummyUser();
-      dummyUser.firstName = this.profileForm.value.firstName;
-      dummyUser.lastName = this.profileForm.value.lastName;
+      if (
+        dummyUser.firstName !== this.profileForm.value.firstName ||
+        dummyUser.lastName !== this.profileForm.value.lastName
+      ) {
+        dummyUser.firstName = this.profileForm.value.firstName;
+        dummyUser.lastName = this.profileForm.value.lastName;
+        this.showNameChangeSuccessMessage = true;
+        setTimeout(() => (this.showNameChangeSuccessMessage = false), 2500);
+      }
     }
   }
 }
