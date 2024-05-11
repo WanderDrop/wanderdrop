@@ -1,0 +1,17 @@
+.extra-padding {
+    position: relative;
+    padding-bottom: 20px;
+  }
+  
+  #adventure-container {
+    background-color: white;
+    padding-bottom: 60px;
+    padding-top: 10px;
+    border-radius: 20px;
+    margin-top: 20px;
+    margin-bottom: 25px;
+  }
+  
+  .float-end {
+    margin-top: 15px;
+  }

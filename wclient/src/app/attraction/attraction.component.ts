@@ -12,29 +12,35 @@ import { CommonModule } from '@angular/common';
 import { ModifyAttractionComponent } from './modify-attraction/modify-attraction.component';
 import { DeleteConfirmationComponent } from '../shared/delete-confirmation/delete-confirmation.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ReportPage } from '../report-page/report-page.model';
+import { AddNewReportPageComponent } from "../report-page/add-new-report-page/add-new-report-page.component";
 
 @Component({
-  selector: 'app-attraction',
-  standalone: true,
-  templateUrl: './attraction.component.html',
-  styleUrl: './attraction.component.css',
-  imports: [
-    CommentItemComponent,
-    CommentListComponent,
-    CommentsComponent,
-    AddCommentComponent,
-    CommonModule,
-    ModifyAttractionComponent,
-    DeleteConfirmationComponent,
-  ],
+    selector: 'app-attraction',
+    standalone: true,
+    templateUrl: './attraction.component.html',
+    styleUrl: './attraction.component.css',
+    imports: [
+        CommentItemComponent,
+        CommentListComponent,
+        CommentsComponent,
+        AddCommentComponent,
+        CommonModule,
+        ModifyAttractionComponent,
+        DeleteConfirmationComponent,
+        AddNewReportPageComponent
+    ]
 })
 export class AttractionComponent implements OnInit {
   attraction!: Attraction | undefined;
+  reportPage!: ReportPage;
   comments!: Comment[];
   attractionName: string = '';
   description: string = '';
   selectedAttractionId!: number;
   @ViewChild('addCommentContent') addCommentContent!: TemplateRef<any>;
+  @ViewChild('addReportPageContent') addReportPageContent! : TemplateRef<any>;
+
 
   constructor(
     private modalService: NgbModal,
@@ -66,6 +72,13 @@ export class AttractionComponent implements OnInit {
 
   onAddComment() {
     const modalRef = this.modalService.open(AddCommentComponent);
+    if (this.attraction) {
+      modalRef.componentInstance.attractionId = this.attraction.id;
+    }
+  }
+
+  onAddNewReportPage() {
+    const modalRef = this.modalService.open(AddNewReportPageComponent);
     if (this.attraction) {
       modalRef.componentInstance.attractionId = this.attraction.id;
     }

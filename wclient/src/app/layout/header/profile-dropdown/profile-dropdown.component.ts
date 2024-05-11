@@ -67,7 +67,8 @@ export class ProfileDropdownComponent implements AfterViewInit {
 
   onDisplayActivity() {}
 
-  onDisplayReports() {}
+  onDisplayReports() {
+  }
 
   onLogout() {}
 
