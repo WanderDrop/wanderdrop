@@ -84,9 +84,9 @@ export class AttractionComponent implements OnInit {
 
     modalRef.result
       .then((result) => {
-        if (result === 'delete') {
-          // Call service to delete the attraction
-          console.log('DELETED');
+        if (result === 'delete' && this.attraction) {
+          this.attractionService.deleteAttraction(this.attraction.id);
+          this.router.navigate(['/home']);
         }
       })
       .catch((reason) => {
