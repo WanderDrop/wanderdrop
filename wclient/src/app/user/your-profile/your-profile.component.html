@@ -1,0 +1,105 @@
+<div class="container m-5">
+  <form [formGroup]="profileForm">
+    <div class="mb-3">
+      <label for="firstName" class="form-label">First Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="firstName"
+        formControlName="firstName"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="lastName" class="form-label">Last Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="lastName"
+        formControlName="lastName"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        formControlName="email"
+        readonly
+      />
+    </div>
+    <button
+      type="button"
+      class="btn btn-primary me-3"
+      (click)="changePassword()"
+    >
+      Change Password
+    </button>
+
+    <div class="modal" *ngIf="isModalOpen">
+      <div class="modal-content">
+        <h2>Change Password</h2>
+        <form [formGroup]="changePasswordForm">
+          <div class="mb-3">
+            <label for="currentPassword" class="form-label"
+              >Current Password</label
+            >
+            <input
+              type="password"
+              class="form-control"
+              id="currentPassword"
+              formControlName="currentPassword"
+            />
+            <div class="text-danger" *ngIf="passwordError">
+              {{ passwordError }}
+            </div>
+            <div class="success-message" *ngIf="showSuccessMessage">
+              Password has been changed successfully!
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="newPassword" class="form-label">New Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="newPassword"
+              formControlName="newPassword"
+            />
+            <div class="text-danger" *ngIf="newPasswordError">
+              {{ newPasswordError }}
+            </div>
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary me-3"
+            (click)="submitChangePassword()"
+          >
+            Submit
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary me-3"
+            (click)="closeModal()"
+          >
+            Close
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-secondary me-3" (click)="close()">
+      Close
+    </button>
+    <button
+      type="submit"
+      class="btn btn-success me-3"
+      *ngIf="valuesChanged()"
+      (click)="save()"
+    >
+      Save new name
+    </button>
+    <div class="success-message" *ngIf="showNameChangeSuccessMessage">
+      Name has been changed successfully!
+    </div>
+  </form>
+</div>

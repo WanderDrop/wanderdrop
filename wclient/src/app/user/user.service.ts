@@ -30,4 +30,9 @@ export class UserService {
   getDummyUser(): User {
     return this.users[0];
   }
+
+  verifyPassword(inputPassword: string): boolean {
+    const dummyUser = this.getDummyUser();
+    return dummyUser.password === inputPassword;
+  }
 }

@@ -5,6 +5,7 @@ import { GoogleMapsComponent } from './google-maps/google-maps.component';
 import { NgModule } from '@angular/core';
 import { AddUserComponent } from './user/add-user/add-user.component';
 import { AddNewAttractionComponent } from './attraction/add-new-attraction/add-new-attraction.component';
+import { YourProfileComponent } from './user/your-profile/your-profile.component';
 
 export const routes: Routes = [
   { path: '', component: GoogleMapsComponent },
@@ -14,6 +15,7 @@ export const routes: Routes = [
   { path: 'add-user', component: AddUserComponent },
   { path: 'add-new-attraction', component: AddNewAttractionComponent },
   { path: 'attraction/:id', component: AttractionComponent },
+  { path: 'profile', component: YourProfileComponent },
 ];
 
 @NgModule({
