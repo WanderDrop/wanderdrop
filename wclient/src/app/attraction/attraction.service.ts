@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Attraction } from './attraction.model';
 import { BehaviorSubject } from 'rxjs';
+import { MarkerService } from '../google-maps/marker.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ export class AttractionService {
   private currentAttractionId = new BehaviorSubject<number | null>(null);
   attractions: Attraction[] = [];
 
-  constructor() {}
+  constructor(private markerService: MarkerService) {}
 
   setCurrentAttraction(attraction: Attraction) {
     this.currentAttraction = attraction;
@@ -63,5 +64,12 @@ export class AttractionService {
 
   getAttractionIdObservable(): BehaviorSubject<number | null> {
     return this.currentAttractionId;
+  }
+
+  deleteAttraction(attractionId: number) {
+    this.attractions = this.attractions.filter(
+      (attraction) => attraction.id !== attractionId
+    );
+    this.markerService.removeMarker(attractionId);
   }
 }

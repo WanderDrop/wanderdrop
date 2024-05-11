@@ -5,7 +5,7 @@
 
   <form (ngSubmit)="onDelete()" #f="ngForm">
     <div class="modal-body">
-      <div *ngFor="let reason of reasons">
+      <div *ngFor="let reason of reasons | async">
         <div class="radio-wrapper">
           <input
             type="radio"

@@ -5,6 +5,7 @@ import { BehaviorSubject, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { AttractionService } from '../attraction/attraction.service';
 import { HttpClient } from '@angular/common/http';
+import { MarkerService } from './marker.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +26,8 @@ export class MapService {
   constructor(
     private router: Router,
     private attractionService: AttractionService,
-    private http: HttpClient
+    private http: HttpClient,
+    private markerService: MarkerService
   ) {}
 
   setNewAttractionLocation(lat: number, lng: number) {
@@ -115,6 +117,7 @@ export class MapService {
           this.attractionService.setCurrentAttractionId(attractionId);
           this.router.navigate(['/attraction', attractionId]);
         });
+        this.markerService.addMarker(attractionId, marker);
       })
       .catch((error: any) => {
         console.error('Error loading Google Maps JavaScript API: ', error);
