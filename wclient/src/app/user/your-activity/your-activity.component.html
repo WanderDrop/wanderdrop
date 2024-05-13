@@ -1,17 +1,23 @@
 <div class="container mt-4">
   <h2 class="mb-3">Your Attractions</h2>
-  <ul class="list-group">
+  <ul class="list-group" *ngIf="attractions.length > 0; else noAttractions">
     <li class="list-group-item" *ngFor="let attraction of attractions">
-      <h5 class="mb-1">{{ attraction.name }}</h5>
+      <h5 class="mb-1 text-primary">{{ attraction.name }}</h5>
       <p class="mb-0">{{ attraction.description }}</p>
     </li>
   </ul>
+  <ng-template #noAttractions>
+    <p>No attractions yet.</p>
+  </ng-template>
 
   <h2 class="mt-5 mb-3">Your Comments</h2>
-  <ul class="list-group">
+  <ul class="list-group" *ngIf="comments.length > 0; else noComments">
     <li class="list-group-item" *ngFor="let comment of comments">
-      <h5 class="mb-1">{{ comment.commentHeading }}</h5>
+      <h5 class="mb-1 text-primary">{{ comment.commentHeading }}</h5>
       <p class="mb-0">{{ comment.commentText }}</p>
     </li>
   </ul>
+  <ng-template #noComments>
+    <p>No comments yet.</p>
+  </ng-template>
 </div>
