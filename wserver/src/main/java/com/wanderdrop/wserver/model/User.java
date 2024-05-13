@@ -18,14 +18,11 @@ public class User {
     @Column(name= "user_id")
     private UUID userId;
 
-    @Column(name= "username", unique = true, nullable = false)
-    private String username;
+    @Column(name= "email", unique = true, nullable = false)
+    private String email;
 
     @Column(name= "password", nullable = false)
     private String password;
-
-    @Column(name= "email", nullable = false)
-    private String email;
 
     @Column(name= "first_name", nullable = false)
     private String firstName;
