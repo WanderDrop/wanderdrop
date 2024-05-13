@@ -21,14 +21,11 @@ public class Attraction {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "location", nullable = false)
-    private String location;
+    @Column(name = "latitude")
+    private String latitude;
 
-    @Column(name = "city")
-    private String city;
-
-    @Column(name = "country")
-    private String country;
+    @Column(name = "longitude")
+    private String longitude;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", referencedColumnName = "user_id", nullable = false, updatable = false)

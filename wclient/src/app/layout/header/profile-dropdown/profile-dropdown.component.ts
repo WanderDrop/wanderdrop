@@ -65,10 +65,11 @@ export class ProfileDropdownComponent implements AfterViewInit {
     this.router.navigate(['/profile']);
   }
 
-  onDisplayActivity() {}
-
-  onDisplayReports() {
+  onDisplayActivity() {
+    this.router.navigate(['activity']);
   }
+
+  onDisplayReports() {}
 
   onLogout() {}
 
