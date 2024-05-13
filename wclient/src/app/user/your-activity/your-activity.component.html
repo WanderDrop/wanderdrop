@@ -1,1 +1,15 @@
-<p>your-activity works!</p>
+<div>
+  <h2>Your Attractions</h2>
+  <ul>
+    <li *ngFor="let attraction of attractions">
+      {{ attraction.name }}: {{ attraction.description }}
+    </li>
+  </ul>
+
+  <h2>Your Comments</h2>
+  <ul>
+    <li *ngFor="let comment of comments">
+      {{ comment.commentHeading }}: {{ comment.commentText }}
+    </li>
+  </ul>
+</div>
