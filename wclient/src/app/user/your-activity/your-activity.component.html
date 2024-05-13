@@ -1,15 +1,17 @@
-<div>
-  <h2>Your Attractions</h2>
-  <ul>
-    <li *ngFor="let attraction of attractions">
-      {{ attraction.name }}: {{ attraction.description }}
+<div class="container mt-4">
+  <h2 class="mb-3">Your Attractions</h2>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let attraction of attractions">
+      <h5 class="mb-1">{{ attraction.name }}</h5>
+      <p class="mb-0">{{ attraction.description }}</p>
     </li>
   </ul>
 
-  <h2>Your Comments</h2>
-  <ul>
-    <li *ngFor="let comment of comments">
-      {{ comment.commentHeading }}: {{ comment.commentText }}
+  <h2 class="mt-5 mb-3">Your Comments</h2>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let comment of comments">
+      <h5 class="mb-1">{{ comment.commentHeading }}</h5>
+      <p class="mb-0">{{ comment.commentText }}</p>
     </li>
   </ul>
 </div>
