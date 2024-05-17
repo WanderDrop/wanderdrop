@@ -42,15 +42,15 @@ export class RegisterComponent {
         this.registerForm.value.userPassword,
         UserRole.USER
       );
-      this.userService.registerUser(newUser).subscribe(
-        (response) => {
+      this.userService.registerUser(newUser).subscribe({
+        next: (response) => {
           console.log(response);
           this.router.navigate(['/home']);
         },
-        (error) => {
+        error: (error) => {
           console.error(error);
-        }
-      );
+        },
+      });
     } else {
       this.registerForm.markAllAsTouched();
     }
