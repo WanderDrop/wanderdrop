@@ -40,7 +40,7 @@ export class RegisterComponent {
         this.registerForm.value.userPassword,
         this.registerForm.value.firstName,
         this.registerForm.value.lastName,
-        UserRole.User
+        UserRole.USER
       );
       this.userService.addUser(newUser);
       console.log(this.userService.getUsers());

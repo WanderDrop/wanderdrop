@@ -31,7 +31,7 @@ export class AddCommentComponent {
       this.attractionId,
       this.commentHeading,
       this.commentText,
-      this.userService.getDummyUser().userId
+      this.userService.getDummyUser().UserId
     );
     this.commentService.addComment(comment);
     this.modalService.dismissAll();

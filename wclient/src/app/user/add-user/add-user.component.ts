@@ -49,7 +49,7 @@ export class AddUserComponent {
         this.registerForm.value.userPassword,
         this.registerForm.value.firstName,
         this.registerForm.value.lastName,
-        this.registerForm.value.role || UserRole.User
+        this.registerForm.value.role || UserRole.USER
       );
       this.userService.addUser(newUser);
       console.log(this.userService.getUsers());

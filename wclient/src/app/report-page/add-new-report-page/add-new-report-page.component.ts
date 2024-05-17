@@ -12,7 +12,7 @@ import { AttractionService } from '../../attraction/attraction.service';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './add-new-report-page.component.html',
-  styleUrl: './add-new-report-page.component.css'
+  styleUrl: './add-new-report-page.component.css',
 })
 export class AddNewReportPageComponent {
   @Input() reportPageHeading: string = '';
@@ -28,10 +28,10 @@ export class AddNewReportPageComponent {
     private ngZone: NgZone,
     private modalService: NgbModal,
     private reportPageService: ReportPageService,
-    private attractionService:AttractionService,
-    private userService : UserService
+    private attractionService: AttractionService,
+    private userService: UserService
   ) {}
-  
+
   onClose() {
     this.ngZone.run(() => {
       this.router.navigate(['/home']);
@@ -50,13 +50,13 @@ export class AddNewReportPageComponent {
     }
     this.modalService.dismissAll();
   }
- 
+
   onSubmit() {
     const reportPage = new ReportPage(
       this.attractionId,
       this.reportPageHeading,
       this.reportPageText,
-      this.userService.getDummyUser().userId
+      this.userService.getDummyUser().UserId
     );
     this.reportPageService.addReportPage(reportPage);
     this.modalService.dismissAll();
@@ -71,8 +71,8 @@ export class AddNewReportPageComponent {
       this.attractionId,
       this.reportPageHeading,
       this.reportPageText,
-      this.userService.getDummyUser().userId
+      this.userService.getDummyUser().UserId
     );
     const newReportPageId = reportPage.reportId;
-}
+  }
 }

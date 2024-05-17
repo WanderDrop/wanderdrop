@@ -48,7 +48,7 @@ export class AddNewAttractionComponent {
       this.description,
       this.latitude,
       this.longitude,
-      this.userService.getDummyUser().userId
+      this.userService.getDummyUser().UserId
     );
     const newAttractionId = attraction.id;
 

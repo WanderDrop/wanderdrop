@@ -10,11 +10,11 @@ export class UserService {
 
   constructor() {
     const dummyUser = new User(
-      'dummy@example.com',
-      'password',
       'Dummy',
       'User',
-      UserRole.User
+      'dummy@example.com',
+      'password',
+      UserRole.USER
     );
     this.users.push(dummyUser);
   }
@@ -33,6 +33,6 @@ export class UserService {
 
   verifyPassword(inputPassword: string): boolean {
     const dummyUser = this.getDummyUser();
-    return dummyUser.password === inputPassword;
+    return dummyUser.Password === inputPassword;
   }
 }
