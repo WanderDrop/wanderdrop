@@ -23,8 +23,9 @@ public class Report {
     @Column(name= "report_message", nullable = false)
     private String reportMessage;
 
-    @Column(name = "status", nullable = false, columnDefinition = "ENUM('active', 'deleted') DEFAULT 'active'")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private Status status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attraction_id",referencedColumnName = "attraction_id", nullable = false, updatable = false )

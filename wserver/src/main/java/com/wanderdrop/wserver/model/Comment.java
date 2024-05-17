@@ -23,8 +23,9 @@ public class Comment {
     @Column(name = "comment_text", nullable = false)
     private String commentText;
 
-    @Column(name = "status", nullable = false, columnDefinition = "ENUM('active', 'deleted') DEFAULT 'active'")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private Status status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attraction_id", referencedColumnName = "attraction_id", insertable = false, updatable = false)
