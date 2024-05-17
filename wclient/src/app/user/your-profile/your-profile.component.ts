@@ -42,9 +42,9 @@ export class YourProfileComponent {
     const dummyUser = this.userService.getDummyUser();
 
     this.profileForm = this.fb.group({
-      firstName: [dummyUser.firstName, Validators.required],
-      lastName: [dummyUser.lastName, Validators.required],
-      email: [{ value: dummyUser.email, disabled: true }, Validators.required],
+      firstName: [dummyUser.Firstname, Validators.required],
+      lastName: [dummyUser.Lastname, Validators.required],
+      email: [{ value: dummyUser.Email, disabled: true }, Validators.required],
     });
     this.originalValues = this.profileForm.value;
   }
@@ -75,8 +75,8 @@ export class YourProfileComponent {
       const newPassword = this.changePasswordForm.value.newPassword;
       if (this.userService.verifyPassword(inputPassword)) {
         const dummyUser = this.userService.getDummyUser();
-        if (dummyUser.password !== newPassword) {
-          dummyUser.password = newPassword;
+        if (dummyUser.Password !== newPassword) {
+          dummyUser.Password = newPassword;
           this.showSuccessMessage = true;
           setTimeout(() => {
             this.showSuccessMessage = false;
@@ -114,11 +114,11 @@ export class YourProfileComponent {
     if (this.profileForm.valid) {
       const dummyUser = this.userService.getDummyUser();
       if (
-        dummyUser.firstName !== this.profileForm.value.firstName ||
-        dummyUser.lastName !== this.profileForm.value.lastName
+        dummyUser.Firstname !== this.profileForm.value.firstName ||
+        dummyUser.Lastname !== this.profileForm.value.lastName
       ) {
-        dummyUser.firstName = this.profileForm.value.firstName;
-        dummyUser.lastName = this.profileForm.value.lastName;
+        dummyUser.Firstname = this.profileForm.value.firstName;
+        dummyUser.Lastname = this.profileForm.value.lastName;
         this.showNameChangeSuccessMessage = true;
         setTimeout(() => (this.showNameChangeSuccessMessage = false), 2500);
       }

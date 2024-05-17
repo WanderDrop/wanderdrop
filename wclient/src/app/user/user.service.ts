@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { User } from './user.model';
 import { UserRole } from './user-role.enum';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -8,15 +9,19 @@ import { UserRole } from './user-role.enum';
 export class UserService {
   private users: User[] = [];
 
-  constructor() {
+  constructor(private http: HttpClient) {
     const dummyUser = new User(
-      'dummy@example.com',
-      'password',
       'Dummy',
       'User',
-      UserRole.User
+      'dummy@example.com',
+      'password',
+      UserRole.USER
     );
     this.users.push(dummyUser);
+  }
+
+  registerUser(user: User) {
+    return this.http.post('http://localhost:8080/api/auth/register', user);
   }
 
   addUser(user: User) {
@@ -33,6 +38,6 @@ export class UserService {
 
   verifyPassword(inputPassword: string): boolean {
     const dummyUser = this.getDummyUser();
-    return dummyUser.password === inputPassword;
+    return dummyUser.Password === inputPassword;
   }
 }

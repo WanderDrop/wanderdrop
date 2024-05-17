@@ -1,96 +1,71 @@
 import { UserRole } from './user-role.enum';
 
 export class User {
-  private _userId!: number;
-  private _email: string;
-  private _password: string;
-  private _firstName: string;
-  private _lastName: string;
-  private _roleId: UserRole;
-  private _createdAt: Date;
-  private _updatedAt?: Date;
-  private _status: string;
+  private userId!: number;
+  private email: string;
+  private password: string;
+  private firstname: string;
+  private lastname: string;
+  private role: UserRole;
   public static lastId = 0;
 
   constructor(
+    firstname: string,
+    lastname: string,
     email: string,
     password: string,
-    firstName: string,
-    lastName: string,
-    roleId: UserRole = UserRole.User
+    role: UserRole
   ) {
     User.lastId++;
-    this._userId = User.lastId;
-    this._password = password;
-    this._email = email;
-    this._firstName = firstName;
-    this._lastName = lastName;
-    this._roleId = roleId;
-    this._createdAt = new Date();
-    this._status = 'active';
+    this.userId = User.lastId;
+    this.password = password;
+    this.email = email;
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.role = role;
   }
 
-  get userId(): number {
-    return this._userId;
+  get UserId(): number {
+    return this.userId;
   }
 
-  get email(): string {
-    return this._email;
+  get Email(): string {
+    return this.email;
   }
 
-  set email(value: string) {
-    this._email = value;
+  set Email(value: string) {
+    this.email = value;
   }
 
-  get password(): string {
-    return this._password;
+  get Password(): string {
+    return this.password;
   }
 
-  set password(value: string) {
-    this._password = value;
+  set Password(value: string) {
+    this.password = value;
   }
 
-  get firstName(): string {
-    return this._firstName;
+  get Firstname(): string {
+    return this.firstname;
   }
 
-  set firstName(value: string) {
-    this._firstName = value;
+  set Firstname(value: string) {
+    this.firstname = value;
   }
 
-  get lastName(): string {
-    return this._lastName;
+  get Lastname(): string {
+    return this.lastname;
   }
 
-  set lastName(value: string) {
-    this._lastName = value;
+  set Lastname(value: string) {
+    this.lastname = value;
   }
 
-  get roleId(): UserRole {
-    return this._roleId;
+  get Role(): UserRole {
+    return this.role;
   }
 
-  set roleId(value: UserRole) {
-    this._roleId = value;
-  }
-
-  get createdAt(): Date {
-    return this._createdAt;
-  }
-
-  get updatedAt(): Date | undefined {
-    return this._updatedAt;
-  }
-
-  set updatedAt(value: Date) {
-    this._updatedAt = value;
-  }
-
-  get status(): string {
-    return this._status;
-  }
-
-  set status(value: string) {
-    this._status = value;
+  set Role(value: UserRole) {
+    this.role = value;
   }
 }

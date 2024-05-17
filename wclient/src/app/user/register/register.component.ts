@@ -36,16 +36,21 @@ export class RegisterComponent {
   onSubmit() {
     if (this.registerForm.valid) {
       const newUser = new User(
-        this.registerForm.value.email,
-        this.registerForm.value.userPassword,
         this.registerForm.value.firstName,
         this.registerForm.value.lastName,
-        UserRole.User
+        this.registerForm.value.email,
+        this.registerForm.value.userPassword,
+        UserRole.USER
       );
-      this.userService.addUser(newUser);
-      console.log(this.userService.getUsers());
-      //At the moment navigate home. In the future display popup "success" or "user with that email already exists" and navigate to login page
-      this.router.navigate(['/home']);
+      this.userService.registerUser(newUser).subscribe({
+        next: (response) => {
+          console.log(response);
+          this.router.navigate(['/home']);
+        },
+        error: (error) => {
+          console.error(error);
+        },
+      });
     } else {
       this.registerForm.markAllAsTouched();
     }
