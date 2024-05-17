@@ -45,16 +45,21 @@ export class AddUserComponent {
   onSubmit() {
     if (this.registerForm.valid) {
       const newUser = new User(
-        this.registerForm.value.email,
-        this.registerForm.value.userPassword,
         this.registerForm.value.firstName,
         this.registerForm.value.lastName,
+        this.registerForm.value.email,
+        this.registerForm.value.userPassword,
         this.registerForm.value.role || UserRole.USER
       );
-      this.userService.addUser(newUser);
-      console.log(this.userService.getUsers());
-      //In the future display popup "success" or "user with that email already exists"
-      this.router.navigate(['/home']);
+      this.userService.registerUser(newUser).subscribe({
+        next: (response) => {
+          console.log(response);
+          this.router.navigate(['/home']);
+        },
+        error: (error) => {
+          console.error(error);
+        },
+      });
     } else {
       this.registerForm.markAllAsTouched();
     }
