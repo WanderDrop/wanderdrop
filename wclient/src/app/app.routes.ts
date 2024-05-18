@@ -9,6 +9,7 @@ import { YourProfileComponent } from './user/your-profile/your-profile.component
 import { ReportPageComponent } from './report-page/report-page.component';
 import { AddNewReportPageComponent } from './report-page/add-new-report-page/add-new-report-page.component';
 import { YourActivityComponent } from './user/your-activity/your-activity.component';
+import { LoginComponent } from './user/login/login.component';
 
 export const routes: Routes = [
   { path: '', component: GoogleMapsComponent },
@@ -23,6 +24,7 @@ export const routes: Routes = [
   { path: 'add-new-report-page', component: AddNewReportPageComponent },
   { path: 'reportPage/:id', component: ReportPageComponent },
   { path: 'activity', component: YourActivityComponent },
+  { path: 'login', component: LoginComponent}
 ];
 
 @NgModule({

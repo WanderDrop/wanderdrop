@@ -4,19 +4,20 @@ import { Router } from '@angular/router';
 import { HeaderComponent } from './layout/header/header.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { GoogleMapsComponent } from './google-maps/google-maps.component';
+import { LoginComponent } from "./user/login/login.component";
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
-  imports: [
-    RouterOutlet,
-    RouterModule,
-    HeaderComponent,
-    FooterComponent,
-    GoogleMapsComponent,
-  ],
+    selector: 'app-root',
+    standalone: true,
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css',
+    imports: [
+        RouterOutlet,
+        RouterModule,
+        HeaderComponent,
+        FooterComponent,
+        GoogleMapsComponent,
+    ]
 })
 export class AppComponent {
   title = 'wclient';
@@ -25,5 +26,8 @@ export class AppComponent {
 
   register() {
     this.router.navigate(['register']);
+  }
+  login(){
+    this.router.navigate(['login'])
   }
 }
