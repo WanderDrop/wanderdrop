@@ -1,4 +1,4 @@
-package com.wanderdrop.wserver.auth;
+package com.wanderdrop.wserver.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
