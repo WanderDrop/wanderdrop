@@ -5,8 +5,12 @@ import com.wanderdrop.wserver.mapper.AttractionMapper;
 import com.wanderdrop.wserver.model.*;
 import com.wanderdrop.wserver.repository.AttractionRepository;
 import com.wanderdrop.wserver.repository.DeletionReasonRepository;
+import com.wanderdrop.wserver.repository.UserRepository;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,16 +19,30 @@ import java.util.stream.Collectors;
 public class AttractionServiceImpl implements AttractionService {
 
     private final AttractionRepository attractionRepository;
+    private final UserRepository userRepository;
     private final DeletionReasonRepository deletionReasonRepository;
 
-    public AttractionServiceImpl(AttractionRepository attractionRepository, DeletionReasonRepository deletionReasonRepository) {
+    public AttractionServiceImpl(AttractionRepository attractionRepository, UserRepository userRepository, DeletionReasonRepository deletionReasonRepository) {
         this.attractionRepository = attractionRepository;
+        this.userRepository = userRepository;
         this.deletionReasonRepository = deletionReasonRepository;
     }
 
     @Override
     public AttractionDto saveAttraction(AttractionDto attractionDto) {
-        return null;
+
+        User currentUser = getCurrentAuthenticatedUser();
+        if (currentUser == null || (currentUser.getRole() != Role.ADMIN && currentUser.getRole() != Role.USER)) {
+            throw new AccessDeniedException("Only logged in users and admins can create an attraction.");
+        }
+
+        attractionDto.setCreatedBy(currentUser.getUserId());
+        Attraction attraction = AttractionMapper.mapToAttraction(attractionDto);
+        attraction.setCreatedBy(currentUser);
+        attraction.setStatus(Status.ACTIVE);
+        attraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        Attraction savedAttraction = attractionRepository.save(attraction);
+        return AttractionMapper.mapToAttractionDto(savedAttraction);
     }
 
     @Override
@@ -43,27 +61,54 @@ public class AttractionServiceImpl implements AttractionService {
 
     @Override
     public AttractionDto updateAttraction(Long attractionId, AttractionDto updatedAttraction) {
-            Attraction existingAttraction = attractionRepository.findById(attractionId).orElse(null);
-            if (existingAttraction != null) {
-                Attraction attractionToUpdate = AttractionMapper.mapToAttraction(updatedAttraction);
-                attractionToUpdate.setAttractionId(attractionId);
-                return saveAttraction(AttractionMapper.mapToAttractionDto(attractionToUpdate));
-            } else {
-                return null;
-            }
+
+        User currentUser = checkAdminUser();
+
+        Attraction existingAttraction = attractionRepository.findById(attractionId).orElse(null);
+        if (existingAttraction != null) {
+            Attraction attractionToUpdate = AttractionMapper.mapToAttraction(updatedAttraction);
+            attractionToUpdate.setAttractionId(attractionId);
+
+            attractionToUpdate.setUpdatedBy(getCurrentAuthenticatedUser());
+            attractionToUpdate.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+            return saveAttraction(AttractionMapper.mapToAttractionDto(attractionToUpdate));
+        } else {
+            return null;
+        }
     }
 
     @Override
     public void deleteAttraction(Long attractionId, Long deletionReasonId) {
+
+        User currentUser = checkAdminUser();
+
         Optional<Attraction> optionalAttraction = attractionRepository.findById(attractionId);
         if (optionalAttraction.isPresent()) {
             Attraction attraction = optionalAttraction.get();
             attraction.setStatus(Status.DELETED);
             DeletionReason deletionReason = deletionReasonRepository.findById(deletionReasonId).orElse(null);
             attraction.setDeletionReason(deletionReason);
+
+            attraction.setUpdatedBy(getCurrentAuthenticatedUser());
+            attraction.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
             attractionRepository.save(attraction);
         } else {
             throw new IllegalArgumentException("Attraction with id " + attractionId + " not found");
         }
+    }
+
+    private User getCurrentAuthenticatedUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(username).orElse(null);
+    }
+
+    private User checkAdminUser() {
+        User currentUser = getCurrentAuthenticatedUser();
+        if (currentUser == null || currentUser.getRole() != Role.ADMIN) {
+            throw new AccessDeniedException("Only admins can perform this action.");
+        }
+        return currentUser;
     }
 }
