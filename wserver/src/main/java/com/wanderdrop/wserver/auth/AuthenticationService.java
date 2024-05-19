@@ -1,7 +1,8 @@
 package com.wanderdrop.wserver.auth;
 
-import com.wanderdrop.wserver.config.JwtService;
-import com.wanderdrop.wserver.model.Role;
+import com.wanderdrop.wserver.dto.AuthenticationRequest;
+import com.wanderdrop.wserver.dto.AuthenticationResponse;
+import com.wanderdrop.wserver.utils.JwtUtil;
 import com.wanderdrop.wserver.model.Status;
 import com.wanderdrop.wserver.model.User;
 import com.wanderdrop.wserver.repository.UserRepository;
@@ -17,7 +18,7 @@ public class AuthenticationService {
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+    private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
@@ -30,7 +31,7 @@ public class AuthenticationService {
                 .status(Status.ACTIVE)
                 .build();
         repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
+        var jwtToken = jwtUtil.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
@@ -46,7 +47,7 @@ public class AuthenticationService {
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
         System.out.println(user);
-        var jwtToken = jwtService.generateToken(user);
+        var jwtToken = jwtUtil.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();

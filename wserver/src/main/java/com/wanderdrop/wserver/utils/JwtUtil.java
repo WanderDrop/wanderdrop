@@ -1,4 +1,4 @@
-package com.wanderdrop.wserver.config;
+package com.wanderdrop.wserver.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-public class JwtService {
+public class JwtUtil {
 
     private static final String SECRET_KEY = "84261393219efda0036b0863b6e0aa7775253c9addc357cf8e74ad3f4cf346f7";
 
