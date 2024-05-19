@@ -54,7 +54,7 @@ export class AddUserComponent {
       this.userService.registerUser(newUser).subscribe({
         next: (response) => {
           console.log(response);
-          this.router.navigate(['/home']);
+          this.router.navigate(['/login']);
         },
         error: (error) => {
           console.error(error);
