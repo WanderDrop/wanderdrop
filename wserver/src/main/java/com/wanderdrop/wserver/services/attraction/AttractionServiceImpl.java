@@ -72,7 +72,7 @@ public class AttractionServiceImpl implements AttractionService {
             existingAttraction.setDescription(updatedAttractionDto.getDescription());
             existingAttraction.setLatitude(updatedAttractionDto.getLatitude());
             existingAttraction.setLongitude(updatedAttractionDto.getLongitude());
-            existingAttraction.setStatus(updatedAttractionDto.getStatus());
+            existingAttraction.setStatus(Status.ACTIVE);
 
             existingAttraction.setUpdatedBy(currentUser);
             existingAttraction.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
