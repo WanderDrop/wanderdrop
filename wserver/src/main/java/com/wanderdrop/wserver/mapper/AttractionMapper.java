@@ -2,6 +2,8 @@ package com.wanderdrop.wserver.mapper;
 
 import com.wanderdrop.wserver.dto.AttractionDto;
 import com.wanderdrop.wserver.model.Attraction;
+import com.wanderdrop.wserver.model.User;
+import com.wanderdrop.wserver.repository.UserRepository;
 
 public class AttractionMapper {
 
@@ -22,7 +24,7 @@ public class AttractionMapper {
         );
     }
 
-    public static Attraction mapToAttraction(AttractionDto attractionDto) {
+    public static Attraction mapToAttraction(AttractionDto attractionDto, UserRepository userRepository) {
         Attraction attraction = new Attraction();
         attraction.setAttractionId(attractionDto.getAttractionId());
         attraction.setName(attractionDto.getName());
@@ -30,7 +32,16 @@ public class AttractionMapper {
         attraction.setLatitude(attractionDto.getLatitude());
         attraction.setLongitude(attractionDto.getLongitude());
         attraction.setStatus(attractionDto.getStatus());
-        // createdBy, updatedBy, and deletionReason will be set in the service
+        if (attractionDto.getCreatedBy() != null) {
+            User createdBy = userRepository.findById(attractionDto.getCreatedBy()).orElse(null);
+            attraction.setCreatedBy(createdBy);
+        }
+        if (attractionDto.getUpdatedBy() != null) {
+            User updatedBy = userRepository.findById(attractionDto.getUpdatedBy()).orElse(null);
+            attraction.setUpdatedBy(updatedBy);
+        }
+        attraction.setCreatedAt(attractionDto.getCreatedAt());
+        attraction.setUpdatedAt(attractionDto.getUpdatedAt());
 
         return attraction;
     }

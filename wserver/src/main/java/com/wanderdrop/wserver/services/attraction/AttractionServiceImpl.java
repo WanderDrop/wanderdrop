@@ -37,7 +37,7 @@ public class AttractionServiceImpl implements AttractionService {
         }
 
         attractionDto.setCreatedBy(currentUser.getUserId());
-        Attraction attraction = AttractionMapper.mapToAttraction(attractionDto);
+        Attraction attraction = AttractionMapper.mapToAttraction(attractionDto, userRepository);
         attraction.setCreatedBy(currentUser);
         attraction.setStatus(Status.ACTIVE);
         attraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
@@ -60,19 +60,25 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
-    public AttractionDto updateAttraction(Long attractionId, AttractionDto updatedAttraction) {
+    public AttractionDto updateAttraction(Long attractionId, AttractionDto updatedAttractionDto) {
 
         User currentUser = checkAdminUser();
 
-        Attraction existingAttraction = attractionRepository.findById(attractionId).orElse(null);
-        if (existingAttraction != null) {
-            Attraction attractionToUpdate = AttractionMapper.mapToAttraction(updatedAttraction);
-            attractionToUpdate.setAttractionId(attractionId);
+        Optional<Attraction> existingAttractionOptional = attractionRepository.findById(attractionId);
+        if (existingAttractionOptional.isPresent()) {
+            Attraction existingAttraction = existingAttractionOptional.get();
 
-            attractionToUpdate.setUpdatedBy(getCurrentAuthenticatedUser());
-            attractionToUpdate.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+            existingAttraction.setName(updatedAttractionDto.getName());
+            existingAttraction.setDescription(updatedAttractionDto.getDescription());
+            existingAttraction.setLatitude(updatedAttractionDto.getLatitude());
+            existingAttraction.setLongitude(updatedAttractionDto.getLongitude());
+            existingAttraction.setStatus(updatedAttractionDto.getStatus());
 
-            return saveAttraction(AttractionMapper.mapToAttractionDto(attractionToUpdate));
+            existingAttraction.setUpdatedBy(currentUser);
+            existingAttraction.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+            Attraction updatedAttraction = attractionRepository.save(existingAttraction);
+            return AttractionMapper.mapToAttractionDto(updatedAttraction);
         } else {
             return null;
         }
