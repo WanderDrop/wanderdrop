@@ -9,12 +9,6 @@ import java.util.UUID;
 public class UserDto {
 
     private UUID userId;
-
     private String email;
-
     private Role role;
-
-
-
-
 }
