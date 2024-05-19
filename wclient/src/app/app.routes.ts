@@ -25,6 +25,7 @@ export const routes: Routes = [
   { path: 'reportPage/:id', component: ReportPageComponent },
   { path: 'activity', component: YourActivityComponent },
   { path: 'login', component: LoginComponent}
+
 ];
 
 @NgModule({

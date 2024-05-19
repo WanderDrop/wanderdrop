@@ -15,7 +15,10 @@
                   <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
                     Welcome Traveler!
   
-                    <form>
+                    <form 
+                    class="mx-1 mx-md-4"
+                    [formGroup]="loginForm"
+                    >
                      <div class="form-group">
                         <div class="d-flex flex-row align-items-center mb-4">
                             <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
@@ -49,20 +52,20 @@
                                     data-mdb-input-init
                                     class="form-outline flex-fill mb-0"
                                 >
-                                    <label class="form-label" for="userPassword"
+                                    <label class="form-label" for="password"
                                     >Password</label
                                     >
                                     <input
                                     type="password"
-                                    formControlName="userPassword"
+                                    formControlName="password"
                                     class="form-control"
-                                    id="userPassword"
+                                    id="password"
                                     placeholder="Password"
                                     />
                                         <div
                                         *ngIf="
-                                            loginForm.get('userPassword')?.invalid &&
-                                            loginForm.get('userPassword')?.touched
+                                            loginForm.get('password')?.invalid &&
+                                            loginForm.get('password')?.touched
                                         "
                                         class="text-danger"
                                         >
@@ -83,11 +86,16 @@
                                 data-mdb-button-init
                                 data-mdb-ripple-init
                                 class="btn btn-primary btn-lg"
+                                (click)="login()"
+                                [disabled]="loginForm.invalid"
                             >
                                 Log in
                             </button>
-                            </div>
                            
+                            </div>
+                            <p>
+                                Or <a (click)="onRegister()" class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"> Register Now!</a>
+                            </p>
                         </form>
                 </div>
                

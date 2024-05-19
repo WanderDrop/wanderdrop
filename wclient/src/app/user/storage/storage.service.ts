@@ -34,20 +34,18 @@ static getUserRole():string{
   }
 }
 static isAdminLoggedIn():boolean{
-  if(this.getToken() == null) {
+  if(this.getToken() == null) 
     return false;
-  }else{
     const role:string = this.getUserRole();
     return role == "ADMIN";
-  }
+  
 }
 static isUserLoggedIn():boolean{
-  if(this.getToken() == null) {
+  if(this.getToken() == null) 
     return false;
-  }else{
     const role:string = this.getUserRole();
     return role == "USER";
-  }
+  
 }
 static logout():void{
   window.localStorage.removeItem(TOKEN);
