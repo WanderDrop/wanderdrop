@@ -14,8 +14,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class AuthenticationResponse {
     private String token;
-
-    private Role role;
-
-    private UUID userId;
+    public Role role;
+    public UUID userId;
 }

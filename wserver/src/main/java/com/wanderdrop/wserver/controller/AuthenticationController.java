@@ -43,7 +43,6 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
-
     @PostMapping("/login")
     public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
             throws BadCredentialsException, DisabledException, UsernameNotFoundException {
@@ -51,7 +50,7 @@ public class AuthenticationController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authenticationRequest.getEmail(),
                     authenticationRequest.getPassword()));
-        } catch (BadCredentialsException e){
+        } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Incorrect email or password");
         }
         final UserDetails userDetails = userService.userDetailsService()
