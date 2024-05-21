@@ -26,10 +26,10 @@ public class Attraction {
     private String description;
 
     @Column(name = "latitude", nullable = false)
-    private String latitude;
+    private Double latitude;
 
     @Column(name = "longitude", nullable = false)
-    private String longitude;
+    private Double longitude;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", referencedColumnName = "user_id", nullable = false, updatable = false)
