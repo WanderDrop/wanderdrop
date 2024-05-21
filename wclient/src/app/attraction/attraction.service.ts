@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Attraction } from './attraction.model';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, catchError, retry, of, Observable } from 'rxjs';
 import { MarkerService } from '../google-maps/marker.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,17 @@ export class AttractionService {
   private currentAttractionId = new BehaviorSubject<number | null>(null);
   attractions: Attraction[] = [];
 
-  constructor(private markerService: MarkerService) {}
+  constructor(private markerService: MarkerService, private http: HttpClient) {}
+
+  public fetchAttractions(): Observable<any> {
+    return this.http.get<any>(`http://localhost:8080/api/attractions`).pipe(
+      retry(3),
+      catchError((error) => {
+        console.error('Error fetching attractions:', error);
+        return of([]);
+      })
+    );
+  }
 
   setCurrentAttraction(attraction: Attraction) {
     this.currentAttraction = attraction;
