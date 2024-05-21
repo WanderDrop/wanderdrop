@@ -125,11 +125,7 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
       // this.addAttractionMarkers();
       console.log('Got markers', ms);
       ms.forEach((m: any) => {
-        this.mapService.addMarker(
-          Number(m.latitude),
-          Number(m.longitude),
-          m.attractionId
-        );
+        this.mapService.addMarker(m.latitude, m.longitude, m.attractionId);
       });
     });
   }

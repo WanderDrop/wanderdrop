@@ -87,6 +87,14 @@ export class Attraction {
     this._updatedBy = value;
   }
 
+  get createdAt(): Date | undefined {
+    return this._createdAt;
+  }
+
+  set createdAt(value: Date) {
+    this._createdAt = value;
+  }
+
   get updatedAt(): Date | undefined {
     return this._updatedAt;
   }
@@ -109,5 +117,27 @@ export class Attraction {
 
   set deletionReason(value: number | undefined) {
     this._deletionReason = value;
+  }
+
+  toRequestPayload() {
+    return {
+      name: this._name,
+      description: this._description,
+      latitude: this._latitude,
+      longitude: this._longitude,
+    };
+  }
+
+  static fromResponse(response: any): Attraction {
+    const attraction = new Attraction(
+      response.name,
+      response.description,
+      response.latitude,
+      response.longitude,
+      response.createdBy
+    );
+    attraction.id = response.id;
+    attraction.createdAt = new Date(response.createdAt);
+    return attraction;
   }
 }

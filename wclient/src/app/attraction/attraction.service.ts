@@ -1,8 +1,9 @@
 import { Injectable, signal } from '@angular/core';
 import { Attraction } from './attraction.model';
-import { BehaviorSubject, catchError, retry, of, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, retry, of, Observable, map } from 'rxjs';
 import { MarkerService } from '../google-maps/marker.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { StorageService } from '../user/storage/storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +23,30 @@ export class AttractionService {
         return of([]);
       })
     );
+  }
+
+  fetchAttractionById(id: number): Observable<Attraction> {
+    return this.http
+      .get<Attraction>(`http://localhost:8080/api/attractions/${id}`)
+      .pipe(map((response) => Attraction.fromResponse(response)));
+  }
+
+  addAttraction(attraction: Attraction): Observable<Attraction> {
+    const token = StorageService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http
+      .post<Attraction>(
+        'http://localhost:8080/api/attractions',
+        attraction.toRequestPayload(),
+        { headers }
+      )
+      .pipe(
+        map((response) => Attraction.fromResponse(response)),
+        catchError((error) => {
+          console.error('Error adding attraction:', error);
+          throw error;
+        })
+      );
   }
 
   setCurrentAttraction(attraction: Attraction) {

@@ -43,16 +43,36 @@ export class AddNewAttractionComponent {
   }
 
   onAddAttraction() {
-    const attraction = new Attraction(
+    const userId = this.userService.getDummyUser().UserId;
+
+    const newAttraction = new Attraction(
       this.attractionName,
       this.description,
       this.latitude,
       this.longitude,
-      this.userService.getDummyUser().UserId
+      userId
     );
-    const newAttractionId = attraction.id;
 
-    this.attractionService.attractions.push(attraction);
+    this.attractionService.addAttraction(newAttraction).subscribe(
+      (response) => {
+        this.mapService.addMarker(
+          response.latitude,
+          response.longitude,
+          response.id
+        );
+        this.ngZone.run(() => {
+          this.router.navigate(['/home']);
+        });
+        this.mapService.triggerResetSearchForm();
+      },
+      (error) => {
+        console.error('Error adding new attraction:', error);
+      }
+    );
+
+    const newAttractionId = newAttraction.id;
+
+    this.attractionService.attractions.push(newAttraction);
 
     this.mapService.addMarker(this.latitude, this.longitude, newAttractionId);
     this.mapService

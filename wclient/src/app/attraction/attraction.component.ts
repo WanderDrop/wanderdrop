@@ -13,23 +13,23 @@ import { ModifyAttractionComponent } from './modify-attraction/modify-attraction
 import { DeleteConfirmationComponent } from '../shared/delete-confirmation/delete-confirmation.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReportPage } from '../report-page/report-page.model';
-import { AddNewReportPageComponent } from "../report-page/add-new-report-page/add-new-report-page.component";
+import { AddNewReportPageComponent } from '../report-page/add-new-report-page/add-new-report-page.component';
 
 @Component({
-    selector: 'app-attraction',
-    standalone: true,
-    templateUrl: './attraction.component.html',
-    styleUrl: './attraction.component.css',
-    imports: [
-        CommentItemComponent,
-        CommentListComponent,
-        CommentsComponent,
-        AddCommentComponent,
-        CommonModule,
-        ModifyAttractionComponent,
-        DeleteConfirmationComponent,
-        AddNewReportPageComponent
-    ]
+  selector: 'app-attraction',
+  standalone: true,
+  templateUrl: './attraction.component.html',
+  styleUrl: './attraction.component.css',
+  imports: [
+    CommentItemComponent,
+    CommentListComponent,
+    CommentsComponent,
+    AddCommentComponent,
+    CommonModule,
+    ModifyAttractionComponent,
+    DeleteConfirmationComponent,
+    AddNewReportPageComponent,
+  ],
 })
 export class AttractionComponent implements OnInit {
   attraction!: Attraction | undefined;
@@ -39,8 +39,7 @@ export class AttractionComponent implements OnInit {
   description: string = '';
   selectedAttractionId!: number;
   @ViewChild('addCommentContent') addCommentContent!: TemplateRef<any>;
-  @ViewChild('addReportPageContent') addReportPageContent! : TemplateRef<any>;
-
+  @ViewChild('addReportPageContent') addReportPageContent!: TemplateRef<any>;
 
   constructor(
     private modalService: NgbModal,
@@ -53,16 +52,20 @@ export class AttractionComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.attraction = this.attractionService.getAttractionById(+id);
-      if (this.attraction) {
-        this.selectedAttractionId = this.attraction.id;
-        this.comments = this.commentService.getComments(this.attraction.id);
-        this.commentService
-          .getCommentsUpdated()
-          .subscribe((comments: Comment[]) => {
-            this.comments = comments;
-          });
-      }
+      this.attractionService
+        .fetchAttractionById(+id)
+        .subscribe((attraction) => {
+          this.attraction = attraction;
+          if (this.attraction) {
+            this.selectedAttractionId = this.attraction.id;
+            this.comments = this.commentService.getComments(this.attraction.id);
+            this.commentService
+              .getCommentsUpdated()
+              .subscribe((comments: Comment[]) => {
+                this.comments = comments;
+              });
+          }
+        });
     }
   }
 
