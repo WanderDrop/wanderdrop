@@ -123,7 +123,12 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
   addAttractionMarkers() {
     this.attractionService.fetchAttractions().subscribe((ms) => {
       // this.addAttractionMarkers();
+      this.attractionService.attractions = ms.map((m: any) => {
+        return { ...m, id: m.attractionId };
+      });
+
       console.log('Got markers', ms);
+
       ms.forEach((m: any) => {
         this.mapService.addMarker(m.latitude, m.longitude, m.attractionId);
       });

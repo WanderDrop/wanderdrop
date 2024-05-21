@@ -136,7 +136,7 @@ export class Attraction {
       response.longitude,
       response.createdBy
     );
-    attraction.id = response.id;
+    attraction.id = response.attractionId;
     attraction.createdAt = new Date(response.createdAt);
     return attraction;
   }

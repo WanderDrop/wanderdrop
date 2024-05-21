@@ -49,6 +49,29 @@ export class AttractionService {
       );
   }
 
+  updateAttraction(
+    attractionId: number,
+    updatedAttraction: Attraction
+  ): Observable<Attraction> {
+    console.log('Updating attraction with ID:', attractionId);
+    console.log('Updated Attraction:', updatedAttraction);
+    const token = StorageService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http
+      .put<Attraction>(
+        `http://localhost:8080/api/attractions/${attractionId}`,
+        updatedAttraction.toRequestPayload(),
+        { headers }
+      )
+      .pipe(
+        map((response) => Attraction.fromResponse(response)),
+        catchError((error) => {
+          console.error('Error updating attraction:', error);
+          throw error;
+        })
+      );
+  }
+
   setCurrentAttraction(attraction: Attraction) {
     this.currentAttraction = attraction;
   }
@@ -75,10 +98,23 @@ export class AttractionService {
   }
 
   getAttractionById(id: number): Attraction | undefined {
-    return this.attractions.find((attraction) => attraction.id === id);
+    console.log('HERE', this.attractions);
+    const attraction = this.attractions.find(
+      (attraction) => attraction.id === id
+    );
+    if (attraction) {
+      return attraction;
+    } else {
+      console.error(
+        'Attraction with id ' + id + ' not found in the list of attractions:',
+        this.attractions
+      );
+      return undefined;
+    }
   }
 
   setCurrentAttractionId(attractionId: number) {
+    console.log('Setting current attraction ID:', attractionId);
     this.currentAttractionId.next(attractionId);
     const attraction = this.getAttractionById(attractionId);
     if (attraction) {
@@ -90,6 +126,7 @@ export class AttractionService {
 
   getCurrentAttractionId(): number {
     const attractionId = this.currentAttractionId.getValue();
+    console.log('Getting current attraction ID:', attractionId);
     if (attractionId !== null) {
       return attractionId;
     } else {
