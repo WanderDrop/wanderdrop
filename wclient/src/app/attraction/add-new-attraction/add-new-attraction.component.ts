@@ -83,7 +83,6 @@ export class AddNewAttractionComponent implements OnInit, OnDestroy {
         },
       });
 
-    const newAttractionId = newAttraction.id;
     this.subscriptions.push(addAttractionSub);
   }
 

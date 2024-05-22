@@ -5,11 +5,13 @@ import {
   Component,
   ElementRef,
   HostListener,
+  OnDestroy,
   QueryList,
   Renderer2,
   ViewChildren,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile-dropdown',
@@ -18,10 +20,10 @@ import { Router } from '@angular/router';
   templateUrl: './profile-dropdown.component.html',
   styleUrl: './profile-dropdown.component.css',
 })
-export class ProfileDropdownComponent implements AfterViewInit {
+export class ProfileDropdownComponent implements AfterViewInit, OnDestroy {
   @ViewChildren('smallDropdownMenu') dropdownMenuSmall!: QueryList<ElementRef>;
-
   screenWidth: number = window.innerWidth;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private renderer: Renderer2,
@@ -37,9 +39,11 @@ export class ProfileDropdownComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.dropdownMenuSmall.changes.subscribe(() => {
-      this.adjustMenuClass();
-    });
+    const dropdownMenuSmallChangesSub =
+      this.dropdownMenuSmall.changes.subscribe(() => {
+        this.adjustMenuClass();
+      });
+    this.subscriptions.push(dropdownMenuSmallChangesSub);
   }
 
   adjustMenuClass() {
@@ -75,5 +79,9 @@ export class ProfileDropdownComponent implements AfterViewInit {
 
   onAddNewUser() {
     this.router.navigate(['/add-user']);
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

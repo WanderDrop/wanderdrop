@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommentItemComponent } from './comment-item/comment-item.component';
 import { CommentService } from '../comment.service';
 import { Comment } from '../comment.model';
 import { CommonModule } from '@angular/common';
 import { AttractionService } from '../../attraction/attraction.service';
-import { switchMap, map } from 'rxjs';
+import { switchMap, map, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-comment-list',
@@ -13,8 +13,9 @@ import { switchMap, map } from 'rxjs';
   styleUrl: './comment-list.component.css',
   imports: [CommentItemComponent, CommonModule],
 })
-export class CommentListComponent implements OnInit {
+export class CommentListComponent implements OnInit, OnDestroy {
   comments: Comment[] = [];
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private commentService: CommentService,
@@ -22,7 +23,7 @@ export class CommentListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.attractionService
+    const attractionIdObservableSub = this.attractionService
       .getAttractionIdObservable()
       .pipe(
         switchMap((attractionId: number | null) => {
@@ -41,5 +42,10 @@ export class CommentListComponent implements OnInit {
           );
         }
       });
+    this.subscriptions.push(attractionIdObservableSub);
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }
