@@ -1,10 +1,11 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { AttractionService } from '../attraction.service';
 import { Router } from '@angular/router';
 import { Attraction } from '../attraction.model';
 import { FormsModule } from '@angular/forms';
 import { MapService } from '../../google-maps/map.service';
 import { UserService } from '../../user/user.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-new-attraction',
@@ -13,11 +14,12 @@ import { UserService } from '../../user/user.service';
   templateUrl: './add-new-attraction.component.html',
   styleUrl: './add-new-attraction.component.css',
 })
-export class AddNewAttractionComponent {
+export class AddNewAttractionComponent implements OnInit, OnDestroy {
   attractionName: string = '';
   description: string = '';
   latitude!: number;
   longitude!: number;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private router: Router,
@@ -28,12 +30,13 @@ export class AddNewAttractionComponent {
   ) {}
 
   ngOnInit() {
-    this.mapService.getPosition().subscribe((position) => {
+    const positionSub = this.mapService.getPosition().subscribe((position) => {
       if (position) {
         this.latitude = position.lat;
         this.longitude = position.lng;
       }
     });
+    this.subscriptions.push(positionSub);
   }
 
   onClose() {
@@ -43,26 +46,48 @@ export class AddNewAttractionComponent {
   }
 
   onAddAttraction() {
-    const attraction = new Attraction(
+    const userId = this.userService.getDummyUser().UserId;
+
+    const newAttraction = new Attraction(
       this.attractionName,
       this.description,
       this.latitude,
       this.longitude,
-      this.userService.getDummyUser().UserId
+      userId
     );
-    const newAttractionId = attraction.id;
 
-    this.attractionService.attractions.push(attraction);
+    const addAttractionSub = this.attractionService
+      .addAttraction(newAttraction)
+      .subscribe({
+        next: (response) => {
+          this.attractionService.attractions.push(response);
+          this.mapService.addMarker(
+            response.latitude,
+            response.longitude,
+            response.id
+          );
+          this.mapService
+            .getMap()
+            .setCenter({ lat: this.latitude, lng: this.longitude });
+          this.mapService.setNewAttractionLocation(
+            this.latitude,
+            this.longitude
+          );
+          this.ngZone.run(() => {
+            this.router.navigate(['/home']);
+          });
+          this.mapService.triggerResetSearchForm();
+        },
+        error: (error) => {
+          console.error('Error adding new attraction:', error);
+        },
+      });
 
-    this.mapService.addMarker(this.latitude, this.longitude, newAttractionId);
-    this.mapService
-      .getMap()
-      .setCenter({ lat: this.latitude, lng: this.longitude });
+    const newAttractionId = newAttraction.id;
+    this.subscriptions.push(addAttractionSub);
+  }
 
-    this.mapService.setNewAttractionLocation(this.latitude, this.longitude);
-    this.ngZone.run(() => {
-      this.router.navigate(['home']);
-    });
-    this.mapService.triggerResetSearchForm();
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

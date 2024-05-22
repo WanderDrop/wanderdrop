@@ -32,9 +32,12 @@ public class AuthenticationService {
                 .build();
         repository.save(user);
         var jwtToken = jwtUtil.generateToken(user);
-        return AuthenticationResponse.builder()
+        var response = AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
+        response.userId = user.getUserId();
+        response.role = user.getRole();
+        return response;
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -48,8 +51,11 @@ public class AuthenticationService {
                 .orElseThrow();
         System.out.println(user);
         var jwtToken = jwtUtil.generateToken(user);
-        return AuthenticationResponse.builder()
+        var response = AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
+        response.userId = user.getUserId();
+        response.role = user.getRole();
+        return response;
     }
 }

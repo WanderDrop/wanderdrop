@@ -12,9 +12,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class ModifyAttractionComponent {
   @Input() attractionName: string = '';
   @Input() description: string = '';
+  @Input() id: any = '';
   @Output() dataChanged = new EventEmitter<{
     attractionName: string;
     description: string;
+    id: string;
   }>();
 
   constructor(private modalService: NgbModal) {}
@@ -24,12 +26,12 @@ export class ModifyAttractionComponent {
   }
 
   onSaveChanges() {
-    if (window.confirm('Are you sure you want to modify the attraction?')) {
-      this.dataChanged.emit({
-        attractionName: this.attractionName,
-        description: this.description,
-      });
-    }
+    console.log('this', this);
+    this.dataChanged.emit({
+      attractionName: this.attractionName,
+      description: this.description,
+      id: this.id,
+    });
     this.modalService.dismissAll();
   }
 }

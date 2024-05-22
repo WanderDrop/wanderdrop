@@ -1,7 +1,7 @@
 import { AttractionStatus } from './attraction-status.enum';
 
 export class Attraction {
-  private _id: number;
+  private _attractionId!: number;
   private _name: string;
   private _description: string;
   private _latitude: number;
@@ -12,7 +12,6 @@ export class Attraction {
   private _updatedAt?: Date;
   private _status: AttractionStatus;
   private _deletionReason?: number;
-  private static lastId = 1;
 
   constructor(
     name: string,
@@ -21,7 +20,6 @@ export class Attraction {
     longitude: number,
     createdBy: number
   ) {
-    this._id = Attraction.lastId++;
     this._name = name;
     this._description = description;
     this._latitude = latitude;
@@ -32,11 +30,11 @@ export class Attraction {
   }
 
   get id(): number {
-    return this._id;
+    return this._attractionId;
   }
 
   set id(value: number) {
-    this._id = value;
+    this._attractionId = value;
   }
 
   get name(): string {
@@ -87,6 +85,14 @@ export class Attraction {
     this._updatedBy = value;
   }
 
+  get createdAt(): Date | undefined {
+    return this._createdAt;
+  }
+
+  set createdAt(value: Date) {
+    this._createdAt = value;
+  }
+
   get updatedAt(): Date | undefined {
     return this._updatedAt;
   }
@@ -109,5 +115,27 @@ export class Attraction {
 
   set deletionReason(value: number | undefined) {
     this._deletionReason = value;
+  }
+
+  toRequestPayload() {
+    return {
+      name: this._name,
+      description: this._description,
+      latitude: this._latitude,
+      longitude: this._longitude,
+    };
+  }
+
+  static fromResponse(response: any): Attraction {
+    const attraction = new Attraction(
+      response.name,
+      response.description,
+      response.latitude,
+      response.longitude,
+      response.createdBy
+    );
+    attraction._attractionId = response.attractionId;
+    attraction.createdAt = new Date(response.createdAt);
+    return attraction;
   }
 }

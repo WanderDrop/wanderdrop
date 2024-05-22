@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  NgZone,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
@@ -114,12 +121,17 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
   }
 
   addAttractionMarkers() {
-    this.attractionService.attractions.forEach((attraction) => {
-      this.mapService.addMarker(
-        attraction.latitude,
-        attraction.longitude,
-        attraction.id
-      );
+    this.attractionService.fetchAttractions().subscribe((ms) => {
+      // this.addAttractionMarkers();
+      this.attractionService.attractions = ms.map((m: any) => {
+        return { ...m, id: m.attractionId };
+      });
+
+      console.log('Got markers', ms);
+
+      ms.forEach((m: any) => {
+        this.mapService.addMarker(m.latitude, m.longitude, m.attractionId);
+      });
     });
   }
 

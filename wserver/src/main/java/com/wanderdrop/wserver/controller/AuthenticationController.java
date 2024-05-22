@@ -6,7 +6,7 @@ import com.wanderdrop.wserver.dto.AuthenticationRequest;
 import com.wanderdrop.wserver.dto.AuthenticationResponse;
 import com.wanderdrop.wserver.model.User;
 import com.wanderdrop.wserver.repository.UserRepository;
-import com.wanderdrop.wserver.services.jwt.UserService;
+import com.wanderdrop.wserver.service.jwt.UserService;
 import com.wanderdrop.wserver.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
 public class AuthenticationController {
 
     private final AuthenticationService service;
@@ -44,7 +43,6 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
-
     @PostMapping("/login")
     public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
             throws BadCredentialsException, DisabledException, UsernameNotFoundException {
@@ -52,7 +50,7 @@ public class AuthenticationController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authenticationRequest.getEmail(),
                     authenticationRequest.getPassword()));
-        } catch (BadCredentialsException e){
+        } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Incorrect email or password");
         }
         final UserDetails userDetails = userService.userDetailsService()

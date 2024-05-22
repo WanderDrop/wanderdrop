@@ -1,4 +1,4 @@
-package com.wanderdrop.wserver.services.jwt;
+package com.wanderdrop.wserver.service.jwt;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,4 +1,4 @@
-package com.wanderdrop.wserver.services.auth;
+package com.wanderdrop.wserver.service.auth;
 
 import com.wanderdrop.wserver.model.Role;
 import com.wanderdrop.wserver.model.Status;

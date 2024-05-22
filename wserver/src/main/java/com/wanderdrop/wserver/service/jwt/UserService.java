@@ -1,9 +1,7 @@
-package com.wanderdrop.wserver.services.jwt;
+package com.wanderdrop.wserver.service.jwt;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService{
     UserDetailsService userDetailsService();
 }
-
-
