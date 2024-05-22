@@ -1,4 +1,4 @@
-package com.wanderdrop.wserver.services.attraction;
+package com.wanderdrop.wserver.service.attraction;
 
 import com.wanderdrop.wserver.dto.AttractionDto;
 import com.wanderdrop.wserver.mapper.AttractionMapper;

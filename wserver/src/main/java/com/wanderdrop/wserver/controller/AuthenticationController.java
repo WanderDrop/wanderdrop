@@ -6,7 +6,7 @@ import com.wanderdrop.wserver.dto.AuthenticationRequest;
 import com.wanderdrop.wserver.dto.AuthenticationResponse;
 import com.wanderdrop.wserver.model.User;
 import com.wanderdrop.wserver.repository.UserRepository;
-import com.wanderdrop.wserver.services.jwt.UserService;
+import com.wanderdrop.wserver.service.jwt.UserService;
 import com.wanderdrop.wserver.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

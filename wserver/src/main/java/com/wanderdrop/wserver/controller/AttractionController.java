@@ -1,7 +1,7 @@
 package com.wanderdrop.wserver.controller;
 
 import com.wanderdrop.wserver.dto.AttractionDto;
-import com.wanderdrop.wserver.services.attraction.AttractionServiceImpl;
+import com.wanderdrop.wserver.service.attraction.AttractionServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

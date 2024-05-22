@@ -53,8 +53,6 @@ export class AttractionService {
     attractionId: number,
     updatedAttraction: Attraction
   ): Observable<Attraction> {
-    console.log('Updating attraction with ID:', attractionId);
-    console.log('Updated Attraction:', updatedAttraction);
     const token = StorageService.getToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http
@@ -121,7 +119,6 @@ export class AttractionService {
   }
 
   getAttractionById(id: number): Attraction | undefined {
-    console.log('HERE', this.attractions);
     const attraction = this.attractions.find(
       (attraction) => attraction.id === id
     );
@@ -137,7 +134,6 @@ export class AttractionService {
   }
 
   setCurrentAttractionId(attractionId: number) {
-    console.log('Setting current attraction ID:', attractionId);
     this.currentAttractionId.next(attractionId);
     const attraction = this.getAttractionById(attractionId);
     if (attraction) {
@@ -149,7 +145,6 @@ export class AttractionService {
 
   getCurrentAttractionId(): number {
     const attractionId = this.currentAttractionId.getValue();
-    console.log('Getting current attraction ID:', attractionId);
     if (attractionId !== null) {
       return attractionId;
     } else {
@@ -161,11 +156,4 @@ export class AttractionService {
   getAttractionIdObservable(): BehaviorSubject<number | null> {
     return this.currentAttractionId;
   }
-
-  // deleteAttraction(attractionId: number) {
-  //   this.attractions = this.attractions.filter(
-  //     (attraction) => attraction.id !== attractionId
-  //   );
-  //   this.markerService.removeMarker(attractionId);
-  // }
 }
