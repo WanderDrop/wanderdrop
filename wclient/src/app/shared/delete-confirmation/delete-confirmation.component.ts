@@ -25,11 +25,19 @@ export class DeleteConfirmationComponent {
   }
 
   onDelete() {
-    const reason =
-      this.selectedReason !== 'other' ? this.selectedReason : this.otherReason;
-    console.log(reason);
-    this.deleteReasonService.saveReasonToDatabase(reason);
-    this.activeModal.close('delete');
+    this.reasons.subscribe((reasonsArray) => {
+      const reason =
+        this.selectedReason !== 'other'
+          ? this.selectedReason
+          : this.otherReason;
+      console.log(reason);
+      const reasonIndex = reasonsArray.findIndex(
+        (reason) => reason === this.selectedReason
+      );
+      const reasonId = reasonIndex + 1;
+      // this.deleteReasonService.saveReasonToDatabase(reason);
+      this.activeModal.close({ action: 'delete', reasonId });
+    });
   }
 
   onCancel() {

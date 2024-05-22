@@ -72,6 +72,29 @@ export class AttractionService {
       );
   }
 
+  deleteAttraction(attractionId: number, reasonId: number): Observable<void> {
+    const token = StorageService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http
+      .put<void>(
+        `http://localhost:8080/api/attractions/${attractionId}/${reasonId}`,
+        {},
+        { headers }
+      )
+      .pipe(
+        catchError((error) => {
+          console.error('Error deleting attraction:', error);
+          throw error;
+        })
+      );
+  }
+
+  removeAttractionFromList(attractionId: number) {
+    this.attractions = this.attractions.filter(
+      (attraction) => attraction.id !== attractionId
+    );
+  }
+
   setCurrentAttraction(attraction: Attraction) {
     this.currentAttraction = attraction;
   }
@@ -139,10 +162,10 @@ export class AttractionService {
     return this.currentAttractionId;
   }
 
-  deleteAttraction(attractionId: number) {
-    this.attractions = this.attractions.filter(
-      (attraction) => attraction.id !== attractionId
-    );
-    this.markerService.removeMarker(attractionId);
-  }
+  // deleteAttraction(attractionId: number) {
+  //   this.attractions = this.attractions.filter(
+  //     (attraction) => attraction.id !== attractionId
+  //   );
+  //   this.markerService.removeMarker(attractionId);
+  // }
 }

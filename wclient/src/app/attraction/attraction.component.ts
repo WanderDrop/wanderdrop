@@ -110,12 +110,27 @@ export class AttractionComponent implements OnInit {
 
   openDelete(content: any) {
     const modalRef = this.modalService.open(DeleteConfirmationComponent);
+    console.log('HERE');
+    console.log('reason id: ' + this.selectedReasonId);
+    console.log('reason id: ' + this.attraction);
 
     modalRef.result
       .then((result) => {
-        if (result === 'delete' && this.attraction) {
-          this.attractionService.deleteAttraction(this.attraction.id);
-          this.router.navigate(['/home']);
+        if (
+          result.action === 'delete' &&
+          result.reasonId !== null &&
+          this.attraction
+        ) {
+          console.log('here');
+          this.selectedReasonId = result.reasonId;
+          this.attractionService
+            .deleteAttraction(this.attraction.id, this.selectedReasonId!)
+            .subscribe(() => {
+              this.attractionService.removeAttractionFromList(
+                this.attraction!.id
+              );
+              this.router.navigate(['/home']);
+            });
         }
       })
       .catch((reason) => {
@@ -146,8 +161,4 @@ export class AttractionComponent implements OnInit {
         });
     }
   }
-
-  // onAttractionSelected(attraction: Attraction) {
-  //   this.selectedAttractionId = attraction.id;
-  // }
 }

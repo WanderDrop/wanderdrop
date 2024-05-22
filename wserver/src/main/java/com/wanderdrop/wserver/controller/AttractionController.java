@@ -35,7 +35,7 @@ public class AttractionController {
         return attractionServiceImpl.updateAttraction(id, attractionDTO);
     }
 
-    @DeleteMapping("/{id}/{reasonId}")
+    @PutMapping("/{id}/{reasonId}")
     public void deleteAttraction(@PathVariable Long id, @PathVariable Long reasonId) {
         attractionServiceImpl.deleteAttraction(id, reasonId);
     }
