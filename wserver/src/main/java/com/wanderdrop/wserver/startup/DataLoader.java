@@ -35,6 +35,7 @@ public class DataLoader implements ApplicationRunner {
             for (String reason : reasons) {
                 DeletionReason deletionReason = new DeletionReason();
                 deletionReason.setReasonMessage(reason);
+                deletionReason.setDefaultReason(true);
                 deletionReasonRepository.save(deletionReason);
             }
         }

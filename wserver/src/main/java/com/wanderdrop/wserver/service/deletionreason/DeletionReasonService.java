@@ -5,5 +5,5 @@ import com.wanderdrop.wserver.dto.DeletionReasonDto;
 import java.util.List;
 
 public interface DeletionReasonService {
-    List<DeletionReasonDto> getAllDeletionReasons();
+    List<DeletionReasonDto> getDefaultDeletionReasons();
 }

@@ -15,4 +15,7 @@ public class DeletionReason {
 
     @Column(name= "reason_message", nullable = false)
     private String reasonMessage;
+
+    @Column(name= "default_reason")
+    private boolean defaultReason;
 }

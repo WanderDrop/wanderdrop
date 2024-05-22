@@ -19,7 +19,7 @@ public class DeletionReasonController {
 
     @GetMapping
     public List<DeletionReasonDto> getAllDeletionReasons() {
-        return deletionReasonService.getAllDeletionReasons();
+        return deletionReasonService.getDefaultDeletionReasons();
     }
 
 }

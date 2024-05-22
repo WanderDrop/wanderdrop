@@ -7,6 +7,8 @@ import com.wanderdrop.wserver.mapper.DeletionReasonMapper;
 import com.wanderdrop.wserver.model.Status;
 import com.wanderdrop.wserver.repository.DeletionReasonRepository;
 import org.springframework.stereotype.Service;
+import com.wanderdrop.wserver.model.DeletionReason;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,8 +24,9 @@ public class DeletionReasonServiceImpl implements DeletionReasonService {
     }
 
     @Override
-    public List<DeletionReasonDto> getAllDeletionReasons() {
+    public List<DeletionReasonDto> getDefaultDeletionReasons() {
         return deletionReasonRepository.findAll().stream()
+                .filter(DeletionReason::isDefaultReason)
                 .map(DeletionReasonMapper::mapToDeletionReasonDto)
                 .collect(Collectors.toList());
     }
