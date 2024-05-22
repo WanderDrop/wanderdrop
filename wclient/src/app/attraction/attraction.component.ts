@@ -1,4 +1,10 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { Attraction } from './attraction.model';
 import { CommentItemComponent } from '../comment/comment-list/comment-item/comment-item.component';
 import { CommentListComponent } from '../comment/comment-list/comment-list.component';
@@ -15,6 +21,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ReportPage } from '../report-page/report-page.model';
 import { AddNewReportPageComponent } from '../report-page/add-new-report-page/add-new-report-page.component';
 import { DeleteReasonService } from '../shared/delete-reason.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-attraction',
@@ -32,7 +39,7 @@ import { DeleteReasonService } from '../shared/delete-reason.service';
     AddNewReportPageComponent,
   ],
 })
-export class AttractionComponent implements OnInit {
+export class AttractionComponent implements OnInit, OnDestroy {
   attraction!: Attraction | undefined;
   reportPage!: ReportPage;
   comments!: Comment[];
@@ -47,6 +54,8 @@ export class AttractionComponent implements OnInit {
   @ViewChild('addCommentContent') addCommentContent!: TemplateRef<any>;
   @ViewChild('addReportPageContent') addReportPageContent!: TemplateRef<any>;
 
+  private subscriptions: Subscription[] = [];
+
   constructor(
     private modalService: NgbModal,
     private attractionService: AttractionService,
@@ -59,24 +68,29 @@ export class AttractionComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.attractionService
+      const attractionSub = this.attractionService
         .fetchAttractionById(+id)
         .subscribe((attraction) => {
-          console.log('attraction', attraction);
           this.attraction = attraction;
           if (this.attraction) {
             this.selectedAttractionId = this.attraction.id;
             this.comments = this.commentService.getComments(this.attraction.id);
-            this.commentService
+            const commentsSub = this.commentService
               .getCommentsUpdated()
               .subscribe((comments: Comment[]) => {
                 this.comments = comments;
               });
+            this.subscriptions.push(commentsSub);
           }
         });
-      this.deleteReasonService.reasons.subscribe((reasons) => {
-        this.deletionReasons = reasons;
-      });
+      this.subscriptions.push(attractionSub);
+
+      const reasonsSub = this.deleteReasonService.reasons.subscribe(
+        (reasons) => {
+          this.deletionReasons = reasons;
+        }
+      );
+      this.subscriptions.push(reasonsSub);
     }
   }
 
@@ -100,7 +114,6 @@ export class AttractionComponent implements OnInit {
 
   openModify(content: any) {
     if (this.attraction) {
-      console.log('this.attraction', this.attraction);
       this.id = this.attraction.id;
       this.attractionName = this.attraction.name;
       this.description = this.attraction.description;
@@ -110,9 +123,6 @@ export class AttractionComponent implements OnInit {
 
   openDelete(content: any) {
     const modalRef = this.modalService.open(DeleteConfirmationComponent);
-    console.log('HERE');
-    console.log('reason id: ' + this.selectedReasonId);
-    console.log('reason id: ' + this.attraction);
 
     modalRef.result
       .then((result) => {
@@ -121,7 +131,6 @@ export class AttractionComponent implements OnInit {
           result.reasonId !== null &&
           this.attraction
         ) {
-          console.log('here');
           this.selectedReasonId = result.reasonId;
           this.attractionService
             .deleteAttraction(this.attraction.id, this.selectedReasonId!)
@@ -160,5 +169,9 @@ export class AttractionComponent implements OnInit {
           this.modalService.dismissAll();
         });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }
