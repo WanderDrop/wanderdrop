@@ -2,9 +2,7 @@ package com.wanderdrop.wserver.controller;
 
 import com.wanderdrop.wserver.dto.DeletionReasonDto;
 import com.wanderdrop.wserver.service.deletionreason.DeletionReasonService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,8 +16,14 @@ public class DeletionReasonController {
     }
 
     @GetMapping
-    public List<DeletionReasonDto> getAllDeletionReasons() {
+    public List<DeletionReasonDto> getDefaultDeletionReasons() {
         return deletionReasonService.getDefaultDeletionReasons();
     }
+
+    @PostMapping
+    public DeletionReasonDto saveDeletionReason(@RequestBody DeletionReasonDto deletionReasonDto) {
+        return deletionReasonService.saveDeletionReason(deletionReasonDto);
+    }
+
 
 }

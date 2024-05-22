@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface DeletionReasonService {
     List<DeletionReasonDto> getDefaultDeletionReasons();
+    DeletionReasonDto saveDeletionReason(DeletionReasonDto deletionReasonDto);
 }

@@ -38,7 +38,18 @@ export class DeleteReasonService {
       });
   }
 
+  postReason(reason: string) {
+    const token = StorageService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.post<{ id: number; reasonMessage: string }>(
+      'http://localhost:8080/api/deletion-reasons',
+      { reasonMessage: reason },
+      { headers }
+    );
+  }
+
   saveReasonToDatabase(reason: string) {
-    // Logic to save the "other" reason into the database here.
+    this.postReason(reason);
   }
 }
