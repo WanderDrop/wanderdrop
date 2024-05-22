@@ -4,7 +4,9 @@ import com.wanderdrop.wserver.dto.AttractionDto;
 import com.wanderdrop.wserver.model.Attraction;
 import com.wanderdrop.wserver.model.User;
 import com.wanderdrop.wserver.repository.UserRepository;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AttractionMapper {
 
     public static AttractionDto mapToAttractionDto(Attraction attraction) {
