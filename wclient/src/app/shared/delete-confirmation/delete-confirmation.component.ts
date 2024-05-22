@@ -15,7 +15,7 @@ import { DeleteReasonService } from '../delete-reason.service';
 export class DeleteConfirmationComponent implements OnDestroy {
   selectedReason: string = '';
   otherReason: string = '';
-  reasons!: Observable<string[]>;
+  reasons!: Observable<{ id: number; reasonMessage: string }[]>;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -33,7 +33,7 @@ export class DeleteConfirmationComponent implements OnDestroy {
           : this.otherReason;
       console.log(reason);
       const reasonIndex = reasonsArray.findIndex(
-        (reason) => reason === this.selectedReason
+        (reasonObj) => reasonObj.reasonMessage === this.selectedReason
       );
       const reasonId = reasonIndex + 1;
       // this.deleteReasonService.saveReasonToDatabase(reason);

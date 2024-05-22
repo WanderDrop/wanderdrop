@@ -48,7 +48,7 @@ export class AttractionComponent implements OnInit, OnDestroy {
   id: any = '';
   selectedAttractionId!: number;
 
-  deletionReasons: string[] = [];
+  deletionReasons: { id: number; reasonMessage: string }[] = [];
   selectedReasonId: number | null = null;
 
   @ViewChild('addCommentContent') addCommentContent!: TemplateRef<any>;

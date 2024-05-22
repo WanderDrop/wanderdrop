@@ -10,11 +10,11 @@
           <input
             type="radio"
             [(ngModel)]="selectedReason"
-            [value]="reason"
+            [value]="reason.reasonMessage"
             name="reason"
             id="reason"
             required
-          /><label for="reason"> {{ reason }}</label>
+          /><label for="reason"> {{ reason.reasonMessage }}</label>
         </div>
       </div>
 

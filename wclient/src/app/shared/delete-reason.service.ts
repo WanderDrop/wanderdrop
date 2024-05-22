@@ -1,24 +1,41 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { StorageService } from '../user/storage/storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DeleteReasonService {
-  constructor() {}
+  private _reasons = new BehaviorSubject<
+    { id: number; reasonMessage: string }[]
+  >([]);
 
-  private _reasons = new BehaviorSubject<string[]>([
-    'Violation of Community Guidelines',
-    'Inappropriate Content',
-    'Irrelevant or Off-topic',
-    'Duplicate Content',
-    'Trolling or Disruptive Behaviour',
-    'Commercial or Promotional Content',
-    'Political or Religious Sensitivity',
-  ]);
+  constructor(private http: HttpClient) {
+    this.fetchReasons();
+  }
 
   get reasons() {
     return this._reasons.asObservable();
+  }
+
+  fetchReasons() {
+    const token = StorageService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    this.http
+      .get<{ id: number; reasonMessage: string }[]>(
+        'http://localhost:8080/api/deletion-reasons',
+        { headers }
+      )
+      .subscribe({
+        next: (data: { id: number; reasonMessage: string }[]) => {
+          this._reasons.next(data);
+        },
+        error: (error: any) => {
+          console.error('Error:', error);
+        },
+      });
   }
 
   saveReasonToDatabase(reason: string) {
