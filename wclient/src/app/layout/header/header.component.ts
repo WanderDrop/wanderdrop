@@ -7,7 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ProfileDropdownComponent } from './profile-dropdown/profile-dropdown.component';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -19,13 +19,22 @@ import { Subscription } from 'rxjs';
   standalone: true,
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
-  imports: [ProfileDropdownComponent, CommonModule, ReactiveFormsModule],
+  imports: [
+    ProfileDropdownComponent,
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+  ],
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   searchForm: FormGroup;
   @ViewChild('search', { static: false })
   public searchElementRef!: ElementRef;
   private autocompleteInitialized = false;
+
+  isLoggedIn = false;
+  isAdmin = false;
+
   private subscriptions: Subscription[] = [];
 
   constructor(
