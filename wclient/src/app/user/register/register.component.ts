@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { UserService } from '../user.service';
 import { UserRole } from '../user-role.enum';
 import { User } from '../user.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -18,8 +19,9 @@ import { User } from '../user.model';
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnDestroy {
   registerForm!: FormGroup;
+  private subscriptions: Subscription[] = [];
 
   constructor(private router: Router, private userService: UserService) {}
 
@@ -42,7 +44,7 @@ export class RegisterComponent {
         this.registerForm.value.userPassword,
         UserRole.USER
       );
-      this.userService.registerUser(newUser).subscribe({
+      const registerUserSub = this.userService.registerUser(newUser).subscribe({
         next: (response) => {
           console.log(response);
           this.router.navigate(['/login']);
@@ -51,6 +53,7 @@ export class RegisterComponent {
           console.error(error);
         },
       });
+      this.subscriptions.push(registerUserSub);
     } else {
       this.registerForm.markAllAsTouched();
     }
@@ -58,5 +61,9 @@ export class RegisterComponent {
 
   onNavigateHome() {
     this.router.navigate(['/home']);
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

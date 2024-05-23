@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   NgZone,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -11,6 +12,7 @@ import { ProfileDropdownComponent } from './profile-dropdown/profile-dropdown.co
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MapService } from '../../google-maps/map.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -19,11 +21,12 @@ import { MapService } from '../../google-maps/map.service';
   styleUrl: './header.component.css',
   imports: [ProfileDropdownComponent, CommonModule, ReactiveFormsModule],
 })
-export class HeaderComponent implements OnInit, AfterViewInit {
+export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   searchForm: FormGroup;
   @ViewChild('search', { static: false })
   public searchElementRef!: ElementRef;
   private autocompleteInitialized = false;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private router: Router,
@@ -37,15 +40,18 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.mapService.getResetSearchForm().subscribe((reset) => {
-      if (reset) {
-        this.searchForm.reset();
-        const autocompleteInput = document.getElementById(
-          'search-input'
-        ) as HTMLInputElement;
-        autocompleteInput.value = '';
-      }
-    });
+    const resetSearchFormSub = this.mapService
+      .getResetSearchForm()
+      .subscribe((reset) => {
+        if (reset) {
+          this.searchForm.reset();
+          const autocompleteInput = document.getElementById(
+            'search-input'
+          ) as HTMLInputElement;
+          autocompleteInput.value = '';
+        }
+      });
+    this.subscriptions.push(resetSearchFormSub);
   }
 
   ngAfterViewInit() {
@@ -82,17 +88,24 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
     const location = this.searchForm.get('location')?.value;
-    this.mapService.geocodeLocation(location).subscribe((response: any) => {
-      if (response.status === 'OK') {
-        const lat = response.results[0].geometry.location.lat;
-        const lng = response.results[0].geometry.location.lng;
-        this.mapService.setPosition(lat, lng);
-      }
-      const autocompleteInput = document.getElementById(
-        'search-input'
-      ) as HTMLInputElement;
-      autocompleteInput.value = '';
-      this.searchForm.get('location')?.setValue('');
-    });
+    const geocodeLocationSub = this.mapService
+      .geocodeLocation(location)
+      .subscribe((response: any) => {
+        if (response.status === 'OK') {
+          const lat = response.results[0].geometry.location.lat;
+          const lng = response.results[0].geometry.location.lng;
+          this.mapService.setPosition(lat, lng);
+        }
+        const autocompleteInput = document.getElementById(
+          'search-input'
+        ) as HTMLInputElement;
+        autocompleteInput.value = '';
+        this.searchForm.get('location')?.setValue('');
+      });
+    this.subscriptions.push(geocodeLocationSub);
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

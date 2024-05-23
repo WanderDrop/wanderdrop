@@ -27,8 +27,9 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
   infoContent = '';
   zoom = 12;
   center!: google.maps.LatLngLiteral | null;
-  private positionSubscription!: Subscription;
+  // private positionSubscription!: Subscription;
   private mapInitialized = false;
+  private subscriptions: Subscription[] = [];
 
   options: google.maps.MapOptions = {
     mapTypeId: 'hybrid',
@@ -67,7 +68,7 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
       this.mapInitialized = true;
     }
 
-    this.positionSubscription = this.mapService
+    const positionSubscription = this.mapService
       .getPosition()
       .subscribe((position) => {
         if (
@@ -81,16 +82,19 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
           this.map.panTo(this.center);
         }
       });
+    this.subscriptions.push(positionSubscription);
 
-    this.mapService.getNewAttractionLocation().subscribe((location) => {
-      if (location && this.map && this.mapInitialized) {
-        newAttractionCreated = true;
-        this.center = location;
-        this.map.setCenter(this.center);
-        this.map.panTo(this.center);
-        this.positionSubscription.unsubscribe();
-      }
-    });
+    const newAttractionLocationSub = this.mapService
+      .getNewAttractionLocation()
+      .subscribe((location) => {
+        if (location && this.map && this.mapInitialized) {
+          newAttractionCreated = true;
+          this.center = location;
+          this.map.setCenter(this.center);
+          this.map.panTo(this.center);
+        }
+      });
+    this.subscriptions.push(newAttractionLocationSub);
   }
 
   initMap(): void {
@@ -195,8 +199,6 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.positionSubscription) {
-      this.positionSubscription.unsubscribe();
-    }
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

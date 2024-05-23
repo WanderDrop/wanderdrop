@@ -36,6 +36,8 @@ public class SecurityConfiguration {
                             .requestMatchers(HttpMethod.GET, "/api/attractions/**").permitAll()
                             .requestMatchers(HttpMethod.POST, "/api/attractions").hasAnyRole("ADMIN", "USER")
                             .requestMatchers(HttpMethod.PUT, "/api/attractions/**").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.GET, "/api/deletion-reasons/**").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.POST, "/api/deletion-reasons").hasRole("ADMIN")
                             .anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

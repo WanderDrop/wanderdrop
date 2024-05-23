@@ -15,7 +15,7 @@ import { DeleteReasonService } from '../delete-reason.service';
 export class DeleteConfirmationComponent implements OnDestroy {
   selectedReason: string = '';
   otherReason: string = '';
-  reasons!: Observable<string[]>;
+  reasons!: Observable<{ id: number; reasonMessage: string }[]>;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -26,20 +26,23 @@ export class DeleteConfirmationComponent implements OnDestroy {
   }
 
   onDelete() {
-    const reasonsSub = this.reasons.subscribe((reasonsArray) => {
-      const reason =
-        this.selectedReason !== 'other'
-          ? this.selectedReason
-          : this.otherReason;
-      console.log(reason);
-      const reasonIndex = reasonsArray.findIndex(
-        (reason) => reason === this.selectedReason
-      );
-      const reasonId = reasonIndex + 1;
-      // this.deleteReasonService.saveReasonToDatabase(reason);
-      this.activeModal.close({ action: 'delete', reasonId });
-    });
-    this.subscriptions.push(reasonsSub);
+    if (this.selectedReason === 'other') {
+      const postReasonSub = this.deleteReasonService
+        .postReason(this.otherReason)
+        .subscribe((data: { id: number; reasonMessage: string }) => {
+          this.activeModal.close({ action: 'delete', reasonId: data.id });
+        });
+      this.subscriptions.push(postReasonSub);
+    } else {
+      const reasonsSub = this.reasons.subscribe((reasonsArray) => {
+        const reasonIndex = reasonsArray.findIndex(
+          (reasonObj) => reasonObj.reasonMessage === this.selectedReason
+        );
+        const reasonId = reasonsArray[reasonIndex].id;
+        this.activeModal.close({ action: 'delete', reasonId });
+      });
+      this.subscriptions.push(reasonsSub);
+    }
   }
 
   onCancel() {
