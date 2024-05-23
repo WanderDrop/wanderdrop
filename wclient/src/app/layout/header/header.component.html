@@ -40,7 +40,7 @@
         [routerLink]="['/login']"
         >Login</a
       >
-      <app-profile-dropdown></app-profile-dropdown>
+      <app-profile-dropdown *ngIf="isLoggedIn"></app-profile-dropdown>
     </div>
   </div>
 </nav>

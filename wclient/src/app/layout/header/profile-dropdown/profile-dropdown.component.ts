@@ -12,6 +12,8 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AuthStatusService } from '../../../user/auth/auth-status.service';
+import { StorageService } from '../../../user/storage/storage.service';
 
 @Component({
   selector: 'app-profile-dropdown',
@@ -28,7 +30,8 @@ export class ProfileDropdownComponent implements AfterViewInit, OnDestroy {
   constructor(
     private renderer: Renderer2,
     private cdr: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private authStatusService: AuthStatusService
   ) {}
 
   @HostListener('window:resize')
@@ -75,7 +78,12 @@ export class ProfileDropdownComponent implements AfterViewInit, OnDestroy {
 
   onDisplayReports() {}
 
-  onLogout() {}
+  onLogout() {
+    StorageService.logout();
+
+    this.authStatusService.logout();
+    this.router.navigate(['/login']);
+  }
 
   onAddNewUser() {
     this.router.navigate(['/add-user']);

@@ -13,6 +13,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MapService } from '../../google-maps/map.service';
 import { Subscription } from 'rxjs';
+import { AuthStatusService } from '../../user/auth/auth-status.service';
+import { StorageService } from '../../user/storage/storage.service';
 
 @Component({
   selector: 'app-header',
@@ -41,7 +43,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
     private mapService: MapService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private authStatusService: AuthStatusService
   ) {
     this.searchForm = this.fb.group({
       location: [''],
@@ -49,6 +52,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isLoggedIn = !!StorageService.getToken();
+    this.isAdmin = StorageService.getUserRole() === 'ADMIN';
+
     const resetSearchFormSub = this.mapService
       .getResetSearchForm()
       .subscribe((reset) => {
@@ -61,6 +67,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       });
     this.subscriptions.push(resetSearchFormSub);
+
+    const loginStatusSub = this.authStatusService.loggedInStatus$.subscribe(
+      (isLoggedIn) => {
+        this.isLoggedIn = isLoggedIn;
+      }
+    );
+    this.subscriptions.push(loginStatusSub);
+
+    const userRoleSub = this.authStatusService.userRoleStatus$.subscribe(
+      (role) => {
+        this.isAdmin = role === 'ADMIN';
+      }
+    );
+    this.subscriptions.push(userRoleSub);
   }
 
   ngAfterViewInit() {

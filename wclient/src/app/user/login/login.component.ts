@@ -12,6 +12,7 @@ import { AuthService } from '../auth/auth.service';
 import { StorageService } from '../storage/storage.service';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { AuthStatusService } from '../auth/auth-status.service';
 
 @Component({
   selector: 'app-login',
@@ -32,7 +33,8 @@ export class LoginComponent implements OnDestroy {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private authStatusService: AuthStatusService
   ) {}
 
   ngOnInit() {
@@ -54,6 +56,10 @@ export class LoginComponent implements OnDestroy {
           };
           StorageService.saveUser(user);
           StorageService.saveToken(res.token);
+
+          this.authStatusService.updateLoginStatus(true);
+          this.authStatusService.updateUserRole(res.role);
+
           if (StorageService.isAdminLoggedIn()) {
             this.router.navigateByUrl('/home');
           } else if (StorageService.isUserLoggedIn()) {
