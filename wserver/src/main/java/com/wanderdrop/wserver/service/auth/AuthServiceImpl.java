@@ -9,16 +9,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.wanderdrop.wserver.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl implements AuthService{
+public class AuthServiceImpl {
 
     private final UserRepository userRepository;
 
     @PostConstruct
-    public void createAdminAccount(){
-        User adminAccount = userRepository.findByRole(Role.ADMIN);
-        if (adminAccount == null){
+    public void createAdminAccount() {
+        List<User> adminAccount = userRepository.findByRole(Role.ADMIN);
+        if (adminAccount.isEmpty()) {
             User newAdminAccount = new User();
             newAdminAccount.setFirstName("Admin");
             newAdminAccount.setLastName("Account");
@@ -28,7 +30,9 @@ public class AuthServiceImpl implements AuthService{
             newAdminAccount.setStatus(Status.ACTIVE);
             userRepository.save(newAdminAccount);
             System.out.println("Admin account created successfully");
+        } else {
+            System.out.println("Admin account already exists");
         }
     }
-
 }
+
