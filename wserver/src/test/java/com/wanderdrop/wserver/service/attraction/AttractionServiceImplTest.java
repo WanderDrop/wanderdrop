@@ -20,12 +20,13 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -158,5 +159,28 @@ class AttractionServiceImplTest {
 
         assertNull(attractionDto);
         verify(attractionRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    public void testGetAllAttractions() {
+        Attraction attraction1 = new Attraction();
+        attraction1.setAttractionId(1L);
+        attraction1.setName("Test Attraction 1");
+        attraction1.setDescription("Description 1");
+        attraction1.setStatus(Status.ACTIVE);
+
+        Attraction attraction2 = new Attraction();
+        attraction2.setAttractionId(2L);
+        attraction2.setName("Test Attraction 2");
+        attraction2.setDescription("Description 2");
+        attraction2.setStatus(Status.ACTIVE);
+
+        when(attractionRepository.findAll()).thenReturn(Arrays.asList(attraction1, attraction2));
+
+        List<AttractionDto> attractionDtos = attractionService.getAllAttractions();
+
+        assertNotNull(attractionDtos);
+        assertEquals(2, attractionDtos.size());
+        verify(attractionRepository, times(1)).findAll();
     }
 }
