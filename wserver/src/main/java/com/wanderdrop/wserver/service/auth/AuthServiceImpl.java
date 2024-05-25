@@ -24,7 +24,7 @@ public class AuthServiceImpl {
             User newAdminAccount = new User();
             newAdminAccount.setFirstName("Admin");
             newAdminAccount.setLastName("Account");
-            newAdminAccount.setEmail("admin@test.com");
+            newAdminAccount.setEmail("admin@wanderdrop.com");
             newAdminAccount.setPassword(new BCryptPasswordEncoder().encode("admin"));
             newAdminAccount.setRole(Role.ADMIN);
             newAdminAccount.setStatus(Status.ACTIVE);
