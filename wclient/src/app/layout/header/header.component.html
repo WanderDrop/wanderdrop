@@ -34,7 +34,13 @@
       </form>
     </div>
     <div>
-      <app-profile-dropdown></app-profile-dropdown>
+      <a
+        class="nav-link text-light"
+        *ngIf="!isLoggedIn"
+        [routerLink]="['/login']"
+        >Login</a
+      >
+      <app-profile-dropdown *ngIf="isLoggedIn"></app-profile-dropdown>
     </div>
   </div>
 </nav>

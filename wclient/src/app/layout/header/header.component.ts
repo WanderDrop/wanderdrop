@@ -7,32 +7,44 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ProfileDropdownComponent } from './profile-dropdown/profile-dropdown.component';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MapService } from '../../google-maps/map.service';
 import { Subscription } from 'rxjs';
+import { AuthStatusService } from '../../user/auth/auth-status.service';
+import { StorageService } from '../../user/storage/storage.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
-  imports: [ProfileDropdownComponent, CommonModule, ReactiveFormsModule],
+  imports: [
+    ProfileDropdownComponent,
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+  ],
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   searchForm: FormGroup;
   @ViewChild('search', { static: false })
   public searchElementRef!: ElementRef;
   private autocompleteInitialized = false;
+
+  isLoggedIn = false;
+  isAdmin = false;
+
   private subscriptions: Subscription[] = [];
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
     private mapService: MapService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private authStatusService: AuthStatusService
   ) {
     this.searchForm = this.fb.group({
       location: [''],
@@ -40,6 +52,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isLoggedIn = !!StorageService.getToken();
+    this.isAdmin = StorageService.getUserRole() === 'ADMIN';
+
     const resetSearchFormSub = this.mapService
       .getResetSearchForm()
       .subscribe((reset) => {
@@ -52,6 +67,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       });
     this.subscriptions.push(resetSearchFormSub);
+
+    const loginStatusSub = this.authStatusService.loggedInStatus$.subscribe(
+      (isLoggedIn) => {
+        this.isLoggedIn = isLoggedIn;
+      }
+    );
+    this.subscriptions.push(loginStatusSub);
+
+    const userRoleSub = this.authStatusService.userRoleStatus$.subscribe(
+      (role) => {
+        this.isAdmin = role === 'ADMIN';
+      }
+    );
+    this.subscriptions.push(userRoleSub);
   }
 
   ngAfterViewInit() {
