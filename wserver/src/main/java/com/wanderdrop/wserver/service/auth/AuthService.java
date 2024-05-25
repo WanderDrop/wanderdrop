@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl {
+public class AuthService {
 
     private final UserRepository userRepository;
 
