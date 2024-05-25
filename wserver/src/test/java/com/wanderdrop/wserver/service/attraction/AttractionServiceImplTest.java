@@ -183,4 +183,49 @@ class AttractionServiceImplTest {
         assertEquals(2, attractionDtos.size());
         verify(attractionRepository, times(1)).findAll();
     }
+
+    @Test
+    public void testUpdateAttraction() {
+        setAuthenticatedUser(mockAdminUser);
+
+        Attraction existingAttraction = new Attraction();
+        existingAttraction.setAttractionId(1L);
+        existingAttraction.setName("Old Attraction");
+        existingAttraction.setDescription("Old Description");
+        existingAttraction.setStatus(Status.ACTIVE);
+        existingAttraction.setCreatedBy(mockAdminUser);
+        existingAttraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+
+        AttractionDto updatedAttractionDto = new AttractionDto();
+        updatedAttractionDto.setName("Updated Attraction");
+        updatedAttractionDto.setDescription("Updated Description");
+
+        when(attractionRepository.findById(1L)).thenReturn(Optional.of(existingAttraction));
+        when(attractionRepository.save(any(Attraction.class))).thenReturn(existingAttraction);
+
+        AttractionDto updatedAttraction = attractionService.updateAttraction(1L, updatedAttractionDto);
+
+        assertNotNull(updatedAttraction);
+        assertEquals(updatedAttractionDto.getName(), updatedAttraction.getName());
+        assertEquals(updatedAttractionDto.getDescription(), updatedAttraction.getDescription());
+        verify(attractionRepository, times(1)).findById(1L);
+        verify(attractionRepository, times(1)).save(any(Attraction.class));
+    }
+
+    @Test
+    public void testUpdateAttraction_NotFound() {
+        setAuthenticatedUser(mockAdminUser);
+
+        AttractionDto updatedAttractionDto = new AttractionDto();
+        updatedAttractionDto.setName("Updated Attraction");
+        updatedAttractionDto.setDescription("Updated Description");
+
+        when(attractionRepository.findById(1L)).thenReturn(Optional.empty());
+
+        AttractionDto updatedAttraction = attractionService.updateAttraction(1L, updatedAttractionDto);
+
+        assertNull(updatedAttraction);
+        verify(attractionRepository, times(1)).findById(1L);
+        verify(attractionRepository, never()).save(any(Attraction.class));
+    }
 }
