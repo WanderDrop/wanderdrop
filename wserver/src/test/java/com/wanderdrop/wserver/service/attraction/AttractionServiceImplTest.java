@@ -1,10 +1,7 @@
 package com.wanderdrop.wserver.service.attraction;
 
 import com.wanderdrop.wserver.dto.AttractionDto;
-import com.wanderdrop.wserver.model.Attraction;
-import com.wanderdrop.wserver.model.Role;
-import com.wanderdrop.wserver.model.Status;
-import com.wanderdrop.wserver.model.User;
+import com.wanderdrop.wserver.model.*;
 import com.wanderdrop.wserver.repository.AttractionRepository;
 import com.wanderdrop.wserver.repository.DeletionReasonRepository;
 import com.wanderdrop.wserver.repository.UserRepository;
@@ -226,6 +223,96 @@ class AttractionServiceImplTest {
 
         assertNull(updatedAttraction);
         verify(attractionRepository, times(1)).findById(1L);
+        verify(attractionRepository, never()).save(any(Attraction.class));
+    }
+
+    @Test
+    public void testUpdateAttraction_AsRegularUser() {
+        setAuthenticatedUser(mockRegularUser);
+
+        Attraction existingAttraction = new Attraction();
+        existingAttraction.setAttractionId(1L);
+        existingAttraction.setName("Old Attraction");
+        existingAttraction.setDescription("Old Description");
+        existingAttraction.setStatus(Status.ACTIVE);
+        existingAttraction.setCreatedBy(mockRegularUser);
+        existingAttraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+
+        AttractionDto updatedAttractionDto = new AttractionDto();
+        updatedAttractionDto.setName("Updated Attraction");
+        updatedAttractionDto.setDescription("Updated Description");
+
+        AccessDeniedException exception = assertThrows(AccessDeniedException.class, () -> {
+            attractionService.updateAttraction(1L, updatedAttractionDto);
+        });
+
+        assertEquals("Only admins can perform this action.", exception.getMessage());
+        verify(attractionRepository, never()).save(any(Attraction.class));
+    }
+
+    @Test
+    public void testDeleteAttraction() {
+        setAuthenticatedUser(mockAdminUser);
+
+        Attraction attraction = new Attraction();
+        attraction.setAttractionId(1L);
+        attraction.setName("Test Attraction");
+        attraction.setDescription("Description");
+        attraction.setStatus(Status.ACTIVE);
+        attraction.setCreatedBy(mockAdminUser);
+        attraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+
+        DeletionReason deletionReason = new DeletionReason();
+        deletionReason.setDeletionReasonId(1L);
+        deletionReason.setReasonMessage("Duplicate");
+
+        when(attractionRepository.findById(1L)).thenReturn(Optional.of(attraction));
+        when(deletionReasonRepository.findById(1L)).thenReturn(Optional.of(deletionReason));
+
+        attractionService.deleteAttraction(1L, 1L);
+
+        verify(attractionRepository, times(1)).findById(1L);
+        verify(deletionReasonRepository, times(1)).findById(1L);
+        verify(attractionRepository, times(1)).save(any(Attraction.class));
+    }
+
+    @Test
+    public void testDeleteAttraction_NotFound() {
+        setAuthenticatedUser(mockAdminUser);
+
+        when(attractionRepository.findById(1L)).thenReturn(Optional.empty());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            attractionService.deleteAttraction(1L, 1L);
+        });
+
+        assertEquals("Attraction with id 1 not found", exception.getMessage());
+        verify(attractionRepository, times(1)).findById(1L);
+        verify(deletionReasonRepository, never()).findById(anyLong());
+        verify(attractionRepository, never()).save(any(Attraction.class));
+    }
+
+    @Test
+    public void testDeleteAttraction_AsRegularUser() {
+        setAuthenticatedUser(mockRegularUser);
+
+        Attraction attraction = new Attraction();
+        attraction.setAttractionId(1L);
+        attraction.setName("Test Attraction");
+        attraction.setDescription("Description");
+        attraction.setStatus(Status.ACTIVE);
+        attraction.setCreatedBy(mockRegularUser);
+        attraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+
+        DeletionReason deletionReason = new DeletionReason();
+        deletionReason.setDeletionReasonId(1L);
+        deletionReason.setReasonMessage("Duplicate");
+
+        AccessDeniedException exception = assertThrows(AccessDeniedException.class, () -> {
+            attractionService.deleteAttraction(1L, 1L);
+        });
+
+        assertEquals("Only admins can perform this action.", exception.getMessage());
         verify(attractionRepository, never()).save(any(Attraction.class));
     }
 }
