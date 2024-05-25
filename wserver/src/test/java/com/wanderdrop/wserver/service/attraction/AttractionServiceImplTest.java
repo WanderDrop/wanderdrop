@@ -133,4 +133,30 @@ class AttractionServiceImplTest {
         verify(attractionRepository, never()).save(any(Attraction.class));
     }
 
+    @Test
+    public void testGetAttractionById() {
+        Attraction attraction = new Attraction();
+        attraction.setAttractionId(1L);
+        attraction.setName("Test Attraction");
+        attraction.setDescription("Description");
+        attraction.setStatus(Status.ACTIVE);
+
+        when(attractionRepository.findById(1L)).thenReturn(Optional.of(attraction));
+
+        AttractionDto attractionDto = attractionService.getAttractionById(1L);
+
+        assertNotNull(attractionDto);
+        assertEquals(attraction.getName(), attractionDto.getName());
+        verify(attractionRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    public void testGetAttractionById_NotFound() {
+        when(attractionRepository.findById(1L)).thenReturn(Optional.empty());
+
+        AttractionDto attractionDto = attractionService.getAttractionById(1L);
+
+        assertNull(attractionDto);
+        verify(attractionRepository, times(1)).findById(1L);
+    }
 }
