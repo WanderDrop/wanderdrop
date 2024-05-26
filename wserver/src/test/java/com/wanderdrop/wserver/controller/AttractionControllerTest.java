@@ -308,4 +308,72 @@ class AttractionControllerTest {
                         .content(objectMapper.writeValueAsString(updatedAttractionDto)))
                 .andExpect(status().isForbidden());
     }
+
+    @Test
+    void testAdminDeleteAttraction() throws Exception {
+
+        User user = new User();
+        user.setEmail("testuser@test.com");
+        user.setPassword(new BCryptPasswordEncoder().encode("password"));
+        user.setFirstName("Firstname");
+        user.setLastName("Lastname");
+        user.setRole(Role.ADMIN);
+        user.setStatus(Status.ACTIVE);
+        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        userRepository.save(user);
+
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        attractionRepository.save(attraction);
+
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+        authenticationRequest.setEmail("testuser@test.com");
+        authenticationRequest.setPassword("password");
+
+        MvcResult result = mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(authenticationRequest)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String response = result.getResponse().getContentAsString();
+        String token = JsonPath.parse(response).read("$.token");
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/attractions/" + attraction.getAttractionId() + "/1")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testUserDeleteAttractionShouldFail() throws Exception {
+
+        User user = new User();
+        user.setEmail("testuser@test.com");
+        user.setPassword(new BCryptPasswordEncoder().encode("password"));
+        user.setFirstName("Firstname");
+        user.setLastName("Lastname");
+        user.setRole(Role.USER);
+        user.setStatus(Status.ACTIVE);
+        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        userRepository.save(user);
+
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        attractionRepository.save(attraction);
+
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+        authenticationRequest.setEmail("testuser@test.com");
+        authenticationRequest.setPassword("password");
+
+        MvcResult result = mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(authenticationRequest)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String response = result.getResponse().getContentAsString();
+        String token = JsonPath.parse(response).read("$.token");
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/attractions/" + attraction.getAttractionId() + "/1")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isForbidden());
+    }
 }
