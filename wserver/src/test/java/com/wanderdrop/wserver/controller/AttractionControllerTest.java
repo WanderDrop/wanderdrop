@@ -224,4 +224,88 @@ class AttractionControllerTest {
                         .content(objectMapper.writeValueAsString(attractionDto)))
                 .andExpect(status().isForbidden());
     }
+
+    @Test
+    void testAdminUpdateAttraction() throws Exception {
+
+        User user = new User();
+        user.setEmail("testuser@test.com");
+        user.setPassword(new BCryptPasswordEncoder().encode("password"));
+        user.setFirstName("Firstname");
+        user.setLastName("Lastname");
+        user.setRole(Role.ADMIN);
+        user.setStatus(Status.ACTIVE);
+        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        userRepository.save(user);
+
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        attractionRepository.save(attraction);
+
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+        authenticationRequest.setEmail("testuser@test.com");
+        authenticationRequest.setPassword("password");
+
+        MvcResult result = mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(authenticationRequest)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String response = result.getResponse().getContentAsString();
+        String token = JsonPath.parse(response).read("$.token");
+
+        AttractionDto updatedAttractionDto = new AttractionDto();
+        updatedAttractionDto.setName("Updated Attraction");
+        updatedAttractionDto.setDescription("Updated Description");
+        updatedAttractionDto.setLatitude(33.1234);
+        updatedAttractionDto.setLongitude(17.3545);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/attractions/" + attraction.getAttractionId())
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedAttractionDto)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testUserUpdateAttractionShouldFail() throws Exception {
+
+        User user = new User();
+        user.setEmail("testuser@test.com");
+        user.setPassword(new BCryptPasswordEncoder().encode("password"));
+        user.setFirstName("Firstname");
+        user.setLastName("Lastname");
+        user.setRole(Role.USER);
+        user.setStatus(Status.ACTIVE);
+        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        userRepository.save(user);
+
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        attractionRepository.save(attraction);
+
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+        authenticationRequest.setEmail("testuser@test.com");
+        authenticationRequest.setPassword("password");
+
+        MvcResult result = mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(authenticationRequest)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String response = result.getResponse().getContentAsString();
+        String token = JsonPath.parse(response).read("$.token");
+
+        AttractionDto updatedAttractionDto = new AttractionDto();
+        updatedAttractionDto.setName("Updated Attraction");
+        updatedAttractionDto.setDescription("Updated Description");
+        updatedAttractionDto.setLatitude(33.1234);
+        updatedAttractionDto.setLongitude(17.3545);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/attractions/" + attraction.getAttractionId())
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedAttractionDto)))
+                .andExpect(status().isForbidden());
+    }
 }
