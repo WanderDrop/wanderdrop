@@ -118,7 +118,7 @@ class AttractionControllerTest {
     }
 
     @Test
-    void testCreateAttraction() throws Exception {
+    void testUserCreateAttraction() throws Exception {
 
         User user = new User();
         user.setEmail("testuser@test.com");
@@ -150,9 +150,78 @@ class AttractionControllerTest {
         attractionDto.setLongitude(16.3545);
 
         mockMvc.perform(post("/api/attractions")
-                        .header("Authorization", "Bearer " + token)  // Include the token in the header
+                        .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(attractionDto)))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void testAdminCreateAttraction() throws Exception {
+
+        User user = new User();
+        user.setEmail("testuser@test.com");
+        user.setPassword(new BCryptPasswordEncoder().encode("password"));
+        user.setFirstName("Firstname");
+        user.setLastName("Lastname");
+        user.setRole(Role.ADMIN);
+        user.setStatus(Status.ACTIVE);
+        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        userRepository.save(user);
+
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+        authenticationRequest.setEmail("testuser@test.com");
+        authenticationRequest.setPassword("password");
+
+        MvcResult result = mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(authenticationRequest)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String response = result.getResponse().getContentAsString();
+        String token = JsonPath.parse(response).read("$.token");
+
+        AttractionDto attractionDto = new AttractionDto();
+        attractionDto.setName("New Attraction");
+        attractionDto.setDescription("New Description");
+        attractionDto.setLatitude(22.1234);
+        attractionDto.setLongitude(16.3545);
+
+        mockMvc.perform(post("/api/attractions")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(attractionDto)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testUserCreateAttractionUnauthorized() throws Exception {
+
+        User user = new User();
+        user.setEmail("testuser@test.com");
+        user.setPassword(new BCryptPasswordEncoder().encode("password"));
+        user.setFirstName("Firstname");
+        user.setLastName("Lastname");
+        user.setRole(Role.USER);
+        user.setStatus(Status.ACTIVE);
+        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        userRepository.save(user);
+
+        AttractionDto attractionDto = new AttractionDto();
+        attractionDto.setDescription("New Description");
+        attractionDto.setLatitude(22.1234);
+        attractionDto.setLongitude(16.3545);
+
+        mockMvc.perform(post("/api/attractions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(attractionDto)))
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(post("/api/attractions")
+                        .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJpbnZhbGlkIn0.invalidsignature")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(attractionDto)))
+                .andExpect(status().isForbidden());
     }
 }
