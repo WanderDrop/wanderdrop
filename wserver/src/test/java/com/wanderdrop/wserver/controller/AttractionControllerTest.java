@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.jayway.jsonpath.JsonPath;
 import com.wanderdrop.wserver.dto.AttractionDto;
 import com.wanderdrop.wserver.dto.AuthenticationRequest;
-import com.wanderdrop.wserver.mapper.AttractionMapper;
 import com.wanderdrop.wserver.model.Attraction;
 import com.wanderdrop.wserver.model.Role;
 import com.wanderdrop.wserver.model.Status;
@@ -18,7 +17,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.test.web.servlet.MvcResult;
@@ -310,6 +308,34 @@ class AttractionControllerTest {
     }
 
     @Test
+    void testUpdateAttractionUnauthorizedShouldFail() throws Exception {
+
+        User user = new User();
+        user.setEmail("testuser@test.com");
+        user.setPassword(new BCryptPasswordEncoder().encode("password"));
+        user.setFirstName("Firstname");
+        user.setLastName("Lastname");
+        user.setRole(Role.ADMIN);
+        user.setStatus(Status.ACTIVE);
+        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        userRepository.save(user);
+
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        attractionRepository.save(attraction);
+
+        AttractionDto updatedAttractionDto = new AttractionDto();
+        updatedAttractionDto.setName("Updated Attraction");
+        updatedAttractionDto.setDescription("Updated Description");
+        updatedAttractionDto.setLatitude(33.1234);
+        updatedAttractionDto.setLongitude(17.3545);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/attractions/" + attraction.getAttractionId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedAttractionDto)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     void testAdminDeleteAttraction() throws Exception {
 
         User user = new User();
@@ -374,6 +400,26 @@ class AttractionControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/attractions/" + attraction.getAttractionId() + "/1")
                         .header("Authorization", "Bearer " + token))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testDeleteAttractionUnauthorizedShouldFail() throws Exception {
+
+        User user = new User();
+        user.setEmail("testuser@test.com");
+        user.setPassword(new BCryptPasswordEncoder().encode("password"));
+        user.setFirstName("Firstname");
+        user.setLastName("Lastname");
+        user.setRole(Role.ADMIN);
+        user.setStatus(Status.ACTIVE);
+        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        userRepository.save(user);
+
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        attractionRepository.save(attraction);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/attractions/" + attraction.getAttractionId() + "/1"))
                 .andExpect(status().isForbidden());
     }
 }
