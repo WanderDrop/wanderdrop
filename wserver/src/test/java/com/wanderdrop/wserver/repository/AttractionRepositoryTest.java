@@ -7,9 +7,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import com.wanderdrop.wserver.model.User;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -17,8 +17,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@SpringBootTest
+@Transactional
 public class AttractionRepositoryTest {
 
     @Autowired
@@ -87,7 +87,6 @@ public class AttractionRepositoryTest {
 
         Attraction found = attractionRepository.findById(attraction.getAttractionId()).orElse(null);
         assertThat(found).isNotNull();
-        assert found != null;
         assertThat(found.getName()).isEqualTo("Attraction 1");
     }
 
