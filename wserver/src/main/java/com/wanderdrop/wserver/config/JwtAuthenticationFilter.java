@@ -40,10 +40,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         jwt = authHeader.substring(7);
 
+        if (!jwt.contains(".") || jwt.split("\\.").length != 3) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("Malformed JWT token");
+            return;
+        }
+
         try {
             userEmail = jwtUtil.extractUsername(jwt);
         } catch (SignatureException e) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("Invalid JWT signature");
             return;
         }
 
