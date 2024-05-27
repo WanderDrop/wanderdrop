@@ -5,6 +5,8 @@ import lombok.*;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "deletionreason")
 public class DeletionReason {
 
