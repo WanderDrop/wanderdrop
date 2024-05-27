@@ -21,11 +21,13 @@ public class AttractionServiceImpl implements AttractionService {
     private final AttractionRepository attractionRepository;
     private final UserRepository userRepository;
     private final DeletionReasonRepository deletionReasonRepository;
+    private final AttractionMapper attractionMapper;
 
-    public AttractionServiceImpl(AttractionRepository attractionRepository, UserRepository userRepository, DeletionReasonRepository deletionReasonRepository) {
+    public AttractionServiceImpl(AttractionRepository attractionRepository, UserRepository userRepository, DeletionReasonRepository deletionReasonRepository, AttractionMapper attractionMapper) {
         this.attractionRepository = attractionRepository;
         this.userRepository = userRepository;
         this.deletionReasonRepository = deletionReasonRepository;
+        this.attractionMapper = attractionMapper;
     }
 
     @Override
@@ -37,25 +39,25 @@ public class AttractionServiceImpl implements AttractionService {
         }
 
         attractionDto.setCreatedBy(currentUser.getUserId());
-        Attraction attraction = AttractionMapper.mapToAttraction(attractionDto, userRepository);
+        Attraction attraction = attractionMapper.mapToAttraction(attractionDto, userRepository);
         attraction.setCreatedBy(currentUser);
         attraction.setStatus(Status.ACTIVE);
         attraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         Attraction savedAttraction = attractionRepository.save(attraction);
-        return AttractionMapper.mapToAttractionDto(savedAttraction);
+        return attractionMapper.mapToAttractionDto(savedAttraction);
     }
 
     @Override
     public AttractionDto getAttractionById(Long attractionId) {
         Attraction attraction = attractionRepository.findById(attractionId).orElse(null);
-        return attraction != null ? AttractionMapper.mapToAttractionDto(attraction) : null;
+        return attraction != null ? attractionMapper.mapToAttractionDto(attraction) : null;
     }
 
     @Override
     public List<AttractionDto> getAllAttractions() {
         return attractionRepository.findAll().stream()
                 .filter(attraction -> attraction.getStatus() == Status.ACTIVE)
-                .map(AttractionMapper::mapToAttractionDto)
+                .map(attractionMapper::mapToAttractionDto)
                 .collect(Collectors.toList());
     }
 
@@ -78,7 +80,7 @@ public class AttractionServiceImpl implements AttractionService {
             existingAttraction.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
             Attraction updatedAttraction = attractionRepository.save(existingAttraction);
-            return AttractionMapper.mapToAttractionDto(updatedAttraction);
+            return attractionMapper.mapToAttractionDto(updatedAttraction);
         } else {
             return null;
         }

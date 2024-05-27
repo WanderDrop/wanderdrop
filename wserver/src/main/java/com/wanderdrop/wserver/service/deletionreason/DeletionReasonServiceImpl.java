@@ -27,15 +27,15 @@ public class DeletionReasonServiceImpl implements DeletionReasonService {
     public List<DeletionReasonDto> getDefaultDeletionReasons() {
         return deletionReasonRepository.findAll().stream()
                 .filter(DeletionReason::isDefaultReason)
-                .map(DeletionReasonMapper::mapToDeletionReasonDto)
+                .map(deletionReasonMapper::mapToDeletionReasonDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public DeletionReasonDto saveDeletionReason(DeletionReasonDto deletionReasonDto) {
-        DeletionReason deletionReason = DeletionReasonMapper.mapToDeletionReason(deletionReasonDto);
+        DeletionReason deletionReason = deletionReasonMapper.mapToDeletionReason(deletionReasonDto);
         deletionReason.setDefaultReason(false);
         deletionReason = deletionReasonRepository.save(deletionReason);
-        return DeletionReasonMapper.mapToDeletionReasonDto(deletionReason);
+        return deletionReasonMapper.mapToDeletionReasonDto(deletionReason);
     }
 }

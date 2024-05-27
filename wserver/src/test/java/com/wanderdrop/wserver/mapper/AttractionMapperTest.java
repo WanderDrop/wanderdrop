@@ -23,6 +23,8 @@ class AttractionMapperTest {
     @Mock
     private UserRepository userRepository;
 
+    private final AttractionMapper attractionMapper = new AttractionMapper();
+
     @Test
     public void testMapToAttractionDto() {
         User createdBy = new User();
@@ -43,7 +45,7 @@ class AttractionMapperTest {
         attraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         attraction.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
-        AttractionDto attractionDto = AttractionMapper.mapToAttractionDto(attraction);
+        AttractionDto attractionDto = attractionMapper.mapToAttractionDto(attraction);
 
         assertNotNull(attractionDto);
         assertEquals(attraction.getAttractionId(), attractionDto.getAttractionId());
@@ -78,7 +80,7 @@ class AttractionMapperTest {
         when(userRepository.findById(createdById)).thenReturn(Optional.empty());
         when(userRepository.findById(updatedById)).thenReturn(Optional.empty());
 
-        Attraction attraction = AttractionMapper.mapToAttraction(attractionDto, userRepository);
+        Attraction attraction = attractionMapper.mapToAttraction(attractionDto, userRepository);
 
         assertNotNull(attraction);
         assertNull(attraction.getCreatedBy());

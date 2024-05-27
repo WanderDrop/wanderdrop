@@ -1,6 +1,7 @@
 package com.wanderdrop.wserver.service.attraction;
 
 import com.wanderdrop.wserver.dto.AttractionDto;
+import com.wanderdrop.wserver.mapper.AttractionMapper;
 import com.wanderdrop.wserver.model.*;
 import com.wanderdrop.wserver.repository.AttractionRepository;
 import com.wanderdrop.wserver.repository.DeletionReasonRepository;
@@ -37,6 +38,9 @@ class AttractionServiceImplTest {
 
     @Mock
     private DeletionReasonRepository deletionReasonRepository;
+
+    @Mock
+    private AttractionMapper attractionMapper;
 
     @InjectMocks
     private AttractionServiceImpl attractionService;
@@ -83,7 +87,9 @@ class AttractionServiceImplTest {
         attraction.setCreatedBy(mockAdminUser);
         attraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
+        when(attractionMapper.mapToAttraction(any(AttractionDto.class), any(UserRepository.class))).thenReturn(attraction);
         when(attractionRepository.save(any(Attraction.class))).thenReturn(attraction);
+        when(attractionMapper.mapToAttractionDto(any(Attraction.class))).thenReturn(attractionDto);
 
         AttractionDto savedAttraction = attractionService.saveAttraction(attractionDto);
 
@@ -108,7 +114,9 @@ class AttractionServiceImplTest {
         attraction.setCreatedBy(mockRegularUser);
         attraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
+        when(attractionMapper.mapToAttraction(any(AttractionDto.class), any(UserRepository.class))).thenReturn(attraction);
         when(attractionRepository.save(any(Attraction.class))).thenReturn(attraction);
+        when(attractionMapper.mapToAttractionDto(any(Attraction.class))).thenReturn(attractionDto);
 
         AttractionDto savedAttraction = attractionService.saveAttraction(attractionDto);
 
@@ -139,12 +147,18 @@ class AttractionServiceImplTest {
         attraction.setDescription("Description");
         attraction.setStatus(Status.ACTIVE);
 
+        AttractionDto attractionDto = new AttractionDto();
+        attractionDto.setAttractionId(1L);
+        attractionDto.setName("Test Attraction");
+        attractionDto.setDescription("Description");
+
         when(attractionRepository.findById(1L)).thenReturn(Optional.of(attraction));
+        when(attractionMapper.mapToAttractionDto(any(Attraction.class))).thenReturn(attractionDto);
 
-        AttractionDto attractionDto = attractionService.getAttractionById(1L);
+        AttractionDto result = attractionService.getAttractionById(1L);
 
-        assertNotNull(attractionDto);
-        assertEquals(attraction.getName(), attractionDto.getName());
+        assertNotNull(result);
+        assertEquals(attraction.getName(), result.getName());
         verify(attractionRepository, times(1)).findById(1L);
     }
 
@@ -172,12 +186,24 @@ class AttractionServiceImplTest {
         attraction2.setDescription("Description 2");
         attraction2.setStatus(Status.ACTIVE);
 
+        AttractionDto attractionDto1 = new AttractionDto();
+        attractionDto1.setAttractionId(1L);
+        attractionDto1.setName("Test Attraction 1");
+        attractionDto1.setDescription("Description 1");
+
+        AttractionDto attractionDto2 = new AttractionDto();
+        attractionDto2.setAttractionId(2L);
+        attractionDto2.setName("Test Attraction 2");
+        attractionDto2.setDescription("Description 2");
+
         when(attractionRepository.findAll()).thenReturn(Arrays.asList(attraction1, attraction2));
+        when(attractionMapper.mapToAttractionDto(attraction1)).thenReturn(attractionDto1);
+        when(attractionMapper.mapToAttractionDto(attraction2)).thenReturn(attractionDto2);
 
-        List<AttractionDto> attractionDtos = attractionService.getAllAttractions();
+        List<AttractionDto> result = attractionService.getAllAttractions();
 
-        assertNotNull(attractionDtos);
-        assertEquals(2, attractionDtos.size());
+        assertNotNull(result);
+        assertEquals(2, result.size());
         verify(attractionRepository, times(1)).findAll();
     }
 
@@ -199,6 +225,7 @@ class AttractionServiceImplTest {
 
         when(attractionRepository.findById(1L)).thenReturn(Optional.of(existingAttraction));
         when(attractionRepository.save(any(Attraction.class))).thenReturn(existingAttraction);
+        when(attractionMapper.mapToAttractionDto(any(Attraction.class))).thenReturn(updatedAttractionDto);
 
         AttractionDto updatedAttraction = attractionService.updateAttraction(1L, updatedAttractionDto);
 
