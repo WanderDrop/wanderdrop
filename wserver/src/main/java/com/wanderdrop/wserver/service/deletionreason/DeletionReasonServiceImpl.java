@@ -1,10 +1,7 @@
 package com.wanderdrop.wserver.service.deletionreason;
 
-import com.wanderdrop.wserver.dto.AttractionDto;
 import com.wanderdrop.wserver.dto.DeletionReasonDto;
-import com.wanderdrop.wserver.mapper.AttractionMapper;
 import com.wanderdrop.wserver.mapper.DeletionReasonMapper;
-import com.wanderdrop.wserver.model.Status;
 import com.wanderdrop.wserver.repository.DeletionReasonRepository;
 import org.springframework.stereotype.Service;
 import com.wanderdrop.wserver.model.DeletionReason;
