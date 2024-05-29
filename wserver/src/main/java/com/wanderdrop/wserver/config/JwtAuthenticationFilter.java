@@ -1,6 +1,7 @@
 package com.wanderdrop.wserver.config;
 
 import com.wanderdrop.wserver.utils.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -51,6 +52,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (SignatureException e) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write("Invalid JWT signature");
+            return;
+        } catch (ExpiredJwtException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("JWT token has expired");
             return;
         }
 

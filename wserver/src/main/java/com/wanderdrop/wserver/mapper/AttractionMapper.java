@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AttractionMapper {
 
-    public static AttractionDto mapToAttractionDto(Attraction attraction) {
+    public AttractionDto mapToAttractionDto(Attraction attraction) {
         return new AttractionDto(
                 attraction.getAttractionId(),
                 attraction.getName(),
@@ -26,7 +26,7 @@ public class AttractionMapper {
         );
     }
 
-    public static Attraction mapToAttraction(AttractionDto attractionDto, UserRepository userRepository) {
+    public Attraction mapToAttraction(AttractionDto attractionDto, UserRepository userRepository) {
         Attraction attraction = new Attraction();
         attraction.setAttractionId(attractionDto.getAttractionId());
         attraction.setName(attractionDto.getName());

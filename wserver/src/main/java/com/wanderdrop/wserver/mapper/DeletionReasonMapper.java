@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeletionReasonMapper {
 
-    public static DeletionReasonDto mapToDeletionReasonDto(DeletionReason deletionReason) {
+    public DeletionReasonDto mapToDeletionReasonDto(DeletionReason deletionReason) {
         return new DeletionReasonDto(
                 deletionReason.getDeletionReasonId(),
                 deletionReason.getReasonMessage()
         );
     }
 
-    public static DeletionReason mapToDeletionReason(DeletionReasonDto deletionReasonDto) {
+    public DeletionReason mapToDeletionReason(DeletionReasonDto deletionReasonDto) {
         DeletionReason deletionReason = new DeletionReason();
         deletionReason.setDeletionReasonId(deletionReasonDto.getId());
         deletionReason.setReasonMessage(deletionReasonDto.getReasonMessage());

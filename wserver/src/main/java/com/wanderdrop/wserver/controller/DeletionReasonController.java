@@ -24,6 +24,4 @@ public class DeletionReasonController {
     public DeletionReasonDto saveDeletionReason(@RequestBody DeletionReasonDto deletionReasonDto) {
         return deletionReasonService.saveDeletionReason(deletionReasonDto);
     }
-
-
 }
