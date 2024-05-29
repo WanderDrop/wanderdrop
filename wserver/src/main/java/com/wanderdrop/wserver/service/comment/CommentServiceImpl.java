@@ -1,8 +1,10 @@
 package com.wanderdrop.wserver.service.comment;
 
+import com.wanderdrop.wserver.dto.AttractionDto;
 import com.wanderdrop.wserver.dto.CommentDto;
 import com.wanderdrop.wserver.mapper.CommentMapper;
 import com.wanderdrop.wserver.model.*;
+import com.wanderdrop.wserver.repository.AttractionRepository;
 import com.wanderdrop.wserver.repository.CommentRepository;
 import com.wanderdrop.wserver.repository.DeletionReasonRepository;
 import com.wanderdrop.wserver.repository.UserRepository;
@@ -22,12 +24,14 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
     private final UserRepository userRepository;
     private final DeletionReasonRepository deletionReasonRepository;
+    private final AttractionRepository attractionRepository;
 
-    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper, UserRepository userRepository, DeletionReasonRepository deletionReasonRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper, UserRepository userRepository, DeletionReasonRepository deletionReasonRepository, AttractionRepository attractionRepository) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.userRepository = userRepository;
         this.deletionReasonRepository = deletionReasonRepository;
+        this.attractionRepository = attractionRepository;
     }
 
     @Override
@@ -46,13 +50,17 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto createComment(CommentDto commentDto) {
+    public CommentDto createComment(CommentDto commentDto, Long attractionId) {
         User currentUser = getCurrentAuthenticatedUser();
         if (currentUser == null || (currentUser.getRole() != Role.ADMIN && currentUser.getRole() != Role.USER)) {
             throw new AccessDeniedException("Only logged-in users and admins can create a comment.");
         }
 
+        Attraction attraction = attractionRepository.findById(attractionId)
+                .orElseThrow(() -> new IllegalArgumentException("Attraction with id " + attractionId + " not found"));
+
         Comment comment = commentMapper.mapToComment(commentDto, userRepository, deletionReasonRepository);
+        comment.setAttraction(attraction);
         comment.setCreatedBy(currentUser);
         comment.setStatus(Status.ACTIVE);
         comment.setCreatedAt(new Timestamp(System.currentTimeMillis()));

@@ -15,5 +15,6 @@ public class CommentDto {
     private String commentText;
     private String createdBy;
     private Timestamp createdAt;
-    private String deletionReason;
+    private Long deletionReason;
+    private Long attractionId;
 }

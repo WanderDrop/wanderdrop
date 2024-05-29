@@ -1,10 +1,7 @@
 package com.wanderdrop.wserver.mapper;
 
 import com.wanderdrop.wserver.dto.CommentDto;
-import com.wanderdrop.wserver.model.Comment;
-import com.wanderdrop.wserver.model.DeletionReason;
-import com.wanderdrop.wserver.model.Status;
-import com.wanderdrop.wserver.model.User;
+import com.wanderdrop.wserver.model.*;
 import com.wanderdrop.wserver.repository.DeletionReasonRepository;
 import com.wanderdrop.wserver.repository.UserRepository;
 import org.springframework.stereotype.Component;
@@ -19,7 +16,8 @@ public class CommentMapper {
                 comment.getCommentText(),
                 comment.getCreatedBy() != null ? comment.getCreatedBy().getUsername() : null,
                 comment.getCreatedAt(),
-                comment.getDeletionReason() != null ? comment.getDeletionReason().getReasonMessage() : null
+                comment.getDeletionReason() != null ? comment.getDeletionReason().getDeletionReasonId() : null,
+                comment.getAttraction() != null ? comment.getAttraction().getAttractionId() : null
         );
     }
 
@@ -36,11 +34,12 @@ public class CommentMapper {
         }
 
         if (commentDto.getDeletionReason() != null) {
-            DeletionReason deletionReason = deletionReasonRepository.findByReasonMessage(commentDto.getDeletionReason()).orElse(null);
+            DeletionReason deletionReason = deletionReasonRepository.findById(commentDto.getDeletionReason()).orElse(null);
             comment.setDeletionReason(deletionReason);
         }
 
         comment.setCreatedAt(commentDto.getCreatedAt());
+
         return comment;
     }
 }

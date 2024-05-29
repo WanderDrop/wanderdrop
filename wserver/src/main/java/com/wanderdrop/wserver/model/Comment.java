@@ -29,7 +29,7 @@ public class Comment {
     private Status status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "attraction_id", referencedColumnName = "attraction_id", insertable = false, updatable = false)
+    @JoinColumn(name = "attraction_id", referencedColumnName = "attraction_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Attraction attraction;
 

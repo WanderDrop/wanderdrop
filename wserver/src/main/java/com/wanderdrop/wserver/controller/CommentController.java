@@ -2,7 +2,6 @@ package com.wanderdrop.wserver.controller;
 
 import com.wanderdrop.wserver.dto.CommentDto;
 import com.wanderdrop.wserver.service.comment.CommentService;
-import com.wanderdrop.wserver.service.comment.CommentServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,9 +26,9 @@ public class CommentController {
         return commentService.getCommentById(id);
     }
 
-    @PostMapping
-    public CommentDto createComment(@RequestBody CommentDto commentDto) {
-        return commentService.createComment(commentDto);
+    @PostMapping("/{attractionId}")
+    public CommentDto createComment(@RequestBody CommentDto commentDto, @PathVariable Long attractionId) {
+        return commentService.createComment(commentDto, attractionId);
     }
 
     @PutMapping("/{id}")
