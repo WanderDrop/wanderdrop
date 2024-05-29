@@ -9,5 +9,5 @@ public interface CommentService {
     CommentDto getCommentById(Long id);
     CommentDto createComment(CommentDto commentDto);
     CommentDto updateComment(Long id, CommentDto commentDto);
-    void deleteComment(Long id, String deletionReason);
+    void deleteComment(Long id, Long deletionReasonId);
 }
