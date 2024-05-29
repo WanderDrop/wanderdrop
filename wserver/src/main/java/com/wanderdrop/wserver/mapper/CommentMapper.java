@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CommentMapper {
 
-    public CommentDto toDto(Comment comment) {
+    public CommentDto mapToCommentDto(Comment comment) {
         return new CommentDto(
                 comment.getCommentId(),
                 comment.getCommentHeading(),
