@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Comment } from './comment.model';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { StorageService } from '../user/storage/storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,28 +10,42 @@ import { BehaviorSubject } from 'rxjs';
 export class CommentService {
   comments: { [attractionId: number]: Comment[] } = {};
   private commentsUpdated = new BehaviorSubject<Comment[]>([]);
+  private baseUrl = `http://localhost:8080/api`;
+  private currentAttractionId: number | null = null;
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   getCommentsUpdated() {
     return this.commentsUpdated.asObservable();
   }
 
-  getComments(attractionId: number) {
-    return this.comments[attractionId] || [];
+  getComments(attractionId: number): Observable<Comment[]> {
+    return this.http.get<Comment[]>(
+      `${this.baseUrl}/comments/attraction/${attractionId}`
+    );
   }
 
-  fetchComments(attractionId: number) {
-    const comments = this.comments[attractionId] || [];
-    this.commentsUpdated.next(comments);
-  }
-
-  addComment(comment: Comment) {
-    if (!this.comments[comment.attractionId]) {
-      this.comments[comment.attractionId] = [];
+  fetchComments(attractionId: number): void {
+    if (this.currentAttractionId !== attractionId) {
+      this.currentAttractionId = attractionId;
+      this.getComments(attractionId).subscribe((comments) => {
+        this.comments[attractionId] = comments;
+        this.commentsUpdated.next([...this.comments[attractionId]]);
+      });
     }
-    this.comments[comment.attractionId].push(comment);
-    this.commentsUpdated.next(this.comments[comment.attractionId]);
+  }
+
+  addComment(
+    attractionId: number,
+    commentData: { commentHeading: string; commentText: string }
+  ): Observable<Comment> {
+    const token = StorageService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post<Comment>(
+      `${this.baseUrl}/comments/${attractionId}`,
+      commentData,
+      { headers }
+    );
   }
 
   deleteComment(commentId: number, attractionId: number) {
@@ -39,5 +55,10 @@ export class CommentService {
       );
       this.commentsUpdated.next(this.comments[attractionId]);
     }
+  }
+
+  clearComments(attractionId: number): void {
+    this.comments[attractionId] = [];
+    this.commentsUpdated.next([...this.comments[attractionId]]);
   }
 }

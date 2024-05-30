@@ -16,9 +16,9 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @GetMapping
-    public List<CommentDto> getAllActiveComments() {
-        return commentService.getAllActiveComments();
+    @GetMapping("/attraction/{attractionId}")
+    public List<CommentDto> getAllActiveComments(@PathVariable Long attractionId) {
+        return commentService.getAllActiveComments(attractionId);
     }
 
     @GetMapping("/{id}")

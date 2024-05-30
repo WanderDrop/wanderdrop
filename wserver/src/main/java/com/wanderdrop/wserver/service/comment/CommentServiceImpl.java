@@ -35,8 +35,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDto> getAllActiveComments() {
-        return commentRepository.findByStatus(Status.ACTIVE)
+    public List<CommentDto> getAllActiveComments(Long attractionId) {
+        return commentRepository.findByStatusAndAttraction_AttractionId(Status.ACTIVE, attractionId)
                 .stream()
                 .map(commentMapper::mapToCommentDto)
                 .collect(Collectors.toList());

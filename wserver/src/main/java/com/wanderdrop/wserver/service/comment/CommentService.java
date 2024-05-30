@@ -6,7 +6,7 @@ import com.wanderdrop.wserver.dto.CommentDto;
 import java.util.List;
 
 public interface CommentService {
-    List<CommentDto> getAllActiveComments();
+    List<CommentDto> getAllActiveComments(Long attractionId);
     CommentDto getCommentById(Long id);
     CommentDto createComment(CommentDto commentDto, Long attractionId);
     CommentDto updateComment(Long id, CommentDto commentDto);

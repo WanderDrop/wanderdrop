@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AttractionService } from '../../attraction/attraction.service';
 import { Comment } from '../comment.model';
@@ -10,31 +16,31 @@ import { UserService } from '../../user/user.service';
 @Component({
   selector: 'app-add-comment',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './add-comment.component.html',
   styleUrl: './add-comment.component.css',
 })
 export class AddCommentComponent {
-  commentHeading = '';
-  commentText = '';
   @Input() attractionId!: number;
+  @Output() commentAdded = new EventEmitter<{
+    commentHeading: string;
+    commentText: string;
+  }>();
+  commentForm: FormGroup;
 
-  constructor(
-    private modalService: NgbModal,
-    private attractionService: AttractionService,
-    private commentService: CommentService,
-    private userService: UserService
-  ) {}
+  constructor(private fb: FormBuilder, private modalService: NgbModal) {
+    this.commentForm = this.fb.group({
+      commentHeading: ['', Validators.required],
+      commentText: ['', Validators.required],
+    });
+  }
 
   onSubmit() {
-    const comment = new Comment(
-      this.attractionId,
-      this.commentHeading,
-      this.commentText,
-      this.userService.getDummyUser().UserId
-    );
-    this.commentService.addComment(comment);
-    this.modalService.dismissAll();
+    if (this.commentForm.valid) {
+      const { commentHeading, commentText } = this.commentForm.value;
+      this.commentAdded.emit({ commentHeading, commentText });
+      this.modalService.dismissAll();
+    }
   }
 
   onCancel() {

@@ -1,4 +1,3 @@
-<app-comment-item
-  *ngFor="let comment of comments"
-  [comment]="comment"
-></app-comment-item>
+<div *ngFor="let comment of comments">
+  <app-comment-item [comment]="comment"></app-comment-item>
+</div>
