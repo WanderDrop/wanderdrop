@@ -5,7 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 @Entity
 @Data
@@ -33,12 +33,12 @@ public class Report {
     private Attraction attractionId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "create_by",referencedColumnName = "user_id", nullable = false, updatable = false )
+    @JoinColumn(name = "created_by",referencedColumnName = "user_id", nullable = false, updatable = false )
     @OnDelete(action = OnDeleteAction.NO_ACTION)
-    private User createBy;
+    private User createdBy;
 
-    @Column(name= "create_at", nullable = false, updatable = false, insertable = false,
+    @Column(name= "created_at", nullable = false, updatable = false, insertable = false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp createAt;
+    private Timestamp createdAt;
 
 }

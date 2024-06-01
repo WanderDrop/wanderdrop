@@ -1,28 +1,25 @@
+import { AddNewAttractionComponent } from '../attraction/add-new-attraction/add-new-attraction.component';
 import { ReportPageStatus } from './report-page-status.enum';
 
 export class ReportPage {
-  private _reportId: number;
+  private _reportId!: number;
   private _reportHeading: string;
-  private _reportText: string;
-  private _attractionId: number;
-  private _createdBy!: number;
-  private _updatedBy?: number;
-  private _createdAt: Date;
-  private _updatedAt?: Date;
+  private _reportMessage: string;
   private _status: ReportPageStatus;
-  private _deletionReason?: number;
-  private static lastId = 0;
+  private _attractionId!: number;
+  private _createdBy!: number;
+  private _createdAt: Date;
+  static _reportId:any;
 
 
   constructor(
     attractionId:number,
     reportHeading: string,
-    reportText: string,
+    reportMessage: string,
     createdBy: number
   ) {
-    this._reportId = ReportPage.lastId++;
     this._reportHeading = reportHeading;
-    this._reportText = reportText;
+    this._reportMessage = reportMessage;
     this._createdBy = createdBy;
     this._attractionId = attractionId;
     this._createdAt = new Date();
@@ -37,58 +34,21 @@ export class ReportPage {
     this._reportId = value;
   }
 
-  get reportHeading(): string {
+  get reportHeading(): string{
     return this._reportHeading;
   }
 
   set reportHeading(value: string) {
     this._reportHeading = value;
+
   }
 
-  get reportText(): string {
-    return this._reportText;
+  get reportMessage(): string {
+    return this._reportMessage;
   }
 
-  set reportText(value: string) {
-    this._reportText = value;
-  }
-
-  get createdBy(): number {
-    return this._createdBy;
-  }
-
-  set createdBy(value: number) {
-    this._createdBy = value;
-  }
-
-  get updatedBy(): number | undefined {
-    return this._updatedBy;
-  }
-
-  set createdAt(value:Date){
-    this.createdAt = value
-  }
-
-  get createdAt():Date{
-    return this._createdAt;
-  }
-
-
-
-  set updatedBy(value: number | undefined) {
-    this._updatedBy = value;
-  }
-
-  get updatedAt(): Date | undefined {
-    return this._updatedAt;
-  }
-
-  set updatedAt(value: Date | undefined) {
-    this._updatedAt = value;
-  }
-
-  get attractionId(): number {
-    return this._attractionId;
+  set reportMessage(value: string) {
+    this._reportMessage = value;
   }
 
   get status(): ReportPageStatus {
@@ -99,11 +59,43 @@ export class ReportPage {
     this._status = value;
   }
 
-  get deletionReason(): number | undefined {
-    return this._deletionReason;
+  get createdBy(): number {
+    return this._createdBy;
   }
 
-  set deletionReason(value: number | undefined) {
-    this._deletionReason = value;
+  set createdBy(value: number) {
+    this._createdBy = value;
   }
+
+  set createdAt(value:Date){
+    this.createdAt = value
+  }
+
+  get createdAt():Date{
+    return this._createdAt;
+  }
+
+  get attractionId(): number {
+    return this._attractionId;
+  }
+  static fromResponse(response: any): ReportPage {
+    const report = new ReportPage(
+      response.attractionId,
+      response.reportHeading,
+      response.reportMessage,
+      response.createdBy,
+    );
+    report._reportId = response.reportId;
+    report.createdAt = new Date(response.createdAt);
+    return report;
+  }
+
+  toRequestPayLoad(){
+    return {
+      attractionId: this.attractionId,
+      reportHeading: this.reportHeading,
+      reportMessage: this.reportMessage,
+    }
+  }
+  
 }

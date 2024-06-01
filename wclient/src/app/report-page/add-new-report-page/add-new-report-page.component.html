@@ -1,24 +1,10 @@
-
+<form (ngSubmit)="onAddReportPage" #f="ngForm">
 <div class="modal-header">
-  <h4 class="modal-title" id="modal-basic-title">Report</h4>
+  <h4 class="modal-title" id="modal-basic-title">Create report about "{{ attractionName }}"</h4>
   <button type="button" class="btn-close" (click)="closeModal()"></button>
 </div>
 <div class="modal-body">
-  <form>
-    <div class="mb-3">
-      <label for="heading">Create a report about </label>
-      <textarea
-        id="name"
-        name="name"
-        class="form-control mt-2"
-        placeholder="Enter attraction name here..."
-        rows="1"
-        [(ngModel)]="reportPageHeading"
-      >
-      {{ reportPageHeading }}</textarea
-      >
-    </div>
-    <div class="mb-3 mt-5">
+    <div>
       <label for="description">Description</label>
       <textarea
         id="description"
@@ -26,19 +12,21 @@
         class="form-control mt-2"
         placeholder="Enter description here..."
         rows="10"
-        [(ngModel)]="reportPageText"
+        [(ngModel)]="reportMessage"
       >
-      {{ reportPageText }}</textarea
+      {{ reportMessage }}</textarea
       >
     </div>
-  </form>
-</div>
+  </div>
 <div class="modal-footer">
-  <button type="submit" class="btn btn-danger"
-   (click)="onSaveChanges()">
+  <button type="submit" 
+   class="btn btn-danger"
+   (click)="onAddReportPage()"
+   [disabled]="!f.valid">
     Report
   </button>
   <button type="button" class="btn btn-primary" (click)="closeModal()">
     Cancel
   </button>
 </div>
+</form>
