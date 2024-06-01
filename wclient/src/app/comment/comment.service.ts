@@ -26,13 +26,18 @@ export class CommentService {
   }
 
   fetchComments(attractionId: number): void {
-    if (this.currentAttractionId !== attractionId) {
-      this.currentAttractionId = attractionId;
-      this.getComments(attractionId).subscribe((comments) => {
+    this.currentAttractionId = attractionId;
+    console.log(`Fetching comments for attractionId: ${attractionId}`);
+    this.getComments(attractionId).subscribe(
+      (comments) => {
+        console.log('Fetched comments from API:', comments);
         this.comments[attractionId] = comments;
         this.commentsUpdated.next([...this.comments[attractionId]]);
-      });
-    }
+      },
+      (error) => {
+        console.error('Error fetching comments:', error);
+      }
+    );
   }
 
   addComment(
@@ -48,12 +53,43 @@ export class CommentService {
     );
   }
 
-  deleteComment(commentId: number, attractionId: number) {
-    if (this.comments[attractionId]) {
-      this.comments[attractionId] = this.comments[attractionId].filter(
-        (comment) => comment.commentId !== commentId
+  // deleteComment(commentId: number, attractionId: number) {
+  //   if (this.comments[attractionId]) {
+  //     this.comments[attractionId] = this.comments[attractionId].filter(
+  //       (comment) => comment.commentId !== commentId
+  //     );
+  //     this.commentsUpdated.next(this.comments[attractionId]);
+  //   }
+  // }
+
+  deleteComment(commentId: number, reasonId: number): Observable<void> {
+    const token = StorageService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http
+      .put<void>(
+        `${this.baseUrl}/comments/${commentId}/${reasonId}`,
+        {},
+        { headers }
+      )
+      .pipe(
+        map(() => {
+          console.log('Deleted comment:', commentId);
+          this.updateCommentsAfterDeletion(commentId);
+        })
       );
-      this.commentsUpdated.next(this.comments[attractionId]);
+  }
+
+  private updateCommentsAfterDeletion(commentId: number) {
+    const currentComments = this.comments[this.currentAttractionId!] || [];
+    const updatedComments = currentComments.filter(
+      (comment) => comment.commentId !== commentId
+    );
+    console.log('Updated comments after deletion:', updatedComments);
+    this.comments[this.currentAttractionId!] = updatedComments;
+    this.commentsUpdated.next([...updatedComments]);
+
+    if (this.currentAttractionId !== null) {
+      this.fetchComments(this.currentAttractionId);
     }
   }
 

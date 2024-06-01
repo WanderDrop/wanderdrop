@@ -37,6 +37,10 @@ public class AttractionController {
 
     @PutMapping("/{id}/{reasonId}")
     public void deleteAttraction(@PathVariable Long id, @PathVariable Long reasonId) {
-        attractionServiceImpl.deleteAttraction(id, reasonId);
+        try {
+            attractionServiceImpl.deleteAttraction(id, reasonId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

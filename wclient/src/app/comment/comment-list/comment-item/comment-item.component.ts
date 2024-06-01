@@ -23,18 +23,17 @@ export class CommentItemComponent {
 
   onDeleteComment(commentId: number) {
     const modalRef = this.modalService.open(DeleteConfirmationComponent);
-    modalRef.componentInstance.selectedReason = '';
-    modalRef.componentInstance.otherReason = '';
-
-    console.log(modalRef.result);
 
     modalRef.result
       .then((result) => {
-        if (result === 'delete') {
-          this.commentService.deleteComment(
-            commentId,
-            this.comment.attractionId
-          );
+        if (result.action === 'delete' && result.reasonId !== null) {
+          this.commentService
+            .deleteComment(commentId, result.reasonId)
+            .subscribe(() => {
+              console.log(
+                `Comment ${commentId} deleted with reason ${result.reasonId}`
+              );
+            });
         }
       })
       .catch((reason) => {
