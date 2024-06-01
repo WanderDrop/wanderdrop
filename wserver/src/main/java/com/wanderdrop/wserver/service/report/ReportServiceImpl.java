@@ -3,7 +3,6 @@ package com.wanderdrop.wserver.service.report;
 import com.wanderdrop.wserver.dto.ReportDto;
 import com.wanderdrop.wserver.mapper.ReportMapper;
 import com.wanderdrop.wserver.model.*;
-import com.wanderdrop.wserver.repository.AttractionRepository;
 import com.wanderdrop.wserver.repository.ReportRepository;
 import com.wanderdrop.wserver.repository.UserRepository;
 import org.springframework.security.access.AccessDeniedException;

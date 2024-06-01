@@ -1,7 +1,6 @@
 package com.wanderdrop.wserver.controller;
 
 import com.wanderdrop.wserver.dto.ReportDto;
-import com.wanderdrop.wserver.model.Status;
 import com.wanderdrop.wserver.service.report.ReportServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
