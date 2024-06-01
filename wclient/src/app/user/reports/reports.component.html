@@ -1,0 +1,19 @@
+<div class="container mt-4">
+    <h2 class="mb-3">Active Reports</h2>
+    <ul class="list-group" *ngIf="reports.length > 0 ; else noReports">
+      <li class="list-group-item" *ngFor="let report of activeReports">
+        <h5 class="mb-1 text-primary">{{ report.reportHeading }}</h5>
+        <p class="mb-0">{{ report.reportMessage }}</p>
+      </li>
+    </ul>
+    <h2 class="mb-3">Deleted Reports</h2>
+    <ul class="list-group" *ngIf="reports.length > 0; else noReports">
+        <li class="list-group-item" *ngFor="let report of deletedReports">
+          <h5 class="mb-1 text-primary">{{ report.reportHeading }}</h5>
+          <p class="mb-0">{{ report.reportMessage }}</p>
+        </li>
+      </ul>
+    <ng-template #noReports>
+      <p>No reports yet.</p>
+    </ng-template>
+  </div>
