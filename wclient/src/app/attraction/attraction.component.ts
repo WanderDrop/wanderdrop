@@ -108,7 +108,7 @@ export class AttractionComponent implements OnInit, OnDestroy {
   onAddNewReportPage() {
     const modalRef = this.modalService.open(AddNewReportPageComponent);
     if (this.attraction) {
-      modalRef.componentInstance.attractionId = this.attraction.id;
+      modalRef.componentInstance.attractionName = this.attraction.name;
     }
   }
 
