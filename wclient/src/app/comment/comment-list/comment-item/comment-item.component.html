@@ -5,7 +5,7 @@
     <h5 class="text-primary">{{ comment.commentHeading }}</h5>
     <p>{{ comment.commentText }}</p>
     <p>
-      <small>Posted by {{ comment.author }} on {{ comment.date }}</small>
+      <small>Posted on {{ formatDate(comment.createdAt) }}</small>
     </p>
   </div>
   <div>

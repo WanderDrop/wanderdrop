@@ -4,6 +4,7 @@ import { Comment } from '../../comment/comment.model';
 import { AttractionService } from '../../attraction/attraction.service';
 import { CommentService } from '../../comment/comment.service';
 import { CommonModule } from '@angular/common';
+import { switchMap, map, forkJoin, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-your-activity',
@@ -22,10 +23,34 @@ export class YourActivityComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.attractions = this.attractionService.attractions;
-    this.attractions.forEach((attraction) => {
-      const attractionComments = this.commentService.getComments(attraction.id);
-      this.comments = [...this.comments, ...attractionComments];
-    });
+    this.attractionService
+      .fetchAttractions()
+      .pipe(
+        switchMap((attractions: Attraction[]) => {
+          this.attractions = attractions;
+          const commentsObservables: Observable<{
+            attractionId: number;
+            comments: Comment[];
+          }>[] = attractions.map((attraction: Attraction) =>
+            this.commentService
+              .getComments(attraction.id)
+              .pipe(
+                map((comments: Comment[]) => ({
+                  attractionId: attraction.id,
+                  comments,
+                }))
+              )
+          );
+          return forkJoin(commentsObservables);
+        })
+      )
+      .subscribe(
+        (commentGroups: { attractionId: number; comments: Comment[] }[]) => {
+          this.comments = commentGroups.flatMap(
+            (group: { attractionId: number; comments: Comment[] }) =>
+              group.comments
+          );
+        }
+      );
   }
 }

@@ -74,7 +74,11 @@ export class AttractionComponent implements OnInit, OnDestroy {
           this.attraction = attraction;
           if (this.attraction) {
             this.selectedAttractionId = this.attraction.id;
-            this.comments = this.commentService.getComments(this.attraction.id);
+            this.commentService
+              .getComments(this.attraction.id)
+              .subscribe((comments) => {
+                this.comments = comments;
+              });
             const commentsSub = this.commentService
               .getCommentsUpdated()
               .subscribe((comments: Comment[]) => {
@@ -102,6 +106,15 @@ export class AttractionComponent implements OnInit, OnDestroy {
     const modalRef = this.modalService.open(AddCommentComponent);
     if (this.attraction) {
       modalRef.componentInstance.attractionId = this.attraction.id;
+      modalRef.componentInstance.commentAdded.subscribe(
+        (commentData: { commentHeading: string; commentText: string }) => {
+          this.commentService
+            .addComment(this.attraction!.id, commentData)
+            .subscribe((newComment) => {
+              this.comments.push(newComment);
+            });
+        }
+      );
     }
   }
 
@@ -134,12 +147,17 @@ export class AttractionComponent implements OnInit, OnDestroy {
           this.selectedReasonId = result.reasonId;
           this.attractionService
             .deleteAttraction(this.attraction.id, this.selectedReasonId!)
-            .subscribe(() => {
-              this.attractionService.removeAttractionFromList(
-                this.attraction!.id
-              );
-              this.router.navigate(['/home']);
-            });
+            .subscribe(
+              () => {
+                this.attractionService.removeAttractionFromList(
+                  this.attraction!.id
+                );
+                this.router.navigate(['/home']);
+              },
+              (error) => {
+                console.error('Error deleting attraction:', error);
+              }
+            );
         }
       })
       .catch((reason) => {

@@ -29,9 +29,15 @@ export class DeleteConfirmationComponent implements OnDestroy {
     if (this.selectedReason === 'other') {
       const postReasonSub = this.deleteReasonService
         .postReason(this.otherReason)
-        .subscribe((data: { id: number; reasonMessage: string }) => {
-          this.activeModal.close({ action: 'delete', reasonId: data.id });
-        });
+        .subscribe(
+          (data: { id: number; reasonMessage: string }) => {
+            this.activeModal.close({ action: 'delete', reasonId: data.id });
+          },
+          (error) => {
+            console.error('Error creating new deletion reason:', error);
+            this.activeModal.dismiss('error');
+          }
+        );
       this.subscriptions.push(postReasonSub);
     } else {
       const reasonsSub = this.reasons.subscribe((reasonsArray) => {

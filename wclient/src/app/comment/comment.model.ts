@@ -1,81 +1,84 @@
 import { CommentStatus } from './comment-status.enum';
 
 export class Comment {
-  private _commentId!: number;
-  private _commentHeading: string;
-  private _commentText: string;
-  private _status: CommentStatus;
-  private _attractionId: number;
-  private _date: Date;
-  private _author: number;
-  private _deletionReasonId!: number;
-  public static lastId = 0;
+  commentId!: number;
+  commentHeading: string;
+  commentText: string;
+  status: string;
+  attractionId: number;
+  createdAt: Date;
+  author: string;
+  deletionReasonId?: number;
 
   constructor(
-    attractionId: number,
     commentHeading: string,
     commentText: string,
-    author: number
+    author: string,
+    attractionId: number,
+    commentId?: number,
+    status?: string,
+    createdAt?: Date,
+    deletionReasonId?: number
   ) {
-    Comment.lastId++;
-    this._commentId = Comment.lastId;
-    this._commentHeading = commentHeading;
-    this._commentText = commentText;
-    this._status = CommentStatus.Active;
-    this._attractionId = attractionId;
-    this._date = new Date();
-    this._author = author;
+    this.commentHeading = commentHeading;
+    this.commentText = commentText;
+    this.author = author;
+    this.attractionId = attractionId;
+    this.commentId = commentId ?? 0;
+    this.status = status ?? 'ACTIVE';
+    this.createdAt = createdAt ?? new Date();
+    this.deletionReasonId = deletionReasonId;
   }
 
-  get commentId(): number {
+  get _commentId(): number {
     return this._commentId;
   }
 
-  get commentHeading(): string {
+  get _commentHeading(): string {
     return this._commentHeading;
   }
 
-  set commentHeading(value: string) {
+  set _commentHeading(value: string) {
     this._commentHeading = value;
   }
 
-  get commentText(): string {
+  get _commentText(): string {
     return this._commentText;
   }
 
-  set commentText(value: string) {
+  set _commentText(value: string) {
     this._commentText = value;
   }
 
-  get status(): CommentStatus {
+  get _status(): CommentStatus {
     return this._status;
   }
 
-  set status(value: CommentStatus) {
+  set _status(value: CommentStatus) {
     this._status = value;
   }
 
-  get attractionId(): number {
+  get _attractionId(): number {
     return this._attractionId;
   }
 
-  get date(): Date {
+  get _date(): Date {
     return this._date;
   }
 
-  get author() {
+  get _author() {
     return this._author;
   }
 
-  set author(value: number) {
+  set _author(value: number) {
     this._author = value;
   }
 
-  get deletionReasonId(): number {
+  get _deletionReasonId(): number {
     return this._deletionReasonId;
   }
 
-  set deletionReasonId(value: number) {
+  set _deletionReasonId(value: number) {
     this._deletionReasonId = value;
   }
 }

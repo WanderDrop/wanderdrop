@@ -9,6 +9,7 @@ import com.wanderdrop.wserver.repository.UserRepository;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -87,20 +88,17 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
+    @Transactional
     public void deleteAttraction(Long attractionId, Long deletionReasonId) {
-
         User currentUser = checkAdminUser();
-
         Optional<Attraction> optionalAttraction = attractionRepository.findById(attractionId);
         if (optionalAttraction.isPresent()) {
             Attraction attraction = optionalAttraction.get();
             attraction.setStatus(Status.DELETED);
-            DeletionReason deletionReason = deletionReasonRepository.findById(deletionReasonId).orElse(null);
+            DeletionReason deletionReason = deletionReasonRepository.findById(deletionReasonId).orElseThrow(() -> new IllegalArgumentException("Deletion reason not found"));
             attraction.setDeletionReason(deletionReason);
-
             attraction.setUpdatedBy(getCurrentAuthenticatedUser());
             attraction.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-
             attractionRepository.save(attraction);
         } else {
             throw new IllegalArgumentException("Attraction with id " + attractionId + " not found");

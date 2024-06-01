@@ -1,11 +1,10 @@
 <div class="modal-body">
-  <form (ngSubmit)="onSubmit()" #f="ngForm">
+  <form (ngSubmit)="onSubmit()" [formGroup]="commentForm">
     <div class="form-group mb-3">
       <label for="commentHeading" class="mb-2">Comment heading</label>
       <input
-        [(ngModel)]="commentHeading"
+        formControlName="commentHeading"
         type="text"
-        name="commentHeading"
         class="form-control"
         id="commentHeading"
         placeholder="Enter heading"
@@ -15,9 +14,8 @@
     <div class="form-group mb-5">
       <label for="commentText" class="mb-2">Comment content</label>
       <textarea
-        [(ngModel)]="commentText"
+        formControlName="commentText"
         class="form-control"
-        name="commentText"
         id="commentText"
         placeholder="Content"
         rows="7"
@@ -30,7 +28,7 @@
         <button
           type="submit"
           class="btn btn-success me-4"
-          [disabled]="!f.valid"
+          [disabled]="!commentForm.valid"
         >
           Add comment
         </button>

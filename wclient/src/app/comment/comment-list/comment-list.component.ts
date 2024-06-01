@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommentItemComponent } from './comment-item/comment-item.component';
 import { CommentService } from '../comment.service';
 import { Comment } from '../comment.model';
@@ -14,7 +14,7 @@ import { switchMap, map, Subscription } from 'rxjs';
   imports: [CommentItemComponent, CommonModule],
 })
 export class CommentListComponent implements OnInit, OnDestroy {
-  comments: Comment[] = [];
+  @Input() comments: Comment[] = [];
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -25,24 +25,21 @@ export class CommentListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const attractionIdObservableSub = this.attractionService
       .getAttractionIdObservable()
-      .pipe(
-        switchMap((attractionId: number | null) => {
-          if (attractionId !== null) {
-            this.commentService.fetchComments(attractionId);
-          }
-          return this.commentService
-            .getCommentsUpdated()
-            .pipe(map((comments: Comment[]) => ({ attractionId, comments })));
-        })
-      )
-      .subscribe(({ attractionId, comments }) => {
+      .subscribe((attractionId: number | null) => {
         if (attractionId !== null) {
-          this.comments = comments.filter(
-            (comment) => comment.attractionId === attractionId
-          );
+          this.commentService.clearComments(attractionId);
+          this.commentService.fetchComments(attractionId);
         }
       });
-    this.subscriptions.push(attractionIdObservableSub);
+
+    const commentsUpdatedSub = this.commentService
+      .getCommentsUpdated()
+      .subscribe((comments: Comment[]) => {
+        console.log('Updated comments received:', comments);
+        this.comments = comments;
+      });
+
+    this.subscriptions.push(attractionIdObservableSub, commentsUpdatedSub);
   }
 
   ngOnDestroy() {
