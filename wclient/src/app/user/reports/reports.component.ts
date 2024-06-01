@@ -13,12 +13,10 @@ import { CommonModule } from '@angular/common';
 export class ReportsComponent implements OnInit{
   reports: ReportPage[] = [];
 
-  constructor(
-    private reportPageService: ReportPageService
-  ){}
+  constructor(){}
 
   ngOnInit(): void {
-    this.reports.forEach((attraction) => {
+    this.reports.forEach(() => {
       this.reports = [...this.reports];
     });
   }
