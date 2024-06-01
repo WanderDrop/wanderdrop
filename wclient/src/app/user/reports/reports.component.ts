@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ReportPage } from '../../report-page/report-page.model';
-import { ReportPageService } from '../../report-page/report-page.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
