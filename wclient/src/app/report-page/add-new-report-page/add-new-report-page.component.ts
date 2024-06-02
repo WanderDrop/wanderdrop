@@ -44,6 +44,7 @@ export class AddNewReportPageComponent {
     const newReport = new ReportPage(
       this.attractionName,
       this.reportMessage,
+
     );
 
     const addReportSub = this.reportService
@@ -60,6 +61,9 @@ export class AddNewReportPageComponent {
       this.modalService.dismissAll();
   }
   onCancel() {
+    this.modalService.dismissAll();
+  }
+  onNavigateHome() {
     this.modalService.dismissAll();
   }
 }
