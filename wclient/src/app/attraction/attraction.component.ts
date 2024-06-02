@@ -21,9 +21,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ReportPage } from '../report-page/report-page.model';
 import { AddNewReportPageComponent } from '../report-page/add-new-report-page/add-new-report-page.component';
 import { DeleteReasonService } from '../shared/delete-reason.service';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 import { ReportPageService } from '../report-page/report-page.service';
 import { StorageService } from '../user/storage/storage.service';
+import { AuthStatusService } from '../user/auth/auth-status.service';
+import { AuthService } from '../user/auth/auth.service';
 
 @Component({
   selector: 'app-attraction',
@@ -55,6 +57,7 @@ export class AttractionComponent implements OnInit, OnDestroy {
 
   isAdmin = false;
   isAuthorized = false;
+  private authSubscription!: Subscription;
 
   @ViewChild('addCommentContent') addCommentContent!: TemplateRef<any>;
   @ViewChild('addReportPageContent') addReportPageContent!: TemplateRef<any>;
@@ -68,10 +71,16 @@ export class AttractionComponent implements OnInit, OnDestroy {
     private reportService: ReportPageService,
     private router: Router,
     private route: ActivatedRoute,
-    private deleteReasonService: DeleteReasonService
+    private deleteReasonService: DeleteReasonService,
+    private authService: AuthService,
+    private authStatusService: AuthStatusService
   ) {}
 
   ngOnInit(): void {
+    const token = StorageService.getToken();
+    const userRole = StorageService.getUserRole();
+    console.log('Stored token:', token);
+    console.log('Stored user role:', userRole);
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       const attractionSub = this.attractionService
@@ -102,9 +111,24 @@ export class AttractionComponent implements OnInit, OnDestroy {
       );
       this.subscriptions.push(reasonsSub);
     }
+
     this.isAdmin = StorageService.isAdminLoggedIn();
     this.isAuthorized =
       StorageService.isAdminLoggedIn() || StorageService.isUserLoggedIn();
+
+    console.log('Initial admin status:', this.isAdmin);
+    console.log('Initial authorized status:', this.isAuthorized);
+
+    this.authSubscription = combineLatest([
+      this.authStatusService.loggedInStatus$,
+      this.authStatusService.userRoleStatus$,
+    ]).subscribe(([isLoggedIn, userRole]) => {
+      this.isAuthorized = isLoggedIn;
+      this.isAdmin = isLoggedIn && userRole === 'ADMIN';
+
+      console.log('Updated admin status:', this.isAdmin);
+      console.log('Updated authorized status:', this.isAuthorized);
+    });
   }
 
   onNavigateHome() {

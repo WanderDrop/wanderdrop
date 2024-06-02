@@ -14,10 +14,12 @@ export class AuthStatusService {
   userRoleStatus$ = this.userRoleStatus.asObservable();
 
   updateLoginStatus(isLoggedIn: boolean) {
+    console.log('Updating logged in status to:', isLoggedIn);
     this.loggedInStatus.next(isLoggedIn);
   }
 
   updateUserRole(role: string) {
+    console.log('Updating user role status to:', role);
     this.userRoleStatus.next(role);
   }
 
