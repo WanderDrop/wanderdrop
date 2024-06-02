@@ -40,6 +40,7 @@ public class ReportServiceImpl implements ReportService {
                 .orElseThrow(() -> new IllegalArgumentException("Attraction with id " + attractionId + " not found"));
 
         Report report = reportMapper.mapToReport(reportDto, userRepository);
+        report.setReportHeading(attraction.getName());
         report.setAttraction(attraction);
         report.setCreatedBy(currentUser);
         report.setStatus(Status.ACTIVE);

@@ -1,46 +1,14 @@
-<div class="modal-body">
+<div class="modal-body position-relative p-4">
+  <button type="button" class="btn-close position-absolute end-0 me-3" aria-label="Close" (click)="onNavigateHome()"></button>
   <form (ngSubmit)="onAddReport()" #f="ngForm">
-    <div class="form-group mt-3 mb-5">
-      <i
-      class="bi bi-x position-absolute top-0 end-0 me-2"
-      style="cursor: pointer"
-      (click)="onClose()"
-    ></i>
-    <label for="reportHeading">Create report about "{{ attractionName }}"</label>
-    <div></div>
-    <input
-      type="text"
-      class="form-control mt-3"
-      id="reportHeading"
-      placeholder="Attraction's name..."
-      [(ngModel)]="attractionName"
-      name="attractionName"
-      required
-    />
-  </div>
-    <div class="form-group mb-5">
-      <label for="reportMessage" class="mb-2">Description</label>
-      <textarea class="form-control" id="reportMessage"
-        placeholder="Enter description here..." 
-        [(ngModel)]="reportMessage"
-        name="reportMessage"
-        rows="10" required></textarea>
+    <div class="form-group mb-4">
+      <label for="reportMessage" class="form-label">Report Message</label>
+      <textarea class="form-control" id="reportMessage" placeholder="Enter description here..." [(ngModel)]="reportMessage" name="reportMessage" rows="5" required></textarea>
     </div>
-    <div class="float-end">
-      <button
-        type="submit"
-        class="btn btn-primary me-3 py-2 px-4 btn-lg mb-3"
-        [disabled]="!f.valid"
-      >
-          Report
-        </button>
-        <button
-          type="button"
-          class="btn btn-secondary me-3 py-2 px-4 btn-lg mb-3"
-          (click)="onCancel()"
-        >
-          Close
-        </button>
-      </div>
-    </form>
+
+    <div class="d-flex justify-content-end">
+      <button type="submit" class="btn btn-danger me-2" [disabled]="!f.valid"> Report</button>
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">Close</button>
+    </div>
+  </form>
 </div>
