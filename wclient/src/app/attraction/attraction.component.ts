@@ -23,6 +23,7 @@ import { AddNewReportPageComponent } from '../report-page/add-new-report-page/ad
 import { DeleteReasonService } from '../shared/delete-reason.service';
 import { Subscription } from 'rxjs';
 import { ReportPageService } from '../report-page/report-page.service';
+import { StorageService } from '../user/storage/storage.service';
 
 @Component({
   selector: 'app-attraction',
@@ -51,6 +52,9 @@ export class AttractionComponent implements OnInit, OnDestroy {
 
   deletionReasons: { id: number; reasonMessage: string }[] = [];
   selectedReasonId: number | null = null;
+
+  isAdmin = false;
+  isAuthorized = false;
 
   @ViewChild('addCommentContent') addCommentContent!: TemplateRef<any>;
   @ViewChild('addReportPageContent') addReportPageContent!: TemplateRef<any>;
@@ -98,6 +102,9 @@ export class AttractionComponent implements OnInit, OnDestroy {
       );
       this.subscriptions.push(reasonsSub);
     }
+    this.isAdmin = StorageService.isAdminLoggedIn();
+    this.isAuthorized =
+      StorageService.isAdminLoggedIn() || StorageService.isUserLoggedIn();
   }
 
   onNavigateHome() {
@@ -120,17 +127,20 @@ export class AttractionComponent implements OnInit, OnDestroy {
     }
   }
 
-
   onAddNewReportPage() {
     const modalRef = this.modalService.open(AddNewReportPageComponent);
     if (this.attraction) {
       modalRef.componentInstance.attractionId = this.attraction.id;
       modalRef.componentInstance.dataChanged.subscribe(
-        (reportData: {reportHeading:  AttractionComponent["attractionName"], reportMessage: string}) =>{
-          this.reportService.addReport(this.attraction!.id, reportData)
-          .subscribe((newReport) => {
-            this.reports.push(newReport);
-          });
+        (reportData: {
+          reportHeading: AttractionComponent['attractionName'];
+          reportMessage: string;
+        }) => {
+          this.reportService
+            .addReport(this.attraction!.id, reportData)
+            .subscribe((newReport) => {
+              this.reports.push(newReport);
+            });
         }
       );
     }

@@ -21,6 +21,7 @@
         </div>
         <div class="float-end">
           <button
+            *ngIf="isAdmin"
             type="button"
             class="btn btn-primary me-3 py-2 px-4 btn-lg mb-2"
             (click)="openModify(modifyContent)"
@@ -37,6 +38,7 @@
           </ng-template>
 
           <button
+            *ngIf="isAdmin"
             type="button"
             class="btn btn-warning me-3 py-2 px-4 btn-lg mb-2"
             (click)="openDelete(deleteContent)"
@@ -49,6 +51,7 @@
           </ng-template>
 
           <button
+            *ngIf="isAuthorized"
             type="button"
             class="btn btn-danger py-2 px-4 btn-lg mb-2"
             (click)="onAddNewReportPage()"
@@ -81,6 +84,7 @@
 
     <div class="float-end">
       <button
+        *ngIf="isAuthorized"
         type="button"
         class="btn btn-primary me-3 py-2 px-4 btn-lg mb-1"
         (click)="onAddComment()"
