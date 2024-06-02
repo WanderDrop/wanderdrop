@@ -1,43 +1,61 @@
 import { Injectable } from '@angular/core';
 import { ReportPage } from './report-page.model';
-import { BehaviorSubject } from 'rxjs';
+import { Observable, catchError, of, retry } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { StorageService } from '../user/storage/storage.service';
+import { AttractionComponent } from '../attraction/attraction.component';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ReportPageService {  
-  reports:{[attractionId: number] : ReportPage[] } = {};
-  private reportsUpdated = new BehaviorSubject<ReportPage[]>([]);
-  
-  constructor() {}
+export class ReportPageService {
+  reports: ReportPage[] = [];
+  private baseUrl = `http://localhost:8080/api`;
 
-  getReportsUpdated() {
-    return this.reportsUpdated.asObservable();
+
+  constructor(private http: HttpClient) {}
+
+  public fetchReports() : Observable<any>{
+    return this.http.get<any>( `${this.baseUrl}/reportes`).pipe(
+      retry(3),
+      catchError((error) => {
+        console.error('Error fetching reports:', error);
+        return of ([]);
+      })
+    );
   }
 
-  getReports(attractionId: number) {
-    return this.reports[attractionId] || [];
+  addReport(
+    attractionId: number,
+    reportData:  {reportHeading:  AttractionComponent["attractionName"]; reportMessage: string}):
+  Observable<ReportPage>{
+    const token = StorageService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http
+    .post<ReportPage>(
+      `${this.baseUrl}/reportes/${attractionId}`,
+      reportData,
+      { headers }
+    )
   }
-
-  fetchReportPage(attractionId: number) {
-    const reports = this.reports[attractionId] || [];
-    this.reportsUpdated.next(reports);
-  }
-
-  addReportPage(reportPage: ReportPage) {
-    if (!this.reports[reportPage.attractionId]) {
-      this.reports[reportPage.attractionId] = [];
-    }
-    this.reports[reportPage.attractionId].push(reportPage);
-    this.reportsUpdated.next(this.reports[reportPage.attractionId]);
-  }
-
-  deleteReportPage(reportPageId: number, attractionId: number) {
-    if (this.reports[attractionId]) {
-      this.reports[attractionId] = this.reports[attractionId].filter(
-        (reportPage) => reportPage.reportId !== reportPageId
+  deleteReport(reportId: number): Observable<void> {
+    const token = StorageService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http
+      .put<void>(
+        `${this.baseUrl}/reportes/${reportId}`,
+        {},
+        { headers }
+      )
+      .pipe(
+        catchError((error) => {
+          console.error('Error deleting report:', error);
+          throw error;
+        })
       );
-      this.reportsUpdated.next(this.reports[attractionId]);
-    }
+  }
+
+  getReports(attractionId: number): Observable<ReportPage[]> {
+    return this.http.get<ReportPage[]>( `${this.baseUrl}/reportes/attractions/${attractionId}/active`);
   }
 }

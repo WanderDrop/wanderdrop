@@ -1,0 +1,22 @@
+package com.wanderdrop.wserver.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
+import java.util.UUID;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+    public class ReportDto {
+
+    private Long reportId;
+    private String reportHeading;
+    private String reportMessage;
+    private Long attractionId;
+    private UUID createdBy;
+    private Timestamp createdAt;
+
+}

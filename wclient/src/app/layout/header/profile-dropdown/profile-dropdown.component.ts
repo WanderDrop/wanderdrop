@@ -76,7 +76,9 @@ export class ProfileDropdownComponent implements AfterViewInit, OnDestroy {
     this.router.navigate(['activity']);
   }
 
-  onDisplayReports() {}
+  onDisplayReports() {
+    this.router.navigate(['reports']);
+  }
 
   onLogout() {
     StorageService.logout();

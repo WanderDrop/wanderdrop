@@ -1,78 +1,65 @@
 import { Component, EventEmitter, Input, NgZone, Output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../user/user.service';
 import { ReportPage } from '../report-page.model';
 import { ReportPageService } from '../report-page.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AttractionService } from '../../attraction/attraction.service';
+import { AttractionComponent } from '../../attraction/attraction.component';
+import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-add-new-report-page',
   standalone: true,
-  imports: [FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './add-new-report-page.component.html',
   styleUrl: './add-new-report-page.component.css',
 })
 export class AddNewReportPageComponent {
-  @Input() reportPageHeading: string = '';
-  @Input() reportPageText: string = '';
+  @Input() reportMessage: string = '';
   @Input() attractionId!: number;
+  @Input() attractionName: string = '';
   @Output() dataChanged = new EventEmitter<{
-    reportPageHeading: string;
-    reportPageText: string;
+    reportHeading: AttractionComponent["attractionName"];
+    reportMessage: string;
   }>();
-
+  private subscriptions: Subscription[] = [];
   constructor(
     private router: Router,
+    private reportService: ReportPageService,
     private ngZone: NgZone,
-    private modalService: NgbModal,
-    private reportPageService: ReportPageService,
-    private attractionService: AttractionService,
-    private userService: UserService
-  ) {}
-
+    private userService: UserService,
+    private modalService: NgbModal
+  ){}
   onClose() {
     this.ngZone.run(() => {
       this.router.navigate(['/home']);
     });
   }
+  onAddReport() {
+    const userId = this.userService.getDummyUser().UserId;
 
-  closeModal() {
-    this.modalService.dismissAll();
-  }
-  onSaveChanges() {
-    if (window.confirm('Are you sure you want to send a report?')) {
-      this.dataChanged.emit({
-        reportPageHeading: this.reportPageHeading,
-        reportPageText: this.reportPageText,
-      });
-    }
-    this.modalService.dismissAll();
-  }
-
-  onSubmit() {
-    const reportPage = new ReportPage(
-      this.attractionId,
-      this.reportPageHeading,
-      this.reportPageText,
-      this.userService.getDummyUser().UserId
+    const newReport = new ReportPage(
+      this.attractionName,
+      this.reportMessage,
     );
-    this.reportPageService.addReportPage(reportPage);
-    this.modalService.dismissAll();
-  }
 
+    const addReportSub = this.reportService
+      .addReport(this.attractionId, newReport)
+      .subscribe({
+        next: (response)=>{
+          this.reportService.reports.push(response);
+        },
+          error: (error) => { console.error('Error adding new report:', error);
+        },
+      });
+      this.subscriptions.push(addReportSub);
+      console.log("Report done");
+      this.modalService.dismissAll();
+  }
   onCancel() {
     this.modalService.dismissAll();
-  }
-
-  onAddReportPage() {
-    const reportPage = new ReportPage(
-      this.attractionId,
-      this.reportPageHeading,
-      this.reportPageText,
-      this.userService.getDummyUser().UserId
-    );
-    const newReportPageId = reportPage.reportId;
   }
 }
