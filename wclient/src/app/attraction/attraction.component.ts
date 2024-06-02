@@ -22,6 +22,7 @@ import { ReportPage } from '../report-page/report-page.model';
 import { AddNewReportPageComponent } from '../report-page/add-new-report-page/add-new-report-page.component';
 import { DeleteReasonService } from '../shared/delete-reason.service';
 import { Subscription } from 'rxjs';
+import { ReportPageService } from '../report-page/report-page.service';
 
 @Component({
   selector: 'app-attraction',
@@ -41,7 +42,7 @@ import { Subscription } from 'rxjs';
 })
 export class AttractionComponent implements OnInit, OnDestroy {
   attraction!: Attraction | undefined;
-  reportPage!: ReportPage;
+  reports!: ReportPage[];
   comments!: Comment[];
   attractionName: string = '';
   description: string = '';
@@ -52,7 +53,7 @@ export class AttractionComponent implements OnInit, OnDestroy {
   selectedReasonId: number | null = null;
 
   @ViewChild('addCommentContent') addCommentContent!: TemplateRef<any>;
-  @ViewChild('addReportPageContent') addReportPageContent!: TemplateRef<any>;
+  @ViewChild('addReportPageContent') addReport!: TemplateRef<any>;
 
   private subscriptions: Subscription[] = [];
 
@@ -60,6 +61,7 @@ export class AttractionComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private attractionService: AttractionService,
     private commentService: CommentService,
+    private reportService: ReportPageService,
     private router: Router,
     private route: ActivatedRoute,
     private deleteReasonService: DeleteReasonService
@@ -108,7 +110,15 @@ export class AttractionComponent implements OnInit, OnDestroy {
   onAddNewReportPage() {
     const modalRef = this.modalService.open(AddNewReportPageComponent);
     if (this.attraction) {
-      modalRef.componentInstance.attractionName = this.attraction.name;
+      modalRef.componentInstance.attractionId = this.attraction.id;
+      modalRef.componentInstance.dataChanged.subscribe(
+        (reportData: {reportHeading:  AttractionComponent["attractionName"], reportMessage: string}) =>{
+          this.reportService.addReport(this.attraction!.id, reportData)
+          .subscribe((newReport) => {
+            this.reports.push(newReport);
+          });
+        }
+      );
     }
   }
 
