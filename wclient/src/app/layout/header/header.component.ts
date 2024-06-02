@@ -81,6 +81,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     );
     this.subscriptions.push(userRoleSub);
+    console.log(this.isLoggedIn);
+    console.log(this.isAdmin);
   }
 
   ngAfterViewInit() {
