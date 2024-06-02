@@ -38,9 +38,9 @@ public class SecurityConfiguration {
                             .requestMatchers(HttpMethod.PUT, "/api/attractions/**").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.GET, "/api/deletion-reasons/**").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.POST, "/api/deletion-reasons").hasRole("ADMIN")
-                            .requestMatchers(HttpMethod.GET, "/api/reports/**").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/api/reports").hasAnyRole("ADMIN", "USER")
-                            .requestMatchers(HttpMethod.PUT, "/api/reports/**").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.GET, "/api/reportes/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/api/reportes").hasAnyRole("ADMIN", "USER")
+                            .requestMatchers(HttpMethod.PUT, "/api/reportes/**").hasRole("ADMIN")
                             .anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
