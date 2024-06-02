@@ -19,8 +19,8 @@ public class AttractionDto {
     private Double latitude;
     private Double longitude;
     private Status status;
-    private UUID createdBy;
-    private UUID updatedBy;
+    private Long createdBy;
+    private Long updatedBy;
     private Timestamp createdAt;
     private Timestamp updatedAt;
     private Long deletionReasonId;

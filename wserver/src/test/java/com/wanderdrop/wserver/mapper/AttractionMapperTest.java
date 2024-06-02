@@ -28,10 +28,10 @@ class AttractionMapperTest {
     @Test
     public void testMapToAttractionDto() {
         User createdBy = new User();
-        createdBy.setUserId(UUID.randomUUID());
+        createdBy.setUserId(1L);
 
         User updatedBy = new User();
-        updatedBy.setUserId(UUID.randomUUID());
+        updatedBy.setUserId(2L);
 
         Attraction attraction = new Attraction();
         attraction.setAttractionId(1L);
@@ -72,13 +72,13 @@ class AttractionMapperTest {
         attractionDto.setLatitude(123.45);
         attractionDto.setLongitude(67.89);
         attractionDto.setStatus(Status.ACTIVE);
-        attractionDto.setCreatedBy(createdById);
-        attractionDto.setUpdatedBy(updatedById);
+        attractionDto.setCreatedBy(1L);
+        attractionDto.setUpdatedBy(2L);
         attractionDto.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         attractionDto.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
-        when(userRepository.findById(createdById)).thenReturn(Optional.empty());
-        when(userRepository.findById(updatedById)).thenReturn(Optional.empty());
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+        when(userRepository.findById(2L)).thenReturn(Optional.empty());
 
         Attraction attraction = attractionMapper.mapToAttraction(attractionDto, userRepository);
 

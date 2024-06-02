@@ -15,5 +15,5 @@ import java.util.UUID;
 public class AuthenticationResponse {
     private String token;
     public Role role;
-    public UUID userId;
+    public Long userId;
 }

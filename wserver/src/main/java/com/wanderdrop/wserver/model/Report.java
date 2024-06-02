@@ -28,9 +28,9 @@ public class Report {
     private Status status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "attraction_id",referencedColumnName = "attraction_id", nullable = false, updatable = false )
+    @JoinColumn(name = "attraction_id",referencedColumnName = "attraction_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Attraction attractionId;
+    private Attraction attraction;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by",referencedColumnName = "user_id", nullable = false, updatable = false )

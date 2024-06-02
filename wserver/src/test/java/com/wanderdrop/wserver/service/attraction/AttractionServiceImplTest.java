@@ -51,12 +51,12 @@ class AttractionServiceImplTest {
     @BeforeEach
     public void setUp() {
         mockAdminUser = new User();
-        mockAdminUser.setUserId(UUID.randomUUID());
+        mockAdminUser.setUserId(1L);
         mockAdminUser.setEmail("admin@example.com");
         mockAdminUser.setRole(Role.ADMIN);
 
         mockRegularUser = new User();
-        mockRegularUser.setUserId(UUID.randomUUID());
+        mockRegularUser.setUserId(2L);
         mockRegularUser.setEmail("user@example.com");
         mockRegularUser.setRole(Role.USER);
     }

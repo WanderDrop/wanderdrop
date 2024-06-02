@@ -25,7 +25,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue
     @Column(name= "user_id")
-    private UUID userId;
+    private Long userId;
 
     @Column(name= "email", unique = true, nullable = false)
     private String email;

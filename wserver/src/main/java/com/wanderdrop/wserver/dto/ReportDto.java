@@ -16,9 +16,9 @@ public class ReportDto {
     private Long reportId;
     private String reportHeading;
     private String reportMessage;
-    private Status status;
+   // private Status status;
     private Long attractionId;
-    private UUID createdBy;
+    private Long createdBy;
     private Timestamp createdAt;
 
 }
