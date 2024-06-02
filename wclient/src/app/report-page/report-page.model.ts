@@ -1,101 +1,82 @@
-import { AddNewAttractionComponent } from '../attraction/add-new-attraction/add-new-attraction.component';
 import { ReportPageStatus } from './report-page-status.enum';
 
 export class ReportPage {
-  private _reportId!: number;
-  private _reportHeading: string;
-  private _reportMessage: string;
-  private _status: ReportPageStatus;
-  private _attractionId!: number;
-  private _createdBy!: number;
-  private _createdAt: Date;
-  static _reportId:any;
+  reportId!: number;
+  reportHeading: string;
+  reportMessage: string;
+  status: string;
+  attractionId!: number;
+  createdBy!: number;
+  createdAt: Date;
 
 
   constructor(
-    attractionId:number,
     reportHeading: string,
     reportMessage: string,
-    createdBy: number
+    attractionId: number,
+    createdBy: number,
+    status?: string,
+    reportId?: number,
+    createdAt?: Date
   ) {
-    this._reportHeading = reportHeading;
-    this._reportMessage = reportMessage;
-    this._createdBy = createdBy;
-    this._attractionId = attractionId;
-    this._createdAt = new Date();
-    this._status = ReportPageStatus.Active;
+    this.reportHeading = reportHeading;
+    this.reportMessage = reportMessage;
+    this.createdBy = createdBy;
+    this.attractionId = attractionId;
+    this.createdAt =  createdAt ?? new Date();
+    this.status = status ?? 'active';
   }
 
-  get reportId(): number {
+  get _reportId(): number {
     return this._reportId;
   }
 
-  set reportId(value: number) {
+  set _reportId(value: number) {
     this._reportId = value;
   }
 
-  get reportHeading(): string{
+  get _reportHeading(): string {
     return this._reportHeading;
   }
 
-  set reportHeading(value: string) {
+  set _reportHeading(value: string) {
     this._reportHeading = value;
 
   }
 
-  get reportMessage(): string {
+  get _reportMessage(): string {
     return this._reportMessage;
   }
 
-  set reportMessage(value: string) {
+  set _reportMessage(value: string) {
     this._reportMessage = value;
   }
 
-  get status(): ReportPageStatus {
+  get _status(): ReportPageStatus {
     return this._status;
   }
 
-  set status(value: ReportPageStatus) {
+  set _status(value: ReportPageStatus) {
     this._status = value;
   }
 
-  get createdBy(): number {
+  get _createdBy(): number {
     return this._createdBy;
   }
 
-  set createdBy(value: number) {
+  set _createdBy(value: number) {
     this._createdBy = value;
   }
 
-  set createdAt(value:Date){
+  set _createdAt(value: Date) {
     this.createdAt = value
   }
 
-  get createdAt():Date{
+  get _createdAt(): Date {
     return this._createdAt;
   }
 
-  get attractionId(): number {
+  get _attractionId(): number {
     return this._attractionId;
   }
-  static fromResponse(response: any): ReportPage {
-    const report = new ReportPage(
-      response.attractionId,
-      response.reportHeading,
-      response.reportMessage,
-      response.createdBy,
-    );
-    report._reportId = response.reportId;
-    report.createdAt = new Date(response.createdAt);
-    return report;
-  }
-
-  toRequestPayLoad(){
-    return {
-      attractionId: this.attractionId,
-      reportHeading: this.reportHeading,
-      reportMessage: this.reportMessage,
-    }
-  }
-  
 }
