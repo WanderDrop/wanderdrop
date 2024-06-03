@@ -1,7 +1,9 @@
 package com.wanderdrop.wserver.controller;
 
+import com.wanderdrop.wserver.dto.AttractionDto;
 import com.wanderdrop.wserver.dto.CommentDto;
 import com.wanderdrop.wserver.service.comment.CommentService;
+import com.wanderdrop.wserver.service.comment.CommentServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,14 +13,21 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
+    private final CommentServiceImpl commentServiceImpl;
 
-    public CommentController(CommentService commentService) {
+    public CommentController(CommentService commentService, CommentServiceImpl commentServiceImpl) {
         this.commentService = commentService;
+        this.commentServiceImpl = commentServiceImpl;
     }
 
     @GetMapping("/attraction/{attractionId}")
     public List<CommentDto> getAllActiveComments(@PathVariable Long attractionId) {
         return commentService.getAllActiveComments(attractionId);
+    }
+
+    @GetMapping("/user")
+    public List<CommentDto> getCommentsForCurrentUser() {
+        return commentServiceImpl.getCommentsForCurrentUser();
     }
 
     @GetMapping("/{id}")
