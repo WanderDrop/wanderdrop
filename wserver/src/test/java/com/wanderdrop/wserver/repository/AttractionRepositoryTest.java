@@ -50,6 +50,19 @@ public class AttractionRepositoryTest {
     }
 
     @Test
+    public void testFindByCreatedBy() {
+        Attraction attraction1 = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        Attraction attraction2 = new Attraction(null, "Attraction 2", "Description 2", 32.1234, 17.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        attractionRepository.save(attraction1);
+        attractionRepository.save(attraction2);
+
+        List<Attraction> attractions = attractionRepository.findByCreatedBy(user);
+
+        assertThat(attractions).hasSize(2);
+        assertThat(attractions).contains(attraction1, attraction2);
+    }
+
+    @Test
     public void testFindNonExistingAttraction() {
         Optional<Attraction> found = attractionRepository.findById(999L);
         assertThat(found).isEmpty();
