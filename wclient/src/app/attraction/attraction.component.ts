@@ -72,15 +72,10 @@ export class AttractionComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private deleteReasonService: DeleteReasonService,
-    private authService: AuthService,
     private authStatusService: AuthStatusService
   ) {}
 
   ngOnInit(): void {
-    const token = StorageService.getToken();
-    const userRole = StorageService.getUserRole();
-    console.log('Stored token:', token);
-    console.log('Stored user role:', userRole);
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       const attractionSub = this.attractionService
@@ -128,6 +123,12 @@ export class AttractionComponent implements OnInit, OnDestroy {
 
       console.log('Updated admin status:', this.isAdmin);
       console.log('Updated authorized status:', this.isAuthorized);
+
+      if (this.isAdmin) {
+        this.deleteReasonService.forceFetchReasons();
+      } else {
+        this.deleteReasonService.clearReasons();
+      }
     });
   }
 

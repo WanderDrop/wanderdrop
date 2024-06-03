@@ -40,11 +40,18 @@ export class DeleteReasonService implements OnDestroy {
     this.subscriptions.push(sub);
   }
 
+  forceFetchReasons() {
+    this.fetchReasons();
+  }
+
+  clearReasons() {
+    this._reasons.next([]);
+  }
+
   postReason(reason: string) {
     const token = StorageService.getToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    // Return a response that includes the id and reasonMessage of the newly created reason
     return this.http.post<{ id: number; reasonMessage: string }>(
       'http://localhost:8080/api/deletion-reasons',
       { reasonMessage: reason },
