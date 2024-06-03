@@ -21,30 +21,38 @@
     >
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <a
+          *ngIf="isUser || isAdmin"
           style="cursor: pointer"
           class="dropdown-item"
           (click)="onDisplayProfile()"
           >Your profile</a
         >
         <a
+          *ngIf="isAdmin"
           style="cursor: pointer"
           class="dropdown-item"
           (click)="onAddNewUser()"
           >Add new user</a
         >
         <a
+          *ngIf="isUser || isAdmin"
           style="cursor: pointer"
           class="dropdown-item"
           (click)="onDisplayActivity()"
           >Your activity</a
         >
         <a
+          *ngIf="isAdmin"
           style="cursor: pointer"
           class="dropdown-item"
           (click)="onDisplayReports()"
           >Reports</a
         >
-        <a style="cursor: pointer" class="dropdown-item" (click)="onLogout()"
+        <a
+          *ngIf="isUser || isAdmin"
+          style="cursor: pointer"
+          class="dropdown-item"
+          (click)="onLogout()"
           >Log out</a
         >
       </div>

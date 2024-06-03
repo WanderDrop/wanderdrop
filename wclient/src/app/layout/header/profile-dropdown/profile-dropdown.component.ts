@@ -6,6 +6,7 @@ import {
   ElementRef,
   HostListener,
   OnDestroy,
+  OnInit,
   QueryList,
   Renderer2,
   ViewChildren,
@@ -22,7 +23,13 @@ import { StorageService } from '../../../user/storage/storage.service';
   templateUrl: './profile-dropdown.component.html',
   styleUrl: './profile-dropdown.component.css',
 })
-export class ProfileDropdownComponent implements AfterViewInit, OnDestroy {
+export class ProfileDropdownComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
+  isAdmin = false;
+  isUser = false;
+  isLoggedIn = false;
+
   @ViewChildren('smallDropdownMenu') dropdownMenuSmall!: QueryList<ElementRef>;
   screenWidth: number = window.innerWidth;
   private subscriptions: Subscription[] = [];
@@ -33,6 +40,17 @@ export class ProfileDropdownComponent implements AfterViewInit, OnDestroy {
     private router: Router,
     private authStatusService: AuthStatusService
   ) {}
+
+  ngOnInit(): void {
+    this.updateUserStatus();
+    const authSub = this.authStatusService.loggedInStatus$.subscribe(
+      (isLoggedIn) => {
+        this.isLoggedIn = isLoggedIn;
+        this.updateUserStatus();
+      }
+    );
+    this.subscriptions.push(authSub);
+  }
 
   @HostListener('window:resize')
   onResize() {
@@ -66,6 +84,12 @@ export class ProfileDropdownComponent implements AfterViewInit, OnDestroy {
         this.renderer.removeClass(dropdownMenu, 'no-overlap');
       }
     });
+  }
+
+  updateUserStatus() {
+    this.isAdmin = StorageService.isAdminLoggedIn();
+    this.isUser = StorageService.isUserLoggedIn();
+    this.isLoggedIn = this.isAdmin || this.isUser;
   }
 
   onDisplayProfile() {
