@@ -1,5 +1,11 @@
 <div class="modal-body">
   <form (ngSubmit)="onSubmit()" [formGroup]="commentForm">
+    <button
+      type="button"
+      class="btn-close position-absolute end-0 me-2"
+      aria-label="Close"
+      (click)="onCancel()"
+    ></button>
     <div class="form-group mb-3">
       <label for="commentHeading" class="mb-2">Comment heading</label>
       <input
