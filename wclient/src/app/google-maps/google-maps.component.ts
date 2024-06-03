@@ -1,12 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  NgZone,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
@@ -29,7 +22,6 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
   infoContent = '';
   zoom = 12;
   center!: google.maps.LatLngLiteral | null;
-  // private positionSubscription!: Subscription;
   private mapInitialized = false;
   private subscriptions: Subscription[] = [];
 
@@ -117,10 +109,6 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
     this.isAdmin = StorageService.isAdminLoggedIn();
     this.isUser = StorageService.isUserLoggedIn();
     this.isLoggedIn = this.isAdmin || this.isUser;
-
-    console.log('isAdmin:', this.isAdmin);
-    console.log('isUser:', this.isUser);
-    console.log('isLoggedIn:', this.isLoggedIn);
   }
 
   initMap(): void {
@@ -146,18 +134,15 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
         this.addAttractionMarkers();
       })
       .catch((error: any) => {
-        console.error('Error loading Google Maps JavaScript API: ', error);
+        console.error('Error loading Google Maps JavaScript API:', error);
       });
   }
 
   addAttractionMarkers() {
     this.attractionService.fetchAttractions().subscribe((ms) => {
-      // this.addAttractionMarkers();
       this.attractionService.attractions = ms.map((m: any) => {
         return { ...m, id: m.attractionId };
       });
-
-      console.log('Got markers', ms);
 
       ms.forEach((m: any) => {
         this.mapService.addMarker(m.latitude, m.longitude, m.attractionId);

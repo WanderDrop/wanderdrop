@@ -107,29 +107,27 @@ export class AttractionComponent implements OnInit, OnDestroy {
       this.subscriptions.push(reasonsSub);
     }
 
-    this.isAdmin = StorageService.isAdminLoggedIn();
-    this.isAuthorized =
-      StorageService.isAdminLoggedIn() || StorageService.isUserLoggedIn();
-
-    console.log('Initial admin status:', this.isAdmin);
-    console.log('Initial authorized status:', this.isAuthorized);
-
-    this.authSubscription = combineLatest([
-      this.authStatusService.loggedInStatus$,
-      this.authStatusService.userRoleStatus$,
-    ]).subscribe(([isLoggedIn, userRole]) => {
-      this.isAuthorized = isLoggedIn;
-      this.isAdmin = isLoggedIn && userRole === 'ADMIN';
-
-      console.log('Updated admin status:', this.isAdmin);
-      console.log('Updated authorized status:', this.isAuthorized);
-
-      if (this.isAdmin) {
-        this.deleteReasonService.forceFetchReasons();
-      } else {
-        this.deleteReasonService.clearReasons();
+    this.authSubscription = this.authStatusService.loggedInStatus$.subscribe(
+      (isLoggedIn) => {
+        this.isAuthorized = isLoggedIn;
+        if (isLoggedIn) {
+          this.authStatusService.userRoleStatus$.subscribe((userRole) => {
+            this.isAdmin = userRole === 'ADMIN';
+            if (this.isAdmin) {
+              this.deleteReasonService.forceFetchReasons();
+              const reasonsSub = this.deleteReasonService.reasons.subscribe(
+                (reasons) => {
+                  this.deletionReasons = reasons;
+                }
+              );
+              this.subscriptions.push(reasonsSub);
+            } else {
+              this.deleteReasonService.clearReasons();
+            }
+          });
+        }
       }
-    });
+    );
   }
 
   onNavigateHome() {
@@ -193,17 +191,17 @@ export class AttractionComponent implements OnInit, OnDestroy {
           this.selectedReasonId = result.reasonId;
           this.attractionService
             .deleteAttraction(this.attraction.id, this.selectedReasonId!)
-            .subscribe(
-              () => {
+            .subscribe({
+              next: () => {
                 this.attractionService.removeAttractionFromList(
                   this.attraction!.id
                 );
                 this.router.navigate(['/home']);
               },
-              (error) => {
+              error: (error) => {
                 console.error('Error deleting attraction:', error);
-              }
-            );
+              },
+            });
         }
       })
       .catch((reason) => {

@@ -35,7 +35,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
     const commentsUpdatedSub = this.commentService
       .getCommentsUpdated()
       .subscribe((comments: Comment[]) => {
-        console.log('Updated comments received:', comments);
         this.comments = comments;
       });
 

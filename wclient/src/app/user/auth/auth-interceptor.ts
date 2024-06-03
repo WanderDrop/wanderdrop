@@ -22,14 +22,12 @@ export class AuthInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    console.log('Interceptor executed');
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           StorageService.logout();
           this.authStatusService.updateLoggedInStatus();
           this.router.navigate(['/login']);
-          console.log('TEST');
         }
         return throwError(() => error);
       })
