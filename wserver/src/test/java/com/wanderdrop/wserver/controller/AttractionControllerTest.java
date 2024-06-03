@@ -93,6 +93,78 @@ class AttractionControllerTest {
         assertEquals(2, attractions.size());
     }
 
+    @Test
+    void testGetUserAttractions() throws Exception {
+        user = new User();
+        user.setEmail("testuser@test.com");
+        user.setPassword(new BCryptPasswordEncoder().encode("password"));
+        user.setFirstName("Firstname");
+        user.setLastName("Lastname");
+        user.setRole(Role.USER);
+        user.setStatus(Status.ACTIVE);
+        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        userRepository.save(user);
+
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+        authenticationRequest.setEmail("testuser@test.com");
+        authenticationRequest.setPassword("password");
+
+        MvcResult result = mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(authenticationRequest)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String response = result.getResponse().getContentAsString();
+        String token = JsonPath.parse(response).read("$.token");
+
+        Attraction attraction1 = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        Attraction attraction2 = new Attraction(null, "Attraction 2", "Description 2", 32.1234, 17.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        attractionRepository.save(attraction1);
+        attractionRepository.save(attraction2);
+
+        mockMvc.perform(get("/api/attractions/user")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
+    }
+
+    @Test
+    void testGetUserAttractionsNoAttractions() throws Exception {
+        user = new User();
+        user.setEmail("testuser@test.com");
+        user.setPassword(new BCryptPasswordEncoder().encode("password"));
+        user.setFirstName("Firstname");
+        user.setLastName("Lastname");
+        user.setRole(Role.USER);
+        user.setStatus(Status.ACTIVE);
+        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        userRepository.save(user);
+
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+        authenticationRequest.setEmail("testuser@test.com");
+        authenticationRequest.setPassword("password");
+
+        MvcResult result = mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(authenticationRequest)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String response = result.getResponse().getContentAsString();
+        String token = JsonPath.parse(response).read("$.token");
+
+        mockMvc.perform(get("/api/attractions/user")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
+    void testGetUserAttractionsUnauthorized() throws Exception {
+        mockMvc.perform(get("/api/attractions/user"))
+                .andExpect(status().isForbidden());
+    }
 
     @Test
     void testGetAttractionById() throws Exception {
