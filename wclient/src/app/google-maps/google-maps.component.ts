@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 import { MapService } from './map.service';
 import { AttractionService } from '../attraction/attraction.service';
 import { Subscription } from 'rxjs';
+import { StorageService } from '../user/storage/storage.service';
+import { AuthStatusService } from '../user/auth/auth-status.service';
 
 @Component({
   selector: 'app-google-maps',
@@ -31,6 +33,10 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
   private mapInitialized = false;
   private subscriptions: Subscription[] = [];
 
+  isUser = false;
+  isAdmin = false;
+  isLoggedIn = false;
+
   options: google.maps.MapOptions = {
     mapTypeId: 'hybrid',
     zoomControl: false,
@@ -47,10 +53,20 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
     private router: Router,
     private mapService: MapService,
     private ngZone: NgZone,
-    private attractionService: AttractionService
+    private attractionService: AttractionService,
+    private authStatusService: AuthStatusService
   ) {}
 
   ngOnInit() {
+    this.updateUserStatus();
+    const authSub = this.authStatusService.loggedInStatus$.subscribe(
+      (isLoggedIn) => {
+        this.isLoggedIn = isLoggedIn;
+        this.updateUserStatus();
+      }
+    );
+    this.subscriptions.push(authSub);
+
     let newAttractionCreated = false;
     this.center = this.mapService.getLastCenter();
 
@@ -95,6 +111,12 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
         }
       });
     this.subscriptions.push(newAttractionLocationSub);
+  }
+
+  updateUserStatus() {
+    this.isAdmin = StorageService.isAdminLoggedIn();
+    this.isUser = StorageService.isUserLoggedIn();
+    this.isLoggedIn = this.isAdmin || this.isUser;
   }
 
   initMap(): void {
@@ -157,7 +179,9 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
   }
 
   click(event: google.maps.MapMouseEvent) {
-    if (event.latLng) {
+    this.updateUserStatus();
+
+    if (this.isLoggedIn && (this.isUser || this.isAdmin) && event.latLng) {
       const position = {
         lat: event.latLng.lat(),
         lng: event.latLng.lng(),
