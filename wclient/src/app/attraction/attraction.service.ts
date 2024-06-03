@@ -49,32 +49,6 @@ export class AttractionService {
       );
   }
 
-  fetchUserActiveAttractions(): Observable<Attraction[]> {
-    const token = StorageService.getToken();
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this.fetchUserAttractions().pipe(
-      map((attractions) =>
-        attractions.filter(
-          (attraction) => attraction.status === AttractionStatus.Active
-        )
-      )
-    );
-  }
-
-  fetchUserDeletedAttractions(): Observable<Attraction[]> {
-    const token = StorageService.getToken();
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this.fetchUserAttractions().pipe(
-      map((attractions) =>
-        attractions.filter(
-          (attraction) => attraction.status === AttractionStatus.Deleted
-        )
-      )
-    );
-  }
-
   addAttraction(attraction: Attraction): Observable<Attraction> {
     const token = StorageService.getToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);

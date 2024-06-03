@@ -1,7 +1,11 @@
 <div class="container mt-4">
   <h2 class="mb-3">Your Attractions</h2>
   <ul class="list-group" *ngIf="attractions.length > 0; else noAttractions">
-    <li class="list-group-item" *ngFor="let attraction of attractions">
+    <li
+      class="list-group-item"
+      *ngFor="let attraction of attractions"
+      [ngClass]="{ 'deleted-attraction': attraction.status === 'DELETED' }"
+    >
       <h5 class="mb-1 text-primary">{{ attraction.name }}</h5>
       <p class="mb-0">{{ attraction.description }}</p>
       <span *ngIf="attraction.status === 'DELETED'" class="text-danger"
