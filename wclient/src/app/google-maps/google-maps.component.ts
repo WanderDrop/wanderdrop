@@ -117,6 +117,10 @@ export class GoogleMapsComponent implements OnInit, OnDestroy {
     this.isAdmin = StorageService.isAdminLoggedIn();
     this.isUser = StorageService.isUserLoggedIn();
     this.isLoggedIn = this.isAdmin || this.isUser;
+
+    console.log('isAdmin:', this.isAdmin);
+    console.log('isUser:', this.isUser);
+    console.log('isLoggedIn:', this.isLoggedIn);
   }
 
   initMap(): void {

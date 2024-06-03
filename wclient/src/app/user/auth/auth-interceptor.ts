@@ -8,10 +8,15 @@ import {
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, catchError, throwError } from 'rxjs';
+import { StorageService } from '../storage/storage.service';
+import { AuthStatusService } from './auth-status.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authStatusService: AuthStatusService
+  ) {}
 
   intercept(
     req: HttpRequest<any>,
@@ -20,11 +25,11 @@ export class AuthInterceptor implements HttpInterceptor {
     console.log('Interceptor executed');
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-        console.log('HTTP Error intercepted:', error);
         if (error.status === 401) {
-          console.log('401 Unauthorized Error');
-          console.log('JWT token has expired, redirecting to login...');
+          StorageService.logout();
+          this.authStatusService.updateLoggedInStatus();
           this.router.navigate(['/login']);
+          console.log('TEST');
         }
         return throwError(() => error);
       })

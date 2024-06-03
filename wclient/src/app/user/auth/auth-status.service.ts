@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,5 +27,11 @@ export class AuthStatusService {
   logout() {
     this.loggedInStatus.next(false);
     this.userRoleStatus.next('');
+  }
+
+  updateLoggedInStatus() {
+    const isAdminLoggedIn = StorageService.isAdminLoggedIn();
+    const isUserLoggedIn = StorageService.isUserLoggedIn();
+    this.loggedInStatus.next(isAdminLoggedIn || isUserLoggedIn);
   }
 }
