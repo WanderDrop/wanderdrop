@@ -4,6 +4,7 @@ import { BehaviorSubject, catchError, retry, of, Observable, map } from 'rxjs';
 import { MarkerService } from '../google-maps/marker.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { StorageService } from '../user/storage/storage.service';
+import { AttractionStatus } from './attraction-status.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +30,49 @@ export class AttractionService {
     return this.http
       .get<Attraction>(`http://localhost:8080/api/attractions/${id}`)
       .pipe(map((response) => Attraction.fromResponse(response)));
+  }
+
+  public fetchUserAttractions(): Observable<Attraction[]> {
+    const token = StorageService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http
+      .get<Attraction[]>(`http://localhost:8080/api/attractions/user`, {
+        headers,
+      })
+      .pipe(
+        retry(3),
+        catchError((error) => {
+          console.error('Error fetching user attractions:', error);
+          return of([]);
+        })
+      );
+  }
+
+  fetchUserActiveAttractions(): Observable<Attraction[]> {
+    const token = StorageService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.fetchUserAttractions().pipe(
+      map((attractions) =>
+        attractions.filter(
+          (attraction) => attraction.status === AttractionStatus.Active
+        )
+      )
+    );
+  }
+
+  fetchUserDeletedAttractions(): Observable<Attraction[]> {
+    const token = StorageService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.fetchUserAttractions().pipe(
+      map((attractions) =>
+        attractions.filter(
+          (attraction) => attraction.status === AttractionStatus.Deleted
+        )
+      )
+    );
   }
 
   addAttraction(attraction: Attraction): Observable<Attraction> {

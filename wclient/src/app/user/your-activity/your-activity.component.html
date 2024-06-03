@@ -4,6 +4,9 @@
     <li class="list-group-item" *ngFor="let attraction of attractions">
       <h5 class="mb-1 text-primary">{{ attraction.name }}</h5>
       <p class="mb-0">{{ attraction.description }}</p>
+      <span *ngIf="attraction.status === 'DELETED'" class="text-danger"
+        >DELETED</span
+      >
     </li>
   </ul>
   <ng-template #noAttractions>

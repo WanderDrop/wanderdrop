@@ -24,7 +24,7 @@ export class YourActivityComponent implements OnInit {
 
   ngOnInit(): void {
     this.attractionService
-      .fetchAttractions()
+      .fetchUserAttractions()
       .pipe(
         switchMap((attractions: Attraction[]) => {
           this.attractions = attractions;
@@ -32,14 +32,12 @@ export class YourActivityComponent implements OnInit {
             attractionId: number;
             comments: Comment[];
           }>[] = attractions.map((attraction: Attraction) =>
-            this.commentService
-              .getComments(attraction.id)
-              .pipe(
-                map((comments: Comment[]) => ({
-                  attractionId: attraction.id,
-                  comments,
-                }))
-              )
+            this.commentService.getComments(attraction.id).pipe(
+              map((comments: Comment[]) => ({
+                attractionId: attraction.id,
+                comments,
+              }))
+            )
           );
           return forkJoin(commentsObservables);
         })
