@@ -4,7 +4,7 @@
     <li
       class="list-group-item"
       *ngFor="let attraction of attractions"
-      [ngClass]="{ 'deleted-attraction': attraction.status === 'DELETED' }"
+      [ngClass]="{ 'deleted-item': attraction.status === 'DELETED' }"
     >
       <h5 class="mb-1 text-primary">{{ attraction.name }}</h5>
       <p class="mb-0">{{ attraction.description }}</p>
@@ -19,9 +19,16 @@
 
   <h2 class="mt-5 mb-3">Your Comments</h2>
   <ul class="list-group" *ngIf="comments.length > 0; else noComments">
-    <li class="list-group-item" *ngFor="let comment of comments">
+    <li
+      class="list-group-item"
+      *ngFor="let comment of comments"
+      [ngClass]="{ 'deleted-item': comment.status === 'DELETED' }"
+    >
       <h5 class="mb-1 text-primary">{{ comment.commentHeading }}</h5>
       <p class="mb-0">{{ comment.commentText }}</p>
+      <span *ngIf="comment.status === 'DELETED'" class="text-danger"
+        >DELETED</span
+      >
     </li>
   </ul>
   <ng-template #noComments>

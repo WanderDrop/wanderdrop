@@ -28,27 +28,11 @@ export class YourActivityComponent implements OnInit {
       .pipe(
         switchMap((attractions: Attraction[]) => {
           this.attractions = attractions;
-          const commentsObservables: Observable<{
-            attractionId: number;
-            comments: Comment[];
-          }>[] = attractions.map((attraction: Attraction) =>
-            this.commentService.getComments(attraction.id).pipe(
-              map((comments: Comment[]) => ({
-                attractionId: attraction.id,
-                comments,
-              }))
-            )
-          );
-          return forkJoin(commentsObservables);
+          return this.commentService.fetchUserComments();
         })
       )
-      .subscribe(
-        (commentGroups: { attractionId: number; comments: Comment[] }[]) => {
-          this.comments = commentGroups.flatMap(
-            (group: { attractionId: number; comments: Comment[] }) =>
-              group.comments
-          );
-        }
-      );
+      .subscribe((comments: Comment[]) => {
+        this.comments = comments;
+      });
   }
 }

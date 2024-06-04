@@ -17,7 +17,8 @@ public class CommentMapper {
                 comment.getCreatedBy() != null ? comment.getCreatedBy().getUsername() : null,
                 comment.getCreatedAt(),
                 comment.getDeletionReason() != null ? comment.getDeletionReason().getDeletionReasonId() : null,
-                comment.getAttraction() != null ? comment.getAttraction().getAttractionId() : null
+                comment.getAttraction() != null ? comment.getAttraction().getAttractionId() : null,
+                comment.getStatus()
         );
     }
 
