@@ -10,6 +10,7 @@ import com.wanderdrop.wserver.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Service
@@ -41,5 +42,15 @@ public class UserServiceImpl implements UserService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public User updateUser(UUID userId, String firstName, String lastName) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userId));
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        return userRepository.save(user);
     }
 }

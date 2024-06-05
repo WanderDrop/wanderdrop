@@ -1,6 +1,8 @@
 package com.wanderdrop.wserver.controller;
 
 import com.wanderdrop.wserver.dto.PasswordChangeRequest;
+import com.wanderdrop.wserver.dto.UpdateUserRequest;
+import com.wanderdrop.wserver.model.User;
 import com.wanderdrop.wserver.service.jwt.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,5 +26,11 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Old password is incorrect");
         }
+    }
+
+    @PutMapping("/{userId}/update")
+    public ResponseEntity<?> updateUser(@PathVariable UUID userId, @RequestBody UpdateUserRequest request) {
+        User updatedUser = userService.updateUser(userId, request.getFirstName(), request.getLastName());
+        return ResponseEntity.ok(updatedUser);
     }
 }
