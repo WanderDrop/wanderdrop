@@ -1,4 +1,4 @@
 export enum AttractionStatus {
-  Active = 'active',
-  Deleted = 'deleted',
+  Active = 'ACTIVE',
+  Deleted = 'DELETED',
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Comment } from './comment.model';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { StorageService } from '../user/storage/storage.service';
 
@@ -38,6 +38,19 @@ export class CommentService {
         console.error('Error fetching comments:', error);
       },
     });
+  }
+
+  fetchUserComments(): Observable<Comment[]> {
+    const token = StorageService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http
+      .get<Comment[]>(`${this.baseUrl}/comments/user`, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error fetching user comments:', error);
+          return of([]);
+        })
+      );
   }
 
   addComment(

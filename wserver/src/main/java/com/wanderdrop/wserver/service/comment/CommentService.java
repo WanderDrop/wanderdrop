@@ -8,6 +8,7 @@ import java.util.List;
 public interface CommentService {
     List<CommentDto> getAllActiveComments(Long attractionId);
     CommentDto getCommentById(Long id);
+    List<CommentDto> getCommentsForCurrentUser();
     CommentDto createComment(CommentDto commentDto, Long attractionId);
     CommentDto updateComment(Long id, CommentDto commentDto);
     void deleteComment(Long id, Long deletionReasonId);

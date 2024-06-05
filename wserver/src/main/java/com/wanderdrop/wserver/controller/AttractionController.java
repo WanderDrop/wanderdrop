@@ -25,6 +25,11 @@ public class AttractionController {
         return attractionServiceImpl.getAttractionById(id);
     }
 
+    @GetMapping("/user")
+    public List<AttractionDto> getAttractionsForCurrentUser() {
+        return attractionServiceImpl.getAttractionsForCurrentUser();
+    }
+
     @PostMapping
     public AttractionDto createAttraction(@RequestBody AttractionDto attractionDTO) {
         return attractionServiceImpl.saveAttraction(attractionDTO);

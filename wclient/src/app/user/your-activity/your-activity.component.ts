@@ -5,17 +5,20 @@ import { AttractionService } from '../../attraction/attraction.service';
 import { CommentService } from '../../comment/comment.service';
 import { CommonModule } from '@angular/common';
 import { switchMap, map, forkJoin, Observable } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-your-activity',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './your-activity.component.html',
   styleUrl: './your-activity.component.css',
 })
 export class YourActivityComponent implements OnInit {
   attractions: Attraction[] = [];
   comments: Comment[] = [];
+  attractionFilter: string = 'ALL';
+  commentFilter: string = 'ALL';
 
   constructor(
     private attractionService: AttractionService,
@@ -24,33 +27,15 @@ export class YourActivityComponent implements OnInit {
 
   ngOnInit(): void {
     this.attractionService
-      .fetchAttractions()
+      .fetchUserAttractions()
       .pipe(
         switchMap((attractions: Attraction[]) => {
           this.attractions = attractions;
-          const commentsObservables: Observable<{
-            attractionId: number;
-            comments: Comment[];
-          }>[] = attractions.map((attraction: Attraction) =>
-            this.commentService
-              .getComments(attraction.id)
-              .pipe(
-                map((comments: Comment[]) => ({
-                  attractionId: attraction.id,
-                  comments,
-                }))
-              )
-          );
-          return forkJoin(commentsObservables);
+          return this.commentService.fetchUserComments();
         })
       )
-      .subscribe(
-        (commentGroups: { attractionId: number; comments: Comment[] }[]) => {
-          this.comments = commentGroups.flatMap(
-            (group: { attractionId: number; comments: Comment[] }) =>
-              group.comments
-          );
-        }
-      );
+      .subscribe((comments: Comment[]) => {
+        this.comments = comments;
+      });
   }
 }

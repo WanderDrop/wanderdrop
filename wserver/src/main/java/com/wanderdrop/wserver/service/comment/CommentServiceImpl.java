@@ -50,6 +50,18 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public List<CommentDto> getCommentsForCurrentUser() {
+        User currentUser = getCurrentAuthenticatedUser();
+        if (currentUser == null) {
+            throw new AccessDeniedException("User not authenticated.");
+        }
+        List<Comment> comments = commentRepository.findByCreatedBy(currentUser);
+        return comments.stream()
+                .map(commentMapper::mapToCommentDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public CommentDto createComment(CommentDto commentDto, Long attractionId) {
         User currentUser = getCurrentAuthenticatedUser();
         if (currentUser == null || (currentUser.getRole() != Role.ADMIN && currentUser.getRole() != Role.USER)) {

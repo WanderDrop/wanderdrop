@@ -1,10 +1,7 @@
 package com.wanderdrop.wserver.mapper;
 
 import com.wanderdrop.wserver.dto.CommentDto;
-import com.wanderdrop.wserver.model.Attraction;
-import com.wanderdrop.wserver.model.Comment;
-import com.wanderdrop.wserver.model.DeletionReason;
-import com.wanderdrop.wserver.model.User;
+import com.wanderdrop.wserver.model.*;
 import com.wanderdrop.wserver.repository.DeletionReasonRepository;
 import com.wanderdrop.wserver.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -66,7 +63,7 @@ class CommentMapperTest {
     @Test
     public void testMapToComment() {
         CommentDto commentDto = new CommentDto(
-                3L, "Heading", "Text", "testUser", Timestamp.valueOf(LocalDateTime.now()), 1L, 2L
+                3L, "Heading", "Text", "testUser", Timestamp.valueOf(LocalDateTime.now()), 1L, 2L, Status.ACTIVE
         );
 
         User user = new User();

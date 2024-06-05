@@ -1,23 +1,67 @@
-<div class="container mt-4">
-  <h2 class="mb-3">Your Attractions</h2>
-  <ul class="list-group" *ngIf="attractions.length > 0; else noAttractions">
-    <li class="list-group-item" *ngFor="let attraction of attractions">
-      <h5 class="mb-1 text-primary">{{ attraction.name }}</h5>
-      <p class="mb-0">{{ attraction.description }}</p>
-    </li>
-  </ul>
-  <ng-template #noAttractions>
-    <p>No attractions yet.</p>
-  </ng-template>
+<div class="container mt-4 mb-4">
+  <div class="row">
+    <div class="col-md-12">
+      <h2 class="mb-3">Your Attractions</h2>
+      <select class="form-select mb-3" [(ngModel)]="attractionFilter">
+        <option value="ALL">All</option>
+        <option value="ACTIVE">Active</option>
+        <option value="DELETED">Deleted</option>
+      </select>
+      <ul class="list-group" *ngIf="attractions.length > 0; else noAttractions">
+        <ng-container *ngFor="let attraction of attractions">
+          <li
+            class="list-group-item"
+            [ngClass]="{ 'deleted-item': attraction.status === 'DELETED' }"
+            *ngIf="
+              attractionFilter === 'ALL' ||
+              (attractionFilter === 'ACTIVE' &&
+                attraction.status !== 'DELETED') ||
+              (attractionFilter === 'DELETED' &&
+                attraction.status === 'DELETED')
+            "
+          >
+            <h5 class="mb-1 text-primary">{{ attraction.name }}</h5>
+            <p class="mb-0">{{ attraction.description }}</p>
+            <span *ngIf="attraction.status === 'DELETED'" class="text-danger"
+              >DELETED</span
+            >
+          </li>
+        </ng-container>
+      </ul>
+      <ng-template #noAttractions>
+        <p>No attractions yet.</p>
+      </ng-template>
+    </div>
 
-  <h2 class="mt-5 mb-3">Your Comments</h2>
-  <ul class="list-group" *ngIf="comments.length > 0; else noComments">
-    <li class="list-group-item" *ngFor="let comment of comments">
-      <h5 class="mb-1 text-primary">{{ comment.commentHeading }}</h5>
-      <p class="mb-0">{{ comment.commentText }}</p>
-    </li>
-  </ul>
-  <ng-template #noComments>
-    <p>No comments yet.</p>
-  </ng-template>
+    <div class="col-md-12 mt-5">
+      <h2 class="mb-3">Your Comments</h2>
+      <select class="form-select mb-3" [(ngModel)]="commentFilter">
+        <option value="ALL">All</option>
+        <option value="ACTIVE">Active</option>
+        <option value="DELETED">Deleted</option>
+      </select>
+      <ul class="list-group" *ngIf="comments.length > 0; else noComments">
+        <ng-container *ngFor="let comment of comments">
+          <li
+            class="list-group-item"
+            [ngClass]="{ 'deleted-item': comment.status === 'DELETED' }"
+            *ngIf="
+              commentFilter === 'ALL' ||
+              (commentFilter === 'ACTIVE' && comment.status !== 'DELETED') ||
+              (commentFilter === 'DELETED' && comment.status === 'DELETED')
+            "
+          >
+            <h5 class="mb-1 text-primary">{{ comment.commentHeading }}</h5>
+            <p class="mb-0">{{ comment.commentText }}</p>
+            <span *ngIf="comment.status === 'DELETED'" class="text-danger"
+              >DELETED</span
+            >
+          </li>
+        </ng-container>
+      </ul>
+      <ng-template #noComments>
+        <p>No comments yet.</p>
+      </ng-template>
+    </div>
+  </div>
 </div>

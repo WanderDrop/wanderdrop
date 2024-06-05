@@ -11,10 +11,12 @@ app-google-maps {
 
 .main-content {
   padding-bottom: 51.188px;
+  background-color: #eee;
 }
 
 @media (max-width: 400px) {
   .main-content {
     padding-bottom: 163.188px;
+    background-color: #eee;
   }
 }

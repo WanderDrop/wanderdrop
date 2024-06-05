@@ -208,6 +208,49 @@ class AttractionServiceImplTest {
     }
 
     @Test
+    public void testGetAttractionsForCurrentUser() {
+        setAuthenticatedUser(mockRegularUser);
+
+        Attraction attraction1 = new Attraction();
+        attraction1.setAttractionId(1L);
+        attraction1.setName("Test Attraction 1");
+        attraction1.setDescription("Description 1");
+        attraction1.setStatus(Status.ACTIVE);
+        attraction1.setCreatedBy(mockRegularUser);
+        attraction1.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+
+        Attraction attraction2 = new Attraction();
+        attraction2.setAttractionId(2L);
+        attraction2.setName("Test Attraction 2");
+        attraction2.setDescription("Description 2");
+        attraction2.setStatus(Status.ACTIVE);
+        attraction2.setCreatedBy(mockRegularUser);
+        attraction2.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+
+        AttractionDto attractionDto1 = new AttractionDto();
+        attractionDto1.setAttractionId(1L);
+        attractionDto1.setName("Test Attraction 1");
+        attractionDto1.setDescription("Description 1");
+
+        AttractionDto attractionDto2 = new AttractionDto();
+        attractionDto2.setAttractionId(2L);
+        attractionDto2.setName("Test Attraction 2");
+        attractionDto2.setDescription("Description 2");
+
+        when(attractionRepository.findByCreatedBy(mockRegularUser)).thenReturn(Arrays.asList(attraction1, attraction2));
+        when(attractionMapper.mapToAttractionDto(attraction1)).thenReturn(attractionDto1);
+        when(attractionMapper.mapToAttractionDto(attraction2)).thenReturn(attractionDto2);
+
+        List<AttractionDto> result = attractionService.getAttractionsForCurrentUser();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("Test Attraction 1", result.get(0).getName());
+        assertEquals("Test Attraction 2", result.get(1).getName());
+        verify(attractionRepository, times(1)).findByCreatedBy(mockRegularUser);
+    }
+
+    @Test
     public void testUpdateAttraction() {
         setAuthenticatedUser(mockAdminUser);
 

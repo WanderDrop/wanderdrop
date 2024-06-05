@@ -63,6 +63,18 @@ public class AttractionServiceImpl implements AttractionService {
     }
 
     @Override
+    public List<AttractionDto> getAttractionsForCurrentUser() {
+        User currentUser = getCurrentAuthenticatedUser();
+        if (currentUser == null) {
+            throw new AccessDeniedException("User not authenticated.");
+        }
+        List<Attraction> attractions = attractionRepository.findByCreatedBy(currentUser);
+        return attractions.stream()
+                .map(attractionMapper::mapToAttractionDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public AttractionDto updateAttraction(Long attractionId, AttractionDto updatedAttractionDto) {
 
         User currentUser = checkAdminUser();

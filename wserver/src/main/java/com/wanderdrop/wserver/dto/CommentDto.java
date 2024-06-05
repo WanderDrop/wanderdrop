@@ -1,5 +1,6 @@
 package com.wanderdrop.wserver.dto;
 
+import com.wanderdrop.wserver.model.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,4 +18,5 @@ public class CommentDto {
     private Timestamp createdAt;
     private Long deletionReason;
     private Long attractionId;
+    private Status status;
 }
