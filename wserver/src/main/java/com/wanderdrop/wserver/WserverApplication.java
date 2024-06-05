@@ -12,5 +12,4 @@ public class WserverApplication {
 
 		SpringApplication.run(WserverApplication.class, args);
 	}
-
 }
