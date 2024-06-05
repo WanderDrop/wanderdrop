@@ -22,6 +22,7 @@ import { Subscription } from 'rxjs';
 export class AddUserComponent implements OnDestroy {
   registerForm!: FormGroup;
   isMobile!: boolean;
+  showSuccessMessage = false;
   private subscriptions: Subscription[] = [];
 
   constructor(private router: Router, private userService: UserService) {
@@ -56,7 +57,10 @@ export class AddUserComponent implements OnDestroy {
       const registerUserSub = this.userService.registerUser(newUser).subscribe({
         next: (response) => {
           console.log(response);
-          this.router.navigate(['/login']);
+          this.showSuccessMessage = true;
+          setTimeout(() => {
+            this.router.navigate(['/home']);
+          }, 1500);
         },
         error: (error) => {
           console.error(error);

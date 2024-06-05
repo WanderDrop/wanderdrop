@@ -21,8 +21,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ReportPage } from '../report-page/report-page.model';
 import { AddNewReportPageComponent } from '../report-page/add-new-report-page/add-new-report-page.component';
 import { DeleteReasonService } from '../shared/delete-reason.service';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 import { ReportPageService } from '../report-page/report-page.service';
+import { StorageService } from '../user/storage/storage.service';
+import { AuthStatusService } from '../user/auth/auth-status.service';
+import { AuthService } from '../user/auth/auth.service';
 
 @Component({
   selector: 'app-attraction',
@@ -52,6 +55,10 @@ export class AttractionComponent implements OnInit, OnDestroy {
   deletionReasons: { id: number; reasonMessage: string }[] = [];
   selectedReasonId: number | null = null;
 
+  isAdmin = false;
+  isAuthorized = false;
+  private authSubscription!: Subscription;
+
   @ViewChild('addCommentContent') addCommentContent!: TemplateRef<any>;
   @ViewChild('addReportPageContent') addReportPageContent!: TemplateRef<any>;
 
@@ -64,7 +71,8 @@ export class AttractionComponent implements OnInit, OnDestroy {
     private reportService: ReportPageService,
     private router: Router,
     private route: ActivatedRoute,
-    private deleteReasonService: DeleteReasonService
+    private deleteReasonService: DeleteReasonService,
+    private authStatusService: AuthStatusService
   ) {}
 
   ngOnInit(): void {
@@ -98,6 +106,28 @@ export class AttractionComponent implements OnInit, OnDestroy {
       );
       this.subscriptions.push(reasonsSub);
     }
+
+    this.authSubscription = this.authStatusService.loggedInStatus$.subscribe(
+      (isLoggedIn) => {
+        this.isAuthorized = isLoggedIn;
+        if (isLoggedIn) {
+          this.authStatusService.userRoleStatus$.subscribe((userRole) => {
+            this.isAdmin = userRole === 'ADMIN';
+            if (this.isAdmin) {
+              this.deleteReasonService.forceFetchReasons();
+              const reasonsSub = this.deleteReasonService.reasons.subscribe(
+                (reasons) => {
+                  this.deletionReasons = reasons;
+                }
+              );
+              this.subscriptions.push(reasonsSub);
+            } else {
+              this.deleteReasonService.clearReasons();
+            }
+          });
+        }
+      }
+    );
   }
 
   onNavigateHome() {
@@ -120,17 +150,20 @@ export class AttractionComponent implements OnInit, OnDestroy {
     }
   }
 
-
   onAddNewReportPage() {
     const modalRef = this.modalService.open(AddNewReportPageComponent);
     if (this.attraction) {
       modalRef.componentInstance.attractionId = this.attraction.id;
       modalRef.componentInstance.dataChanged.subscribe(
-        (reportData: {reportHeading:  AttractionComponent["attractionName"], reportMessage: string}) =>{
-          this.reportService.addReport(this.attraction!.id, reportData)
-          .subscribe((newReport) => {
-            this.reports.push(newReport);
-          });
+        (reportData: {
+          reportHeading: AttractionComponent['attractionName'];
+          reportMessage: string;
+        }) => {
+          this.reportService
+            .addReport(this.attraction!.id, reportData)
+            .subscribe((newReport) => {
+              this.reports.push(newReport);
+            });
         }
       );
     }
@@ -158,17 +191,17 @@ export class AttractionComponent implements OnInit, OnDestroy {
           this.selectedReasonId = result.reasonId;
           this.attractionService
             .deleteAttraction(this.attraction.id, this.selectedReasonId!)
-            .subscribe(
-              () => {
+            .subscribe({
+              next: () => {
                 this.attractionService.removeAttractionFromList(
                   this.attraction!.id
                 );
                 this.router.navigate(['/home']);
               },
-              (error) => {
+              error: (error) => {
                 console.error('Error deleting attraction:', error);
-              }
-            );
+              },
+            });
         }
       })
       .catch((reason) => {
