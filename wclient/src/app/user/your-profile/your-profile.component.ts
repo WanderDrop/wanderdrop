@@ -22,7 +22,7 @@ import { Router } from '@angular/router';
   templateUrl: './your-profile.component.html',
   styleUrl: './your-profile.component.css',
 })
-export class YourProfileComponent {
+export class YourProfileComponent implements OnInit {
   profileForm!: FormGroup;
   originalValues: any;
   changePasswordForm!: FormGroup;
@@ -39,12 +39,15 @@ export class YourProfileComponent {
     private viewContainerRef: ViewContainerRef,
     private router: Router
   ) {
-    const dummyUser = this.userService.getDummyUser();
+    const currentUser = this.userService.getCurrentUser();
 
     this.profileForm = this.fb.group({
-      firstName: [dummyUser.Firstname, Validators.required],
-      lastName: [dummyUser.Lastname, Validators.required],
-      email: [{ value: dummyUser.Email, disabled: true }, Validators.required],
+      firstName: [currentUser.Firstname, Validators.required],
+      lastName: [currentUser.Lastname, Validators.required],
+      email: [
+        { value: currentUser.Email, disabled: true },
+        Validators.required,
+      ],
     });
     this.originalValues = this.profileForm.value;
   }
@@ -73,24 +76,29 @@ export class YourProfileComponent {
     if (this.changePasswordForm.valid) {
       const inputPassword = this.changePasswordForm.value.currentPassword;
       const newPassword = this.changePasswordForm.value.newPassword;
-      if (this.userService.verifyPassword(inputPassword)) {
-        const dummyUser = this.userService.getDummyUser();
-        if (dummyUser.Password !== newPassword) {
-          dummyUser.Password = newPassword;
-          this.showSuccessMessage = true;
-          setTimeout(() => {
-            this.showSuccessMessage = false;
-            this.isModalOpen = false;
-            this.changePasswordForm.reset();
-          }, 2500);
-        } else {
-          this.newPasswordError =
-            'The new password should not be the same as the old password.';
-          this.changePasswordForm.controls['newPassword'].reset();
-        }
+      if (inputPassword === newPassword) {
+        this.newPasswordError =
+          'The new password should not be the same as the old password.';
+        this.changePasswordForm.controls['newPassword'].reset();
       } else {
-        this.passwordError = 'The current password does not match.';
-        this.changePasswordForm.reset();
+        this.userService.changePassword(inputPassword, newPassword).subscribe({
+          next: () => {
+            this.showSuccessMessage = true;
+            setTimeout(() => {
+              this.showSuccessMessage = false;
+              this.isModalOpen = false;
+              this.changePasswordForm.reset();
+            }, 2500);
+          },
+          error: (error) => {
+            if (error.status === 401) {
+              this.passwordError = 'The current password does not match.';
+              this.changePasswordForm.controls['currentPassword'].reset();
+            } else {
+              console.log('Error occurred');
+            }
+          },
+        });
       }
     }
   }
@@ -112,13 +120,13 @@ export class YourProfileComponent {
 
   save() {
     if (this.profileForm.valid) {
-      const dummyUser = this.userService.getDummyUser();
+      const currentUser = this.userService.getCurrentUser();
       if (
-        dummyUser.Firstname !== this.profileForm.value.firstName ||
-        dummyUser.Lastname !== this.profileForm.value.lastName
+        currentUser.Firstname !== this.profileForm.value.firstName ||
+        currentUser.Lastname !== this.profileForm.value.lastName
       ) {
-        dummyUser.Firstname = this.profileForm.value.firstName;
-        dummyUser.Lastname = this.profileForm.value.lastName;
+        currentUser.Firstname = this.profileForm.value.firstName;
+        currentUser.Lastname = this.profileForm.value.lastName;
         this.showNameChangeSuccessMessage = true;
         setTimeout(() => (this.showNameChangeSuccessMessage = false), 2500);
       }
