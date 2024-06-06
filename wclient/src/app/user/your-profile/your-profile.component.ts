@@ -1,11 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -37,24 +31,27 @@ export class YourProfileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private viewContainerRef: ViewContainerRef,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     try {
       const currentUser = this.userService.getCurrentUser();
+      console.log('Current user:', currentUser);
 
-      this.profileForm = this.fb.group({
-        firstName: [currentUser.firstName, Validators.required],
-        lastName: [currentUser.lastName, Validators.required],
-        email: [
-          { value: currentUser.email, disabled: true },
-          Validators.required,
-        ],
-      });
-
-      this.originalValues = this.profileForm.value;
+      if (currentUser) {
+        this.profileForm = this.fb.group({
+          firstName: [currentUser.firstName, Validators.required],
+          lastName: [currentUser.lastName, Validators.required],
+          email: [
+            { value: currentUser.email, disabled: true },
+            Validators.required,
+          ],
+        });
+        this.originalValues = this.profileForm.value;
+      } else {
+        this.router.navigate(['login']);
+      }
 
       this.changePasswordForm = this.fb.group({
         currentPassword: ['', Validators.required],

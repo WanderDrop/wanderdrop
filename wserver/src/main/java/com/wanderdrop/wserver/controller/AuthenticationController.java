@@ -62,6 +62,8 @@ public class AuthenticationController {
             authenticationResponse.setToken(token);
             authenticationResponse.setUserId(optionalUser.get().getUserId());
             authenticationResponse.setRole(optionalUser.get().getRole());
+            authenticationResponse.setFirstName(optionalUser.get().getFirstName());
+            authenticationResponse.setLastName(optionalUser.get().getLastName());
         }
         return authenticationResponse;
     }

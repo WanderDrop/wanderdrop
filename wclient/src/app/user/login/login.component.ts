@@ -53,6 +53,8 @@ export class LoginComponent implements OnDestroy {
           const user = {
             userId: res.userId,
             role: res.role,
+            firstName: res.firstName,
+            lastName: res.lastName,
           };
           StorageService.saveUser(user);
           StorageService.saveToken(res.token);
