@@ -59,6 +59,7 @@ public class AuthenticationService {
         response.role = user.getRole();
         response.firstName = user.getFirstName();
         response.lastName = user.getLastName();
+        response.email = user.getEmail();
 
         return response;
     }

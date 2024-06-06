@@ -55,6 +55,7 @@ export class LoginComponent implements OnDestroy {
             role: res.role,
             firstName: res.firstName,
             lastName: res.lastName,
+            email: res.email,
           };
           StorageService.saveUser(user);
           StorageService.saveToken(res.token);

@@ -64,6 +64,7 @@ public class AuthenticationController {
             authenticationResponse.setRole(optionalUser.get().getRole());
             authenticationResponse.setFirstName(optionalUser.get().getFirstName());
             authenticationResponse.setLastName(optionalUser.get().getLastName());
+            authenticationResponse.setEmail(optionalUser.get().getEmail());
         }
         return authenticationResponse;
     }
