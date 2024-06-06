@@ -9,50 +9,36 @@ import { StorageService } from './storage/storage.service';
   providedIn: 'root',
 })
 export class UserService {
-  // private users: User[] = [];
+  private apiUrl = 'http://localhost:8080/api';
 
-  constructor(private http: HttpClient) {
-    // const dummyUser = new User(
-    //   'Dummy',
-    //   'User',
-    //   'dummy@example.com',
-    //   'password',
-    //   UserRole.USER
-    // );
-    // this.users.push(dummyUser);
-  }
+  constructor(private http: HttpClient) {}
 
   registerUser(user: User) {
-    return this.http.post('http://localhost:8080/api/auth/register', user);
+    return this.http.post(`${this.apiUrl}/auth/register`, user);
   }
 
   changePassword(oldPassword: string, newPassword: string): Observable<any> {
     const token = StorageService.getToken();
     const user = StorageService.getUser();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    const url = `http://localhost:8080/api/users/${user.userId}/change-password`;
+    const url = `${this.apiUrl}/users/${user.userId}/change-password`;
     const body = { oldPassword, newPassword };
     return this.http.post(url, body, { headers });
   }
 
-  // addUser(user: User) {
-  //   this.users.push(user);
-  // }
-
-  // getUsers(): User[] {
-  //   return [...this.users];
-  // }
-
-  // getDummyUser(): User {
-  //   return this.users[0];
-  // }
-
   getCurrentUser(): User {
-    return StorageService.getUser();
+    const user = StorageService.getUser();
+    if (!user) {
+      throw new Error('User is not defined in local storage');
+    }
+    return user;
   }
 
-  // verifyPassword(inputPassword: string): boolean {
-  //   const dummyUser = this.getDummyUser();
-  //   return dummyUser.Password === inputPassword;
-  // }
+  updateUser(userId: string, user: any): Observable<any> {
+    const token = StorageService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.put(`${this.apiUrl}/users/${userId}/update`, user, {
+      headers,
+    });
+  }
 }

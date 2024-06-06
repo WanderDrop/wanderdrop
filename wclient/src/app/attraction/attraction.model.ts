@@ -6,8 +6,8 @@ export class Attraction {
   private _description: string;
   private _latitude: number;
   private _longitude: number;
-  private _createdBy!: number;
-  private _updatedBy?: number;
+  private _createdBy!: string;
+  private _updatedBy?: string;
   private _createdAt: Date;
   private _updatedAt?: Date;
   private _status: AttractionStatus;
@@ -18,7 +18,7 @@ export class Attraction {
     description: string,
     latitude: number,
     longitude: number,
-    createdBy: number
+    createdBy: string
   ) {
     this._name = name;
     this._description = description;
@@ -69,19 +69,19 @@ export class Attraction {
     this._longitude = value;
   }
 
-  get createdBy(): number {
+  get createdBy(): string {
     return this._createdBy;
   }
 
-  set createdBy(value: number) {
+  set createdBy(value: string) {
     this._createdBy = value;
   }
 
-  get updatedBy(): number | undefined {
+  get updatedBy(): string | undefined {
     return this._updatedBy;
   }
 
-  set updatedBy(value: number | undefined) {
+  set updatedBy(value: string | undefined) {
     this._updatedBy = value;
   }
 

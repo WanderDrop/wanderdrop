@@ -38,7 +38,7 @@ export class AddNewReportPageComponent {
     });
   }
   onAddReport() {
-    const userId = this.userService.getCurrentUser().UserId;
+    const userId = this.userService.getCurrentUser().userId;
 
     const newReport = new ReportPage(this.attractionName, this.reportMessage);
 

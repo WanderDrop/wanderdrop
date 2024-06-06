@@ -14,6 +14,7 @@ import {
 } from '@angular/forms';
 import { UserService } from '../user.service';
 import { Router } from '@angular/router';
+import { StorageService } from '../storage/storage.service';
 
 @Component({
   selector: 'app-your-profile',
@@ -38,25 +39,31 @@ export class YourProfileComponent implements OnInit {
     private userService: UserService,
     private viewContainerRef: ViewContainerRef,
     private router: Router
-  ) {
-    const currentUser = this.userService.getCurrentUser();
-
-    this.profileForm = this.fb.group({
-      firstName: [currentUser.Firstname, Validators.required],
-      lastName: [currentUser.Lastname, Validators.required],
-      email: [
-        { value: currentUser.Email, disabled: true },
-        Validators.required,
-      ],
-    });
-    this.originalValues = this.profileForm.value;
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.changePasswordForm = this.fb.group({
-      currentPassword: ['', Validators.required],
-      newPassword: ['', Validators.required],
-    });
+    try {
+      const currentUser = this.userService.getCurrentUser();
+
+      this.profileForm = this.fb.group({
+        firstName: [currentUser.firstName, Validators.required],
+        lastName: [currentUser.lastName, Validators.required],
+        email: [
+          { value: currentUser.email, disabled: true },
+          Validators.required,
+        ],
+      });
+
+      this.originalValues = this.profileForm.value;
+
+      this.changePasswordForm = this.fb.group({
+        currentPassword: ['', Validators.required],
+        newPassword: ['', Validators.required],
+      });
+    } catch (error) {
+      console.error('Error fetching current user:', error);
+      this.router.navigate(['login']);
+    }
   }
 
   valuesChanged(): boolean {
@@ -122,13 +129,25 @@ export class YourProfileComponent implements OnInit {
     if (this.profileForm.valid) {
       const currentUser = this.userService.getCurrentUser();
       if (
-        currentUser.Firstname !== this.profileForm.value.firstName ||
-        currentUser.Lastname !== this.profileForm.value.lastName
+        currentUser.firstName !== this.profileForm.value.firstName ||
+        currentUser.lastName !== this.profileForm.value.lastName
       ) {
-        currentUser.Firstname = this.profileForm.value.firstName;
-        currentUser.Lastname = this.profileForm.value.lastName;
-        this.showNameChangeSuccessMessage = true;
-        setTimeout(() => (this.showNameChangeSuccessMessage = false), 2500);
+        const updatedUser = {
+          firstName: this.profileForm.value.firstName,
+          lastName: this.profileForm.value.lastName,
+        };
+        this.userService.updateUser(currentUser.userId, updatedUser).subscribe({
+          next: () => {
+            currentUser.firstName = updatedUser.firstName;
+            currentUser.lastName = updatedUser.lastName;
+            StorageService.saveUser(currentUser);
+            this.showNameChangeSuccessMessage = true;
+            setTimeout(() => (this.showNameChangeSuccessMessage = false), 2500);
+          },
+          error: (error) => {
+            console.error('Error updating profile', error);
+          },
+        });
       }
     }
   }

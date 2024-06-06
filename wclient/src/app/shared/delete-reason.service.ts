@@ -34,7 +34,13 @@ export class DeleteReasonService implements OnDestroy {
           this._reasons.next(data);
         },
         error: (error: any) => {
-          console.error('Error:', error);
+          if (error.error === 'Malformed JWT token') {
+            console.error(
+              'Error: The authentication token is malformed. Please log in again.'
+            );
+          } else {
+            console.error('Error:', error);
+          }
         },
       });
     this.subscriptions.push(sub);
