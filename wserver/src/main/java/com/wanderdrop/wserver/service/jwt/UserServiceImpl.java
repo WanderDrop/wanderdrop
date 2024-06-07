@@ -1,6 +1,7 @@
 package com.wanderdrop.wserver.service.jwt;
 
 import com.wanderdrop.wserver.dto.PasswordChangeRequest;
+import com.wanderdrop.wserver.exeption.IncorrectPasswordException;
 import com.wanderdrop.wserver.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,12 +36,16 @@ public class UserServiceImpl implements UserService {
     public boolean changePassword(UUID userId, String oldPassword, String newPassword) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userId));
+        System.out.println("Old Password: " + oldPassword);
+        System.out.println("Encoded User Password: " + user.getPassword());
+        System.out.println("Password Matches: " + passwordEncoder.matches(oldPassword, user.getPassword()));
+
         if (passwordEncoder.matches(oldPassword, user.getPassword())) {
             user.setPassword(passwordEncoder.encode(newPassword));
             userRepository.save(user);
             return true;
         } else {
-            return false;
+            throw new IncorrectPasswordException("Old password is incorrect");
         }
     }
 

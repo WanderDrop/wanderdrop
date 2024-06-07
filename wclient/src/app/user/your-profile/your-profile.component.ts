@@ -95,11 +95,17 @@ export class YourProfileComponent implements OnInit {
             }, 2500);
           },
           error: (error) => {
-            if (error.status === 401) {
+            console.log(error.message);
+            if (
+              error.message.includes(
+                'Http failure response for http://localhost:8080/api/users'
+              )
+            ) {
               this.passwordError = 'The current password does not match.';
               this.changePasswordForm.controls['currentPassword'].reset();
+              this.changePasswordForm.controls['newPassword'].reset();
             } else {
-              console.log('Error occurred');
+              console.log('Error occurred:', error);
             }
           },
         });

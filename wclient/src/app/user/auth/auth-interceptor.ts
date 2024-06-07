@@ -24,16 +24,24 @@ export class AuthInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-        const passwordChangeUrl = '/api/users/change-password';
+        const passwordChangeUrl = 'http://localhost:8080/api/users/';
 
         if (error.status === 401) {
-          if (req.url.includes(passwordChangeUrl)) {
-            return throwError(() => error);
+          StorageService.logout();
+          this.authStatusService.updateLoggedInStatus();
+          this.router.navigate(['/login']);
+        } else if (
+          error.status === 403 &&
+          req.url.includes(passwordChangeUrl)
+        ) {
+          console.log(error);
+          if (error.error) {
+            console.error('Password change failed:', error.error.error);
           } else {
-            StorageService.logout();
-            this.authStatusService.updateLoggedInStatus();
-            this.router.navigate(['/login']);
+            console.error('Password change failed:', error.message);
           }
+        } else {
+          console.log(req.url);
         }
 
         return throwError(() => error);
