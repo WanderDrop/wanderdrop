@@ -9,6 +9,7 @@ import com.wanderdrop.wserver.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +49,7 @@ public class AuthenticationService {
                 )
         );
         var user = repository.findByEmail(request.getEmail())
-                .orElseThrow();
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         System.out.println(user);
         var jwtToken = jwtUtil.generateToken(user);
         var response = AuthenticationResponse.builder()
@@ -56,6 +57,10 @@ public class AuthenticationService {
                 .build();
         response.userId = user.getUserId();
         response.role = user.getRole();
+        response.firstName = user.getFirstName();
+        response.lastName = user.getLastName();
+        response.email = user.getEmail();
+
         return response;
     }
 }

@@ -5,9 +5,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { UserService } from '../user.service';
 import { Router } from '@angular/router';
-import { BrowserModule } from '@angular/platform-browser';
 import { AuthService } from '../auth/auth.service';
 import { StorageService } from '../storage/storage.service';
 import { CommonModule } from '@angular/common';
@@ -53,6 +51,9 @@ export class LoginComponent implements OnDestroy {
           const user = {
             userId: res.userId,
             role: res.role,
+            firstName: res.firstName,
+            lastName: res.lastName,
+            email: res.email,
           };
           StorageService.saveUser(user);
           StorageService.saveToken(res.token);

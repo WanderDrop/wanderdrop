@@ -4,7 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { AuthStatusService } from './auth-status.service';
 import { LoginResponse } from './login-response';
 
-const BASE_URL = ['http://localhost:8080']; // to connect with Backend
+const BASE_URL = ['http://localhost:8080'];
 
 @Injectable({
   providedIn: 'root',

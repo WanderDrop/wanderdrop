@@ -9,7 +9,6 @@ import { AttractionComponent } from '../../attraction/attraction.component';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
-
 @Component({
   selector: 'app-add-new-report-page',
   standalone: true,
@@ -22,7 +21,7 @@ export class AddNewReportPageComponent {
   @Input() attractionId!: number;
   @Input() attractionName: string = '';
   @Output() dataChanged = new EventEmitter<{
-    reportHeading: AttractionComponent["attractionName"];
+    reportHeading: AttractionComponent['attractionName'];
     reportMessage: string;
   }>();
   private subscriptions: Subscription[] = [];
@@ -32,33 +31,30 @@ export class AddNewReportPageComponent {
     private ngZone: NgZone,
     private userService: UserService,
     private modalService: NgbModal
-  ){}
+  ) {}
   onClose() {
     this.ngZone.run(() => {
       this.router.navigate(['/home']);
     });
   }
   onAddReport() {
-    const userId = this.userService.getDummyUser().UserId;
+    const userId = this.userService.getCurrentUser().userId;
 
-    const newReport = new ReportPage(
-      this.attractionName,
-      this.reportMessage,
-
-    );
+    const newReport = new ReportPage(this.attractionName, this.reportMessage);
 
     const addReportSub = this.reportService
       .addReport(this.attractionId, newReport)
       .subscribe({
-        next: (response)=>{
+        next: (response) => {
           this.reportService.reports.push(response);
         },
-          error: (error) => { console.error('Error adding new report:', error);
+        error: (error) => {
+          console.error('Error adding new report:', error);
         },
       });
-      this.subscriptions.push(addReportSub);
-      console.log("Report done");
-      this.modalService.dismissAll();
+    this.subscriptions.push(addReportSub);
+    console.log('Report done');
+    this.modalService.dismissAll();
   }
   onCancel() {
     this.modalService.dismissAll();

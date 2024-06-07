@@ -46,7 +46,7 @@ export class AddNewAttractionComponent implements OnInit, OnDestroy {
   }
 
   onAddAttraction() {
-    const userId = this.userService.getDummyUser().UserId;
+    const userId = this.userService.getCurrentUser().userId;
 
     const newAttraction = new Attraction(
       this.attractionName,

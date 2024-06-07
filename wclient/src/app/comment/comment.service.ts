@@ -27,10 +27,8 @@ export class CommentService {
 
   fetchComments(attractionId: number): void {
     this.currentAttractionId = attractionId;
-    console.log(`Fetching comments for attractionId: ${attractionId}`);
     this.getComments(attractionId).subscribe({
       next: (comments) => {
-        console.log('Fetched comments from API:', comments);
         this.comments[attractionId] = comments;
         this.commentsUpdated.next([...this.comments[attractionId]]);
       },
@@ -77,7 +75,6 @@ export class CommentService {
       )
       .pipe(
         map(() => {
-          console.log('Deleted comment:', commentId);
           this.updateCommentsAfterDeletion(commentId);
         })
       );
@@ -88,7 +85,6 @@ export class CommentService {
     const updatedComments = currentComments.filter(
       (comment) => comment.commentId !== commentId
     );
-    console.log('Updated comments after deletion:', updatedComments);
     this.comments[this.currentAttractionId!] = updatedComments;
     this.commentsUpdated.next([...updatedComments]);
 

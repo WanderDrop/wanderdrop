@@ -10,5 +10,7 @@ public class UserDto {
 
     private UUID userId;
     private String email;
+    private String firstName;
+    private String lastName;
     private Role role;
 }
