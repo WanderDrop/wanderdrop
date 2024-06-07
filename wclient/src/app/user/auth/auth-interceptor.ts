@@ -34,16 +34,12 @@ export class AuthInterceptor implements HttpInterceptor {
           error.status === 403 &&
           req.url.includes(passwordChangeUrl)
         ) {
-          console.log(error);
           if (error.error) {
             console.error('Password change failed:', error.error.error);
           } else {
             console.error('Password change failed:', error.message);
           }
-        } else {
-          console.log(req.url);
-        }
-
+        } 
         return throwError(() => error);
       })
     );

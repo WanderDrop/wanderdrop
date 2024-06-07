@@ -29,13 +29,30 @@
         readonly
       />
     </div>
-    <button
-      type="button"
-      class="btn btn-primary me-3"
-      (click)="changePassword()"
-    >
-      Change Password
-    </button>
+
+    <div class="d-flex justify-content-between align-items-center">
+      <button
+        type="button"
+        class="btn btn-primary me-3"
+        (click)="changePassword()"
+      >
+        Change Password
+      </button>
+
+      <div class="ml-auto">
+        <button
+          type="submit"
+          class="btn btn-success me-3"
+          *ngIf="valuesChanged()"
+          (click)="save()"
+        >
+          Save new name
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="close()">
+          Close
+        </button>
+      </div>
+    </div>
 
     <div class="modal" *ngIf="isModalOpen">
       <div class="modal-content">
@@ -70,35 +87,25 @@
               {{ newPasswordError }}
             </div>
           </div>
-          <button
-            type="button"
-            class="btn btn-primary me-3"
-            (click)="submitChangePassword()"
-          >
-            Submit
-          </button>
-          <button
-            type="button"
-            class="btn btn-secondary me-3"
-            (click)="closeModal()"
-          >
-            Close
-          </button>
+          <div class="d-flex justify-content-between align-items-center">
+            <button
+              type="button"
+              class="btn btn-primary me-3"
+              (click)="submitChangePassword()"
+            >
+              Submit
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary me-3"
+              (click)="closeModal()"
+            >
+              Close
+            </button>
+          </div>
         </form>
       </div>
     </div>
-
-    <button type="button" class="btn btn-secondary me-3" (click)="close()">
-      Close
-    </button>
-    <button
-      type="submit"
-      class="btn btn-success me-3"
-      *ngIf="valuesChanged()"
-      (click)="save()"
-    >
-      Save new name
-    </button>
     <div class="success-message" *ngIf="showNameChangeSuccessMessage">
       Name has been changed successfully!
     </div>
