@@ -14,10 +14,10 @@ public class ReportMapper {
                 report.getReportId(),
                 report.getReportHeading(),
                 report.getReportMessage(),
-                // report.getStatus(),
                 report.getAttraction() != null ? report.getAttraction().getAttractionId() : null,
                 report.getCreatedBy() != null ? report.getCreatedBy().getUserId() : null,
-                report.getCreatedAt()
+                report.getCreatedAt(),
+                report.getStatus()
         );
     }
 

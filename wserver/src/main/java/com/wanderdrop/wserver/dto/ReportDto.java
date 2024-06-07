@@ -1,5 +1,6 @@
 package com.wanderdrop.wserver.dto;
 
+import com.wanderdrop.wserver.model.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +19,5 @@ import java.util.UUID;
     private Long attractionId;
     private UUID createdBy;
     private Timestamp createdAt;
-
+    private Status status;
 }
