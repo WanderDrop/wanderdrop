@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ReportPage } from './report-page.model';
-import { Observable, catchError, map, of, retry } from 'rxjs';
+import { Observable, catchError, of, retry } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { StorageService } from '../user/storage/storage.service';
 import { AttractionComponent } from '../attraction/attraction.component';
