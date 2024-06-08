@@ -114,7 +114,7 @@ public class ReportControllerTest {
         report.setCreatedAt(Timestamp.from(Instant.now()));
         report = reportRepository.save(report);
 
-        mockMvc.perform(get("/api/reportes/attraction/{attractionId}/active", attraction.getAttractionId())
+        mockMvc.perform(get("/api/reports/active", attraction.getAttractionId())
                         .header("Authorization", adminJwtToken))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -136,7 +136,7 @@ public class ReportControllerTest {
         report.setCreatedAt(Timestamp.from(Instant.now()));
         report = reportRepository.save(report);
 
-        mockMvc.perform(get("/api/reportes/{id}", report.getReportId())
+        mockMvc.perform(get("/api/reports/{id}", report.getReportId())
                         .header("Authorization", userJwtToken))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -181,7 +181,7 @@ public class ReportControllerTest {
         report = reportRepository.save(report);
 
 
-        mockMvc.perform(put("/api/reportes/{id}", report.getReportId(), 1L).header("Authorization", adminJwtToken))
+        mockMvc.perform(put("/api/reports/{id}", report.getReportId(), 1L).header("Authorization", adminJwtToken))
                 .andExpect(status().isOk());
 
         Report deletedReport = reportRepository.findById(report.getReportId()).orElse(null);
@@ -200,24 +200,14 @@ public class ReportControllerTest {
         mockMvc.perform(post("/api/reportes/{attractionId}", 999L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(reportDto)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
-    public void testGetAllActiveReports_Unauthorized() throws Exception {
-        mockMvc.perform(get("/api/reportes/attraction/{attractionId}/active", attraction.getAttractionId()))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void testCreateComment_Unauthenticated() throws Exception {
-        ReportDto reportDto = new ReportDto();
-        reportDto.setReportHeading("Unauthorized Heading");
-        reportDto.setReportMessage("Unauthorized Text");
-
-        mockMvc.perform(post("/api/reportes/{attractionId}", attraction.getAttractionId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(reportDto)))
+    public void testGetAllActiveReports_Unauthenticated() throws Exception {
+        mockMvc.perform(get("/api/reports/active")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
+
 }
