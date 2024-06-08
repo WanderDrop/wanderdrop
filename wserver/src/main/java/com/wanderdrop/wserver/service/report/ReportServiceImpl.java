@@ -76,13 +76,6 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<ReportDto> getAllClosedReports(Long attractionId) {
-        return reportRepository.findByStatusAndAttraction_AttractionId(Status.DELETED, attractionId)
-                .stream()
-                .map(reportMapper :: mapToReportDto)
-                .collect(Collectors.toList());
-    }
-    @Override
     public List<ReportDto> getAllClosedReports() {
         User currentUser = getCurrentAuthenticatedUser();
         if (currentUser == null && !checkAdminUser()) {

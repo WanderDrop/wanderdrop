@@ -21,10 +21,6 @@ public class ReportController {
         return reportService.getAllActiveReports(attractionId);
     }
 
-    //    @GetMapping("/attractions/{attractionId}")
-//    public List<ReportDto> getClosedReportsByAttractionId(@PathVariable Long attractionId) {
-//        return reportService.getAllClosedReports(attractionId);
-//    }
     @GetMapping("/reports/active")
     public List<ReportDto> getReportsByAttractionId() {
         return reportService.getAllActiveReports();
