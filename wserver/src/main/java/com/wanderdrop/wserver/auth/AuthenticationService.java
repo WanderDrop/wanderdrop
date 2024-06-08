@@ -38,6 +38,8 @@ public class AuthenticationService {
                 .build();
         response.userId = user.getUserId();
         response.role = user.getRole();
+        response.firstName = user.getFirstName();
+        response.lastName = user.getLastName();
         return response;
     }
 
