@@ -1,5 +1,5 @@
 
 export enum ReportPageStatus {
-    Active = 'active',
-    Deleted = 'deleted',
-  }
+  Active = 'ACTIVE',
+  Deleted = 'DELETED',
+}
