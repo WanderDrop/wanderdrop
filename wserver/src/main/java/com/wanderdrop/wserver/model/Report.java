@@ -33,7 +33,7 @@ public class Report {
     private Attraction attraction;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by",referencedColumnName = "user_id", updatable = false, insertable = false)
+    @JoinColumn(name = "created_by",referencedColumnName = "user_id")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private User createdBy;
 
