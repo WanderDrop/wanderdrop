@@ -59,13 +59,29 @@ public class ReportServiceImpl implements ReportService {
     public List<ReportDto> getAllActiveReports(Long attractionId) {
         return reportRepository.findByStatusAndAttraction_AttractionId(Status.ACTIVE, attractionId)
                 .stream()
-                .map(reportMapper :: mapToReportDto)
+                .map(reportMapper::mapToReportDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ReportDto> getAllClosedReports(Long attractionId) {
-        return reportRepository.findByStatusAndAttraction_AttractionId(Status.DELETED, attractionId)
+    public List<ReportDto> getAllActiveReports() {
+        User currentUser = getCurrentAuthenticatedUser();
+        if (currentUser == null && !checkAdminUser()) {
+            throw new AccessDeniedException("Admin not authenticated.");
+        }
+        return reportRepository.findByStatus(Status.ACTIVE)
+                .stream()
+                .map(reportMapper::mapToReportDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ReportDto> getAllClosedReports() {
+        User currentUser = getCurrentAuthenticatedUser();
+        if (currentUser == null && !checkAdminUser()) {
+            throw new AccessDeniedException("Admin not authenticated.");
+        }
+        return reportRepository.findByStatus(Status.DELETED)
                 .stream()
                 .map(reportMapper :: mapToReportDto)
                 .collect(Collectors.toList());

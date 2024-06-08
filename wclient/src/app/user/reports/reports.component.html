@@ -1,1 +1,55 @@
-
+<div class="container mt-4">
+    <h2 class="mb-3">Active Reports</h2>
+    <ng-container *ngIf="activeReports.length > 0; else noReports">
+      <table class="table table-bordered align-middle" *ngFor="let report of activeReports">
+      <thead>
+        <tr class="table-primary">
+        <th scope="col">Attraction Reported</th>
+        <th scope="col">Report Message</th>
+        <th scope="col">Status</th>
+        <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table align-middle">
+          <th scope="row">{{ report.reportHeading }} </th>
+          <th scope="row">{{ report.reportMessage }}</th>
+          <th scope="row" class="text-success">{{ report.status}}</th>
+          <th scope="row"> <button
+            type="button"
+            class="btn btn-danger py-2 "
+            (click)="onDeleteReport(report.reportId, report.status)"
+          >
+            Delete </button></th>
+        </tr>
+      </tbody>
+      </table>
+    </ng-container>
+  
+    <h2 class="mb-3">Deleted Reports</h2>
+    <ng-container *ngIf="closedReports.length > 0; else noReports">
+      <table class="table table-bordered" *ngFor="let report of closedReports">
+        <thead>
+        <tr class="table-warning">
+          <th scope="col">Attraction Reported</th>
+          <th scope="col">Report Message</th>
+          <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table">
+            <th scope="row">{{ report.reportHeading }} </th>
+            <th scope="row">{{ report.reportMessage }}</th>
+            <th scope="row" class="text-danger">{{ report.status}}</th>
+          </tr>
+        </tbody>
+        </table>
+    </ng-container>
+  
+    <ng-template #noReports>
+      <p>No reports yet.</p>
+    </ng-template>
+  </div>
+  
+  
+  

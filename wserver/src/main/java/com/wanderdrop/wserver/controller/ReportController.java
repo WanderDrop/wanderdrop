@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reportes")
+@RequestMapping("/api")
 public class ReportController {
 
     private final ReportService reportService;
@@ -15,27 +15,33 @@ public class ReportController {
     public ReportController(ReportService reportService) {
         this.reportService = reportService;
     }
-    @GetMapping("/attraction/{attractionId}/active")
-    public List<ReportDto> getAllActiveReports(@PathVariable Long attractionId) {
+
+    @GetMapping("/reports/attractions/{attractionId}")
+    public List<ReportDto> getActiveReportsByAttractionId(@PathVariable Long attractionId) {
         return reportService.getAllActiveReports(attractionId);
     }
 
-    @GetMapping("/attraction/{attractionId}/closed")
-    public List<ReportDto> getAllClosedReports(@PathVariable Long attractionId) {
-        return reportService.getAllClosedReports(attractionId);
+    @GetMapping("/reports/active")
+    public List<ReportDto> getReportsByAttractionId() {
+        return reportService.getAllActiveReports();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/reports/closed")
+    public List<ReportDto> getAllClosedReports() {
+        return reportService.getAllClosedReports();
+    }
+
+    @GetMapping("/reports/{id}")
     public ReportDto getReportById(@PathVariable Long id) {
         return reportService.getReportById(id);
     }
 
-    @PostMapping("/{attractionId}")
+    @PostMapping("/reportes/{attractionId}")
     public ReportDto createReport(@RequestBody ReportDto reportDto,@PathVariable Long attractionId ) {
         return reportService.createReport(reportDto, attractionId);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/reports/{id}")
     public void deleteReport (@PathVariable Long id) {
         reportService.deleteReport(id);
     }

@@ -38,4 +38,7 @@ export class ReportPage {
     this._reportMessage = value;
   }
 
+  get status(): ReportPageStatus {
+    return this.status;
+  }
 }
