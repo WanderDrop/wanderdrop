@@ -59,7 +59,7 @@ GitHub repository: [Wanderdrop](https://github.com/WanderDrop/wanderdrop)
 
 1. Navigate to the backend directory:
    ```sh
-   cd wanderdrop/backend
+   cd wanderdrop/wserver
     ```
 2. Configure the application properties with your database credentials inside application.properties
 3. Build and run the Spring Boot application
@@ -67,13 +67,26 @@ GitHub repository: [Wanderdrop](https://github.com/WanderDrop/wanderdrop)
 ### Frontend Setup:
 1. Navigate to the frontend directory:
    ```sh
-   cd wanderdrop/frontend
+   cd wanderdrop/wclient
     ```
 2. Install dependencies
     ```sh
    npm install
     ```
-3. Start the Angular development server:
+3. Add environments: 
+   ```sh
+   ng generate environments
+   ```
+   or
+   ```sh
+   ng g environments
+   ```
+   
+Inside environment.development.ts and environment.ts add two variables and assign your values to:
+- API_KEY
+- MAP_ID
+
+4. Start the Angular development server:
      ```sh
    ng serve
     ```
