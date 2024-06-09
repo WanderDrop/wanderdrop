@@ -46,7 +46,6 @@ export class LoginComponent implements OnDestroy {
     const loginSub = this.authService
       .login(this.loginForm.value)
       .subscribe((res: any) => {
-        console.log(res);
         if (res.userId != null) {
           const user = {
             userId: res.userId,
