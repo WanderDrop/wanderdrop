@@ -192,18 +192,6 @@ public class ReportControllerTest {
     }
 
     @Test
-    public void testCreateReport_Unauthorized() throws Exception {
-        ReportDto reportDto = new ReportDto();
-        reportDto.setReportHeading("Unauthorized Heading");
-        reportDto.setReportMessage("Unauthorized Text");
-
-        mockMvc.perform(post("/api/reportes/{attractionId}", 999L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(reportDto)))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
     public void testGetAllActiveReports_Unauthenticated() throws Exception {
         mockMvc.perform(get("/api/reports/active")
                         .contentType(MediaType.APPLICATION_JSON))

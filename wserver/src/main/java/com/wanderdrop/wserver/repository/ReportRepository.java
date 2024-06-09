@@ -11,5 +11,4 @@ import java.util.List;
 public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findByStatusAndAttraction_AttractionId(Status status, Long attractionId);
     List<Report> findByStatus(Status status);
-    List<Report> findByCreatedBy(User user);
 }
