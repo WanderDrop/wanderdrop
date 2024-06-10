@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -18,6 +18,6 @@ import java.util.UUID;
     private String reportMessage;
     private Long attractionId;
     private UUID createdBy;
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
     private Status status;
 }

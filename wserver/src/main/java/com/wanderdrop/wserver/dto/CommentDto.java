@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -15,7 +15,7 @@ public class CommentDto {
     private String commentHeading;
     private String commentText;
     private String createdBy;
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
     private Long deletionReason;
     private Long attractionId;
     private Status status;

@@ -10,7 +10,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,7 +44,7 @@ public class ReportServiceImpl implements ReportService {
         report.setAttraction(attraction);
         report.setCreatedBy(currentUser);
         report.setStatus(Status.ACTIVE);
-        report.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        report.setCreatedAt(LocalDateTime.now());
         Report savedReport = reportRepository.save(report);
         return reportMapper.mapToReportDto(savedReport);
     }

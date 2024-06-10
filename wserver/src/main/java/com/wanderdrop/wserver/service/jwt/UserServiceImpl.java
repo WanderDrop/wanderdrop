@@ -1,6 +1,5 @@
 package com.wanderdrop.wserver.service.jwt;
 
-import com.wanderdrop.wserver.dto.PasswordChangeRequest;
 import com.wanderdrop.wserver.exeption.IncorrectPasswordException;
 import com.wanderdrop.wserver.model.User;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,7 @@ import com.wanderdrop.wserver.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -55,7 +54,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userId));
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setUpdatedAt(LocalDateTime.now());
         return userRepository.save(user);
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
@@ -65,6 +66,7 @@ public class AuthenticationController {
             authenticationResponse.setFirstName(optionalUser.get().getFirstName());
             authenticationResponse.setLastName(optionalUser.get().getLastName());
             authenticationResponse.setEmail(optionalUser.get().getEmail());
+            authenticationResponse.setCreatedAt(LocalDateTime.now());
         }
         return authenticationResponse;
     }

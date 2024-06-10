@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,7 +43,7 @@ public class AttractionServiceImpl implements AttractionService {
         Attraction attraction = attractionMapper.mapToAttraction(attractionDto, userRepository);
         attraction.setCreatedBy(currentUser);
         attraction.setStatus(Status.ACTIVE);
-        attraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        attraction.setCreatedAt(LocalDateTime.now());
         Attraction savedAttraction = attractionRepository.save(attraction);
         return attractionMapper.mapToAttractionDto(savedAttraction);
     }
@@ -90,7 +90,7 @@ public class AttractionServiceImpl implements AttractionService {
             existingAttraction.setStatus(Status.ACTIVE);
 
             existingAttraction.setUpdatedBy(currentUser);
-            existingAttraction.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+            existingAttraction.setUpdatedAt(LocalDateTime.now());
 
             Attraction updatedAttraction = attractionRepository.save(existingAttraction);
             return attractionMapper.mapToAttractionDto(updatedAttraction);
@@ -110,7 +110,7 @@ public class AttractionServiceImpl implements AttractionService {
             DeletionReason deletionReason = deletionReasonRepository.findById(deletionReasonId).orElseThrow(() -> new IllegalArgumentException("Deletion reason not found"));
             attraction.setDeletionReason(deletionReason);
             attraction.setUpdatedBy(getCurrentAuthenticatedUser());
-            attraction.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+            attraction.setUpdatedAt(LocalDateTime.now());
             attractionRepository.save(attraction);
         } else {
             throw new IllegalArgumentException("Attraction with id " + attractionId + " not found");

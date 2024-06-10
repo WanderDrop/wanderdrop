@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.wanderdrop.wserver.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -26,6 +27,7 @@ public class AuthService {
             newAdminAccount.setLastName("Account");
             newAdminAccount.setEmail("admin@wanderdrop.com");
             newAdminAccount.setPassword(new BCryptPasswordEncoder().encode("admin"));
+            newAdminAccount.setCreatedAt(LocalDateTime.now());
             newAdminAccount.setRole(Role.ADMIN);
             newAdminAccount.setStatus(Status.ACTIVE);
             userRepository.save(newAdminAccount);

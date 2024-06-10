@@ -1,6 +1,5 @@
 package com.wanderdrop.wserver.service.comment;
 
-import com.wanderdrop.wserver.dto.AttractionDto;
 import com.wanderdrop.wserver.dto.CommentDto;
 import com.wanderdrop.wserver.mapper.CommentMapper;
 import com.wanderdrop.wserver.model.*;
@@ -12,7 +11,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -75,7 +74,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setAttraction(attraction);
         comment.setCreatedBy(currentUser);
         comment.setStatus(Status.ACTIVE);
-        comment.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        comment.setCreatedAt(LocalDateTime.now());
         Comment savedComment = commentRepository.save(comment);
         return commentMapper.mapToCommentDto(savedComment);
     }
@@ -88,7 +87,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setCommentHeading(commentDto.getCommentHeading());
         comment.setCommentText(commentDto.getCommentText());
         comment.setUpdatedBy(currentUser);
-        comment.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        comment.setUpdatedAt(LocalDateTime.now());
 
         Comment updatedComment = commentRepository.save(comment);
         return commentMapper.mapToCommentDto(updatedComment);
@@ -106,7 +105,7 @@ public class CommentServiceImpl implements CommentService {
             comment.setDeletionReason(deletionReason);
 
             comment.setUpdatedBy(currentUser);
-            comment.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+            comment.setUpdatedAt(LocalDateTime.now());
 
             commentRepository.save(comment);
         } else {
