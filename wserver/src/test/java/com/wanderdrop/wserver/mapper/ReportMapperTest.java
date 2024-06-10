@@ -9,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,7 +37,7 @@ public class ReportMapperTest {
         report.setReportHeading("Heading");
         report.setReportMessage("Message");
         report.setCreatedBy(user);
-        report.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        report.setCreatedAt(LocalDateTime.now());
         report.setAttraction(attraction);
 
         ReportDto reportDto = reportMapper.mapToReportDto(report);
@@ -60,7 +59,7 @@ public class ReportMapperTest {
         reportDto.setReportHeading("Heading");
         reportDto.setReportMessage("Message");
         reportDto.setCreatedBy(user);
-        reportDto.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        reportDto.setCreatedAt(LocalDateTime.now());
         reportDto.setStatus(Status.ACTIVE);
         reportDto.setAttractionId(4L);
 

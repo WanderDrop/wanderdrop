@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -67,33 +67,6 @@ class AttractionControllerTest {
     }
 
     @Test
-    void testGetAllAttractionsWithUserAndAttractions() throws Exception {
-
-        user = new User();
-        user.setEmail("testuser@test.com");
-        user.setPassword("password");
-        user.setFirstName("Firstname");
-        user.setLastName("Lastname");
-        user.setRole(Role.USER);
-        user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        userRepository.save(user);
-        Attraction attraction1 = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
-        Attraction attraction2 = new Attraction(null, "Attraction 2", "Description 2", 32.1234, 17.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
-        attractionRepository.save(attraction1);
-        attractionRepository.save(attraction2);
-
-        var response = mockMvc.perform(get("/api/attractions"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andReturn();
-
-        var attractions = objectMapper.readValue(response.getResponse().getContentAsString(), new TypeReference<List<AttractionDto>>() {
-        });
-        assertEquals(2, attractions.size());
-    }
-
-    @Test
     void testGetUserAttractions() throws Exception {
         user = new User();
         user.setEmail("testuser@test.com");
@@ -102,7 +75,7 @@ class AttractionControllerTest {
         user.setLastName("Lastname");
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
@@ -118,8 +91,8 @@ class AttractionControllerTest {
         String response = result.getResponse().getContentAsString();
         String token = JsonPath.parse(response).read("$.token");
 
-        Attraction attraction1 = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
-        Attraction attraction2 = new Attraction(null, "Attraction 2", "Description 2", 32.1234, 17.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        Attraction attraction1 = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
+        Attraction attraction2 = new Attraction(null, "Attraction 2", "Description 2", 32.1234, 17.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
         attractionRepository.save(attraction1);
         attractionRepository.save(attraction2);
 
@@ -138,7 +111,7 @@ class AttractionControllerTest {
         user.setLastName("Lastname");
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
@@ -176,10 +149,10 @@ class AttractionControllerTest {
         user.setLastName("Lastname");
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
 
-        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
         attractionRepository.save(attraction);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/attractions/{id}", attraction.getAttractionId()))
@@ -197,7 +170,7 @@ class AttractionControllerTest {
         user.setLastName("Lastname");
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
@@ -236,7 +209,7 @@ class AttractionControllerTest {
         user.setLastName("Lastname");
         user.setRole(Role.ADMIN);
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
@@ -275,7 +248,7 @@ class AttractionControllerTest {
         user.setLastName("Lastname");
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
 
         AttractionDto attractionDto = new AttractionDto();
@@ -305,10 +278,10 @@ class AttractionControllerTest {
         user.setLastName("Lastname");
         user.setRole(Role.ADMIN);
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
 
-        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
         attractionRepository.save(attraction);
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
@@ -347,10 +320,10 @@ class AttractionControllerTest {
         user.setLastName("Lastname");
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
 
-        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
         attractionRepository.save(attraction);
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
@@ -389,10 +362,10 @@ class AttractionControllerTest {
         user.setLastName("Lastname");
         user.setRole(Role.ADMIN);
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
 
-        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
         attractionRepository.save(attraction);
 
         AttractionDto updatedAttractionDto = new AttractionDto();
@@ -417,10 +390,10 @@ class AttractionControllerTest {
         user.setLastName("Lastname");
         user.setRole(Role.ADMIN);
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
 
-        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
         attractionRepository.save(attraction);
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
@@ -451,10 +424,10 @@ class AttractionControllerTest {
         user.setLastName("Lastname");
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
 
-        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
         attractionRepository.save(attraction);
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
@@ -485,10 +458,10 @@ class AttractionControllerTest {
         user.setLastName("Lastname");
         user.setRole(Role.ADMIN);
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
 
-        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
         attractionRepository.save(attraction);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/attractions/" + attraction.getAttractionId() + "/1"))

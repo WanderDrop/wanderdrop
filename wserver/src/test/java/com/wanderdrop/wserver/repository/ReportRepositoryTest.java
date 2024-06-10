@@ -8,8 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,7 +39,8 @@ public class ReportRepositoryTest {
         user.setLastName("User");
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setUpdatedAt(Timestamp.from(Instant.now()));
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
 
         attraction = new Attraction();
@@ -49,6 +49,7 @@ public class ReportRepositoryTest {
         attraction.setLatitude(21.12345);
         attraction.setLongitude(21.12345);
         attraction.setCreatedBy(user);
+        attraction.setCreatedAt(LocalDateTime.now());
         attraction.setStatus(Status.ACTIVE);
 
         attractionRepository.save(attraction);
@@ -68,7 +69,7 @@ public class ReportRepositoryTest {
         report.setStatus(Status.ACTIVE);
         report.setAttraction(attraction);
         report.setCreatedBy(user);
-        report.setCreatedAt(Timestamp.from(Instant.now()));
+        report.setCreatedAt(LocalDateTime.now());
         reportRepository.save(report);
 
         Report newReport = new Report();
@@ -77,7 +78,7 @@ public class ReportRepositoryTest {
         newReport.setStatus(Status.DELETED);
         newReport.setAttraction(attraction);
         newReport.setCreatedBy(user);
-        newReport.setCreatedAt(Timestamp.from(Instant.now()));
+        newReport.setCreatedAt(LocalDateTime.now());
         reportRepository.save(newReport);
 
         Report report1= new Report();
@@ -86,7 +87,7 @@ public class ReportRepositoryTest {
         report1.setStatus(Status.ACTIVE);
         report1.setAttraction(attraction);
         report1.setCreatedBy(user);
-        report1.setCreatedAt(Timestamp.from(Instant.now()));
+        report1.setCreatedAt(LocalDateTime.now());
         reportRepository.save(report1);
 
         List<Report> activeReports = reportRepository.findByStatusAndAttraction_AttractionId(Status.ACTIVE, attraction.getAttractionId());
@@ -108,7 +109,7 @@ public class ReportRepositoryTest {
         report.setStatus(Status.ACTIVE);
         report.setAttraction(attraction);
         report.setCreatedBy(user);
-        report.setCreatedAt(Timestamp.from(Instant.now()));
+        report.setCreatedAt(LocalDateTime.now());
         reportRepository.save(report);
 
         Report newReport = new Report();
@@ -117,7 +118,7 @@ public class ReportRepositoryTest {
         newReport.setStatus(Status.DELETED);
         newReport.setAttraction(attraction);
         newReport.setCreatedBy(user);
-        newReport.setCreatedAt(Timestamp.from(Instant.now()));
+        newReport.setCreatedAt(LocalDateTime.now());
         reportRepository.save(newReport);
 
         Report report1= new Report();
@@ -126,7 +127,7 @@ public class ReportRepositoryTest {
         report1.setStatus(Status.ACTIVE);
         report1.setAttraction(attraction);
         report1.setCreatedBy(user);
-        report1.setCreatedAt(Timestamp.from(Instant.now()));
+        report1.setCreatedAt(LocalDateTime.now());
         reportRepository.save(report1);
 
         List<Report> activeReports = reportRepository.findByStatus(Status.ACTIVE);

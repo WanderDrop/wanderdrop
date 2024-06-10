@@ -10,7 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,8 +42,8 @@ class AttractionMapperTest {
         attraction.setStatus(Status.ACTIVE);
         attraction.setCreatedBy(createdBy);
         attraction.setUpdatedBy(updatedBy);
-        attraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        attraction.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        attraction.setCreatedAt(LocalDateTime.now());
+        attraction.setUpdatedAt(LocalDateTime.now());
 
         AttractionDto attractionDto = attractionMapper.mapToAttractionDto(attraction);
 
@@ -74,8 +74,8 @@ class AttractionMapperTest {
         attractionDto.setStatus(Status.ACTIVE);
         attractionDto.setCreatedBy(createdById);
         attractionDto.setUpdatedBy(updatedById);
-        attractionDto.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        attractionDto.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        attractionDto.setCreatedAt(LocalDateTime.now());
+        attractionDto.setUpdatedAt(LocalDateTime.now());
 
         when(userRepository.findById(createdById)).thenReturn(Optional.empty());
         when(userRepository.findById(updatedById)).thenReturn(Optional.empty());

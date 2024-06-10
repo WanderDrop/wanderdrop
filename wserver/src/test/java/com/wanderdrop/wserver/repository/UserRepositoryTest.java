@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import java.sql.Timestamp;
-import java.time.Instant;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +32,8 @@ public class UserRepositoryTest {
         user.setLastName("User");
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setUpdatedAt(Timestamp.from(Instant.now()));
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
 
     }

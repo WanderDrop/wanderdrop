@@ -7,8 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,14 +32,14 @@ public class CommentRepositoryTest {
     @BeforeEach
     public void setup() {
         user = new User();
-        user.setEmail("testUser");
         user.setEmail("test@example.com");
         user.setPassword("password");
         user.setFirstName("Test");
         user.setLastName("User");
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setUpdatedAt(Timestamp.from(Instant.now()));
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
 
         attraction = new Attraction();
@@ -49,6 +48,7 @@ public class CommentRepositoryTest {
         attraction.setLatitude(21.12345);
         attraction.setLongitude(21.12345);
         attraction.setCreatedBy(user);
+        attraction.setCreatedAt(LocalDateTime.now());
         attraction.setStatus(Status.ACTIVE);
 
         attractionRepository.save(attraction);
@@ -62,7 +62,7 @@ public class CommentRepositoryTest {
         comment1.setStatus(Status.ACTIVE);
         comment1.setAttraction(attraction);
         comment1.setCreatedBy(user);
-        comment1.setCreatedAt(Timestamp.from(Instant.now()));
+        comment1.setCreatedAt(LocalDateTime.now());
         commentRepository.save(comment1);
 
         Comment comment2 = new Comment();
@@ -71,7 +71,7 @@ public class CommentRepositoryTest {
         comment2.setStatus(Status.DELETED);
         comment2.setAttraction(attraction);
         comment2.setCreatedBy(user);
-        comment2.setCreatedAt(Timestamp.from(Instant.now()));
+        comment2.setCreatedAt(LocalDateTime.now());
         commentRepository.save(comment2);
 
         Comment comment3 = new Comment();
@@ -80,7 +80,7 @@ public class CommentRepositoryTest {
         comment3.setStatus(Status.ACTIVE);
         comment3.setAttraction(attraction);
         comment3.setCreatedBy(user);
-        comment3.setCreatedAt(Timestamp.from(Instant.now()));
+        comment3.setCreatedAt(LocalDateTime.now());
         commentRepository.save(comment3);
 
         List<Comment> activeComments = commentRepository.findByStatusAndAttraction_AttractionId(Status.ACTIVE, attraction.getAttractionId());

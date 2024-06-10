@@ -11,7 +11,7 @@ import com.wanderdrop.wserver.model.User;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +38,7 @@ public class AttractionRepositoryTest {
         user.setLastName("Lastname");
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
     }
 
@@ -51,8 +51,8 @@ public class AttractionRepositoryTest {
 
     @Test
     public void testFindByCreatedBy() {
-        Attraction attraction1 = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
-        Attraction attraction2 = new Attraction(null, "Attraction 2", "Description 2", 32.1234, 17.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        Attraction attraction1 = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
+        Attraction attraction2 = new Attraction(null, "Attraction 2", "Description 2", 32.1234, 17.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
         attractionRepository.save(attraction1);
         attractionRepository.save(attraction2);
 
@@ -70,7 +70,7 @@ public class AttractionRepositoryTest {
 
     @Test
     public void testFindAttractionById() {
-        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
         attractionRepository.save(attraction);
 
         Attraction found = attractionRepository.findById(attraction.getAttractionId()).orElse(null);
@@ -80,8 +80,8 @@ public class AttractionRepositoryTest {
 
     @Test
     public void testGetAllAttractions() {
-        Attraction attraction1 = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
-        Attraction attraction2 = new Attraction(null, "Attraction 2", "Description 2", 32.1234, 17.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        Attraction attraction1 = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
+        Attraction attraction2 = new Attraction(null, "Attraction 2", "Description 2", 32.1234, 17.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
         attractionRepository.save(attraction1);
         attractionRepository.save(attraction2);
 
@@ -94,7 +94,7 @@ public class AttractionRepositoryTest {
     @Test
     public void testSaveAttraction() {
 
-        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
 
         attractionRepository.save(attraction);
 
@@ -106,7 +106,7 @@ public class AttractionRepositoryTest {
     @Test
     public void testUpdateAttraction() {
 
-        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
         attractionRepository.save(attraction);
 
         attraction.setName("Updated Attraction");
@@ -120,7 +120,7 @@ public class AttractionRepositoryTest {
     @Test
     public void testDeleteAttraction() {
 
-        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), Status.ACTIVE, null);
+        Attraction attraction = new Attraction(null, "Attraction 1", "Description 1", 22.1234, 16.3545, user, user, LocalDateTime.now(), LocalDateTime.now(), Status.ACTIVE, null);
         attractionRepository.save(attraction);
 
         attractionRepository.delete(attraction);

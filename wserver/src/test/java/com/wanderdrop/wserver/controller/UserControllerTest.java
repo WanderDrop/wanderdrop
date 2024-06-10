@@ -23,8 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -72,7 +71,7 @@ public class UserControllerTest {
         user.setLastName("Test");
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(Timestamp.from(Instant.now()));
+        user.setCreatedAt(LocalDateTime.now());
         user = userRepository.save(user);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());

@@ -18,8 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -68,7 +67,7 @@ public class ReportControllerTest {
         user.setLastName("Test");
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(Timestamp.from(Instant.now()));
+        user.setCreatedAt(LocalDateTime.now());
         user = userRepository.save(user);
 
         admin = new User();
@@ -78,7 +77,7 @@ public class ReportControllerTest {
         admin.setLastName("User");
         admin.setRole(Role.ADMIN);
         admin.setStatus(Status.ACTIVE);
-        admin.setCreatedAt(Timestamp.from(Instant.now()));
+        admin.setCreatedAt(LocalDateTime.now());
         admin = userRepository.save(admin);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
@@ -94,6 +93,7 @@ public class ReportControllerTest {
         attraction.setLongitude(-74.0060);
         attraction.setCreatedBy(admin);
         attraction.setStatus(Status.ACTIVE);
+        attraction.setCreatedAt(LocalDateTime.now());
         attraction = attractionRepository.save(attraction);
     }
     @AfterEach
@@ -111,7 +111,7 @@ public class ReportControllerTest {
         report.setStatus(Status.ACTIVE);
         report.setAttraction(attraction);
         report.setCreatedBy(admin);
-        report.setCreatedAt(Timestamp.from(Instant.now()));
+        report.setCreatedAt(LocalDateTime.now());
         report = reportRepository.save(report);
 
         mockMvc.perform(get("/api/reports/active", attraction.getAttractionId())
@@ -133,7 +133,7 @@ public class ReportControllerTest {
         report.setStatus(Status.ACTIVE);
         report.setAttraction(attraction);
         report.setCreatedBy(admin);
-        report.setCreatedAt(Timestamp.from(Instant.now()));
+        report.setCreatedAt(LocalDateTime.now());
         report = reportRepository.save(report);
 
         mockMvc.perform(get("/api/reports/{id}", report.getReportId())
@@ -177,7 +177,7 @@ public class ReportControllerTest {
         report.setStatus(Status.ACTIVE);
         report.setAttraction(attraction);
         report.setCreatedBy(admin);
-        report.setCreatedAt(Timestamp.from(Instant.now()));
+        report.setCreatedAt(LocalDateTime.now());
         report = reportRepository.save(report);
 
 

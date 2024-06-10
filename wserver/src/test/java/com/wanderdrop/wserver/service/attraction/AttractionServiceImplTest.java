@@ -17,7 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -85,7 +85,7 @@ class AttractionServiceImplTest {
         attraction.setDescription("Description");
         attraction.setStatus(Status.ACTIVE);
         attraction.setCreatedBy(mockAdminUser);
-        attraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        attraction.setCreatedAt(LocalDateTime.now());
 
         when(attractionMapper.mapToAttraction(any(AttractionDto.class), any(UserRepository.class))).thenReturn(attraction);
         when(attractionRepository.save(any(Attraction.class))).thenReturn(attraction);
@@ -112,7 +112,7 @@ class AttractionServiceImplTest {
         attraction.setDescription("Description");
         attraction.setStatus(Status.ACTIVE);
         attraction.setCreatedBy(mockRegularUser);
-        attraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        attraction.setCreatedAt(LocalDateTime.now());
 
         when(attractionMapper.mapToAttraction(any(AttractionDto.class), any(UserRepository.class))).thenReturn(attraction);
         when(attractionRepository.save(any(Attraction.class))).thenReturn(attraction);
@@ -217,7 +217,7 @@ class AttractionServiceImplTest {
         attraction1.setDescription("Description 1");
         attraction1.setStatus(Status.ACTIVE);
         attraction1.setCreatedBy(mockRegularUser);
-        attraction1.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        attraction1.setCreatedAt(LocalDateTime.now());
 
         Attraction attraction2 = new Attraction();
         attraction2.setAttractionId(2L);
@@ -225,7 +225,7 @@ class AttractionServiceImplTest {
         attraction2.setDescription("Description 2");
         attraction2.setStatus(Status.ACTIVE);
         attraction2.setCreatedBy(mockRegularUser);
-        attraction2.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        attraction2.setCreatedAt(LocalDateTime.now());
 
         AttractionDto attractionDto1 = new AttractionDto();
         attractionDto1.setAttractionId(1L);
@@ -260,7 +260,7 @@ class AttractionServiceImplTest {
         existingAttraction.setDescription("Old Description");
         existingAttraction.setStatus(Status.ACTIVE);
         existingAttraction.setCreatedBy(mockAdminUser);
-        existingAttraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        existingAttraction.setCreatedAt(LocalDateTime.now());
 
         AttractionDto updatedAttractionDto = new AttractionDto();
         updatedAttractionDto.setName("Updated Attraction");
@@ -306,7 +306,7 @@ class AttractionServiceImplTest {
         existingAttraction.setDescription("Old Description");
         existingAttraction.setStatus(Status.ACTIVE);
         existingAttraction.setCreatedBy(mockRegularUser);
-        existingAttraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        existingAttraction.setCreatedAt(LocalDateTime.now());
 
         AttractionDto updatedAttractionDto = new AttractionDto();
         updatedAttractionDto.setName("Updated Attraction");
@@ -330,7 +330,7 @@ class AttractionServiceImplTest {
         attraction.setDescription("Description");
         attraction.setStatus(Status.ACTIVE);
         attraction.setCreatedBy(mockAdminUser);
-        attraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        attraction.setCreatedAt(LocalDateTime.now());
 
         DeletionReason deletionReason = new DeletionReason();
         deletionReason.setDeletionReasonId(1L);
@@ -372,7 +372,7 @@ class AttractionServiceImplTest {
         attraction.setDescription("Description");
         attraction.setStatus(Status.ACTIVE);
         attraction.setCreatedBy(mockRegularUser);
-        attraction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        attraction.setCreatedAt(LocalDateTime.now());
 
         DeletionReason deletionReason = new DeletionReason();
         deletionReason.setDeletionReasonId(1L);

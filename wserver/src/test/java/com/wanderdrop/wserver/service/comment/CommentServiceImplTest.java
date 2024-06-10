@@ -13,13 +13,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -56,14 +54,14 @@ class CommentServiceImplTest {
     @BeforeEach
     public void setup() {
         user = new User();
-        user.setEmail("testUser");
         user.setEmail("test@example.com");
         user.setPassword("password");
         user.setFirstName("Test");
         user.setLastName("User");
+        user.setCreatedAt(LocalDateTime.now());
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setUpdatedAt(Timestamp.from(Instant.now()));
+        user.setUpdatedAt(LocalDateTime.now());
 
         attraction = new Attraction();
         attraction.setAttractionId(1L);
@@ -78,14 +76,14 @@ class CommentServiceImplTest {
         comment.setStatus(Status.ACTIVE);
         comment.setAttraction(attraction);
         comment.setCreatedBy(user);
-        comment.setCreatedAt(Timestamp.from(Instant.now()));
+        comment.setCreatedAt(LocalDateTime.now());
 
         commentDto = new CommentDto();
         commentDto.setCommentId(1L);
         commentDto.setCommentHeading("Heading1");
         commentDto.setCommentText("Text1");
         commentDto.setCreatedBy("testUser");
-        commentDto.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        commentDto.setCreatedAt(LocalDateTime.now());
         commentDto.setAttractionId(attraction.getAttractionId());
     }
 

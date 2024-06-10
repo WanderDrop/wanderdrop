@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -45,7 +44,7 @@ class CommentMapperTest {
         comment.setCommentHeading("Heading");
         comment.setCommentText("Text");
         comment.setCreatedBy(user);
-        comment.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        comment.setCreatedAt(LocalDateTime.now());
         comment.setDeletionReason(deletionReason);
         comment.setAttraction(attraction);
 
@@ -63,7 +62,7 @@ class CommentMapperTest {
     @Test
     public void testMapToComment() {
         CommentDto commentDto = new CommentDto(
-                3L, "Heading", "Text", "testUser", Timestamp.valueOf(LocalDateTime.now()), 1L, 2L, Status.ACTIVE
+                3L, "Heading", "Text", "testUser", LocalDateTime.now(), 1L, 2L, Status.ACTIVE
         );
 
         User user = new User();

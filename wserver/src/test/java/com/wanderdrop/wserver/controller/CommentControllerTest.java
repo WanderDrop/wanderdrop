@@ -18,8 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -68,7 +67,7 @@ class CommentControllerTest {
         user.setLastName("User");
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(Timestamp.from(Instant.now()));
+        user.setCreatedAt(LocalDateTime.now());
         user = userRepository.save(user);
 
         admin = new User();
@@ -78,7 +77,7 @@ class CommentControllerTest {
         admin.setLastName("User");
         admin.setRole(Role.ADMIN);
         admin.setStatus(Status.ACTIVE);
-        admin.setCreatedAt(Timestamp.from(Instant.now()));
+        admin.setCreatedAt(LocalDateTime.now());
         admin = userRepository.save(admin);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
@@ -93,6 +92,7 @@ class CommentControllerTest {
         attraction.setLatitude(40.7128);
         attraction.setLongitude(-74.0060);
         attraction.setCreatedBy(user);
+        attraction.setCreatedAt(LocalDateTime.now());
         attraction.setStatus(Status.ACTIVE);
         attraction = attractionRepository.save(attraction);
     }
@@ -112,7 +112,7 @@ class CommentControllerTest {
         comment.setStatus(Status.ACTIVE);
         comment.setAttraction(attraction);
         comment.setCreatedBy(user);
-        comment.setCreatedAt(Timestamp.from(Instant.now()));
+        comment.setCreatedAt(LocalDateTime.now());
         comment = commentRepository.save(comment);
 
         mockMvc.perform(get("/api/comments/attraction/{attractionId}", attraction.getAttractionId())
@@ -134,7 +134,7 @@ class CommentControllerTest {
         comment.setStatus(Status.ACTIVE);
         comment.setAttraction(attraction);
         comment.setCreatedBy(user);
-        comment.setCreatedAt(Timestamp.from(Instant.now()));
+        comment.setCreatedAt(LocalDateTime.now());
         comment = commentRepository.save(comment);
 
         mockMvc.perform(get("/api/comments/{id}", comment.getCommentId())
@@ -179,7 +179,7 @@ class CommentControllerTest {
         comment.setStatus(Status.ACTIVE);
         comment.setAttraction(attraction);
         comment.setCreatedBy(user);
-        comment.setCreatedAt(Timestamp.from(Instant.now()));
+        comment.setCreatedAt(LocalDateTime.now());
         comment = commentRepository.save(comment);
 
         CommentDto updatedCommentDto = new CommentDto();
@@ -211,7 +211,7 @@ class CommentControllerTest {
         comment.setStatus(Status.ACTIVE);
         comment.setAttraction(attraction);
         comment.setCreatedBy(user);
-        comment.setCreatedAt(Timestamp.from(Instant.now()));
+        comment.setCreatedAt(LocalDateTime.now());
         comment = commentRepository.save(comment);
 
         CommentDto updatedCommentDto = new CommentDto();
@@ -233,7 +233,7 @@ class CommentControllerTest {
         comment.setStatus(Status.ACTIVE);
         comment.setAttraction(attraction);
         comment.setCreatedBy(user);
-        comment.setCreatedAt(Timestamp.from(Instant.now()));
+        comment.setCreatedAt(LocalDateTime.now());
         comment = commentRepository.save(comment);
 
         mockMvc.perform(put("/api/comments/{id}/{reasonId}", comment.getCommentId(), 1L)
@@ -249,7 +249,7 @@ class CommentControllerTest {
         comment.setStatus(Status.ACTIVE);
         comment.setAttraction(attraction);
         comment.setCreatedBy(user);
-        comment.setCreatedAt(Timestamp.from(Instant.now()));
+        comment.setCreatedAt(LocalDateTime.now());
         comment = commentRepository.save(comment);
 
         mockMvc.perform(put("/api/comments/{id}/{reasonId}", comment.getCommentId(), 1L).header("Authorization", adminJwtToken))
